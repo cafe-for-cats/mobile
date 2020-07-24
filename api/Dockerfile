@@ -1,6 +1,15 @@
 FROM node:latest
-WORKDIR /src
-RUN npm install -g nodemon
+
+RUN mkdir -p /usr/src/app
+
+WORKDIR /usr/src/app
+
+COPY . ./ 
+
 RUN npm install
-ADD ./src/ /src/
-CMD ["nodemon", "/src/index.js"]
+
+EXPOSE 3000:3000
+
+CMD ["yarn", "start"]
+
+RUN apk add curl
