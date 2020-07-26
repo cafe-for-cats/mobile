@@ -13,6 +13,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final Map<String, Marker> _markers = {};
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
     final googleOffices = await locations.getGoogleOffices();
     setState(() {
@@ -41,11 +43,20 @@ class _MyAppState extends State<MyApp> {
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
+          myLocationEnabled: false,
+          myLocationButtonEnabled: false,
           initialCameraPosition: CameraPosition(
             target: const LatLng(0, 0),
             zoom: 2,
           ),
           markers: _markers.values.toSet(),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            onPressed: () => _scaffoldKey.currentState.openDrawer();
+          },
+          child: Icon(Icons.control_point),
+          backgroundColor: Colors.green,
         ),
       ),
     );

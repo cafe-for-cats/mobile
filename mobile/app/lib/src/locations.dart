@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 
-part 'package:app/src/locations.g.dart';
+part 'locations.g.dart';
 
 @JsonSerializable()
 class LatLng {
@@ -85,7 +85,7 @@ Future<Locations> getGoogleOffices() async {
   final response = await http.get(googleLocationsURL);
   if (response.statusCode == 200) {
     return Locations.fromJson(json.decode(response.body));
-  } else {
+  } else {/**/
     throw HttpException(
         'Unexpected status code ${response.statusCode}:'
             ' ${response.reasonPhrase}',
