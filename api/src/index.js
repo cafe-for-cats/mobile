@@ -12,7 +12,7 @@ app.get('/pins', function(req, res) {
     host: 'mysql',
     port: 3306,
     user: 'root',
-    password: '/',
+    password: 'root',
     database: 'master'
   });
 
@@ -21,7 +21,7 @@ app.get('/pins', function(req, res) {
   connection.query('SELECT * FROM PINS', function(err, rows, fields) {
     if (err) res.send(err);
 
-    res.send(rows[0]);
+    res.send(rows);
   });
 
   connection.end();
