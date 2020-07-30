@@ -9,10 +9,10 @@ app.get('/', function(req, res) {
 
 app.get('/pins', function(req, res) {
   var connection = mysql.createConnection({
-    host: 'localhost',
+    host: 'mysql',
     port: 3306,
-    user: 'sa',
-    password: 'yJRxqg7mFf68waeJoibh',
+    user: 'root',
+    password: '/',
     database: 'master'
   });
 
