@@ -15,12 +15,3 @@ CREATE TABLE master.PINS
 DROP TABLE PINS; 
 */
 
-
--- leave for 2 hours and then vacuum
-
--- they come back EVERY 3 months
-
--- they come back for free between the quarterly's if they see pests
-
--- 50 FOR FIRST, 105 QUARTERLY
--- 105 WILL NEVER CHANGE
