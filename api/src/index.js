@@ -81,10 +81,11 @@ app.get('/pins/:pinId', (req, res) => {
  * @param longitude The longitude of the location for this Pin
  * @param latitude The latitude of the location for this Pin
  * @param label The Pin's label
+ * @param createDate The created Date
  * @returns The created Pin
  */
 app.post('/pins', (req, res) => {
-  const { userId, longitude, latitude, label } = req.body;
+  const { userId, longitude, latitude, label, createDate } = req.body;
 
   const connection = mysql.createConnection({
     host: 'mysql',
@@ -98,7 +99,7 @@ app.post('/pins', (req, res) => {
 
   connection.query(
     `INSERT INTO PINS(PIN_ID, USER_ID, LATITUDE, LONGITUDE, LABEL, CREATE_DATE)
-    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, ${label}, ${createDate})`,
+    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '${createDate}')`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
