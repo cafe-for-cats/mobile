@@ -81,6 +81,7 @@ app.get('/pins/:pinId', (req, res) => {
  * @param longitude The longitude of the location for this Pin
  * @param latitude The latitude of the location for this Pin
  * @param label The Pin's label
+ * @param createDate The created Date
  * @returns The created Pin
  */
 app.post('/pins', (req, res) => {
