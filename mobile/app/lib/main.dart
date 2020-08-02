@@ -23,22 +23,9 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    const googleLocationsURL = 'http://localhost:3000/pins';
-
-    // Retrieve the locations of Google offices
-    final response = await http.get(googleLocationsURL);
+    final response = await http.get('http://localhost:3000/pins').catchError((err) => throw err);
 
     List<Pin> pins = parse(response.body);
-
-//    if (response.statusCode == 200) {
-////      return Locations.fromJson(json.decode(response.body));
-////    } else {
-////      throw HttpException(
-////          'Unexpected status code ${response.statusCode}:'
-////              ' ${response.reasonPhrase}',
-////          uri: Uri.parse(googleLocationsURL));
-////    }'
-
 
     setState(() {
       _markers.clear();
@@ -48,7 +35,6 @@ class _MyAppState extends State<MyApp> {
           position: LatLng(pin.latitude, pin.longitude),
           infoWindow: InfoWindow(
             title: pin.label,
-//            snippet: office.address,
           ),
         );
         _markers[pin.label] = marker;
@@ -61,7 +47,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Google Office Locations'),
+          title: const Text('Protest Item Location Pinger'),
           backgroundColor: Colors.green[700],
         ),
         drawer: Builder(builder: (context) =>
@@ -74,7 +60,7 @@ class _MyAppState extends State<MyApp> {
                       color: Colors.blue,
                     ),
                     child: Text(
-                      'Drawer Header',
+                      'Add a Pin',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -83,16 +69,20 @@ class _MyAppState extends State<MyApp> {
                   ),
                   ListTile(
                     leading: Icon(Icons.message),
-                  title: Text('Add a Pin'),
-                    onTap: () { Navigator.pop(context); },
+                  title: Text('Water'),
+                    onTap: () { awaitPost('Water'); },
                   ),
                   ListTile(
                     leading: Icon(Icons.account_circle),
-                    title: Text('Profile'),
+                    title: Text('Medic'),
+                    onTap: () { awaitPost('Medic'); },
+
                   ),
                   ListTile(
                     leading: Icon(Icons.settings),
-                    title: Text('Settings'),
+                    title: Text('Masks'),
+                    onTap: () { awaitPost('Masks'); },
+
                   ),
                 ],
               ),
@@ -109,25 +99,41 @@ class _MyAppState extends State<MyApp> {
           ),
           markers: _markers.values.toSet(),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            onPressed: () => _scaffoldKey.currentState.openDrawer();
-          },
-          child: Icon(Icons.control_point),
-          backgroundColor: Colors.green,
-        ),
       ),
     );
   }
 }
 
+Future<void> awaitPost(String input) async {
+  var url ='http://localhost:3000/pins';
+
+  var data = {
+    'userId': 123,
+    'longitude': 38.92,
+    'latitude':  -90.82,
+    'label': input.toString(),
+    'createDate': "2020-02-06"
+  };
+
+  var body = json.encode(data);
+
+  var response = await http.post(url,
+      headers: {"Content-Type": "application/json"},
+      body: body
+  );
+  print("${response.statusCode}");
+  print("${response.body}");
+
+  return response;
+}
+
 class Pin {
+  Pin({this.id, this.label, this.longitude, this.latitude});
+
   final String id;
   final String label;
   final double longitude;
   final double latitude;
-
-  Pin({this.id, this.label, this.longitude, this.latitude});
 
   factory Pin.fromJson(Map<String, dynamic> json) {
     return Pin(
