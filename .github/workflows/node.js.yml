@@ -4,7 +4,7 @@
 name: Node.js CI
 defaults:
   run:
-    working-directory: '/api'
+    working-directory: ./app/mobile
 
 on:
   push:
