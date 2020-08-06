@@ -134,6 +134,8 @@ Future<void> awaitPost(String input) async {
   print("${response.body}");
 
   return response;
+
+  // TODO: attach local pins on to _markers and set the state locally
 }
 
 class Pin {
