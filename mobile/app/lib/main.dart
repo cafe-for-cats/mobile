@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -23,22 +24,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    final response = await http.get('http://localhost:3000/pins').catchError((err) => throw err);
+    const dur = const Duration(seconds: 15);
 
-    List<Pin> pins = parse(response.body);
+    Timer.periodic(dur, (Timer t) async {
+      final response = await http
+          .get('http://localhost:3000/pins')
+          .catchError((err) => throw err);
 
-    setState(() {
-      _markers.clear();
-      for (final pin in pins) {
-        final marker = Marker(
-          markerId: MarkerId(pin.label),
-          position: LatLng(pin.latitude, pin.longitude),
-          infoWindow: InfoWindow(
-            title: pin.label,
-          ),
-        );
-        _markers[pin.label] = marker;
-      }
+      var pins = parse(response.body);
+
+      setState(() {
+        _markers.clear();
+        for (final pin in pins) {
+          final marker = Marker(
+            markerId: MarkerId(pin.label),
+            position: LatLng(pin.latitude, pin.longitude),
+            infoWindow: InfoWindow(
+              title: pin.label,
+            ),
+          );
+          _markers[pin.label] = marker;
+        }
+      });
     });
   }
 
@@ -50,43 +57,47 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Protest Item Location Pinger'),
           backgroundColor: Colors.green[700],
         ),
-        drawer: Builder(builder: (context) =>
-            Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                    child: Text(
-                      'Add a Pin',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
+        drawer: Builder(
+          builder: (context) => Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Text(
+                    'Add a Pin',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.message),
+                ),
+                ListTile(
+                  leading: Icon(Icons.message),
                   title: Text('Water'),
-                    onTap: () { awaitPost('Water'); },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.account_circle),
-                    title: Text('Medic'),
-                    onTap: () { awaitPost('Medic'); },
-
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text('Masks'),
-                    onTap: () { awaitPost('Masks'); },
-
-                  ),
-                ],
-              ),
+                  onTap: () {
+                    awaitPost('Water');
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.account_circle),
+                  title: Text('Medic'),
+                  onTap: () {
+                    awaitPost('Medic');
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text('Masks'),
+                  onTap: () {
+                    awaitPost('Masks');
+                  },
+                ),
+              ],
             ),
+          ),
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
@@ -105,12 +116,12 @@ class _MyAppState extends State<MyApp> {
 }
 
 Future<void> awaitPost(String input) async {
-  var url ='http://localhost:3000/pins';
+  var url = 'http://localhost:3000/pins';
 
   var data = {
     'userId': 123,
-    'longitude': 38.92,
-    'latitude':  -90.82,
+    'longitude': 30.92,
+    'latitude': -120.82,
     'label': input.toString(),
     'createDate': "2020-02-06"
   };
@@ -118,9 +129,7 @@ Future<void> awaitPost(String input) async {
   var body = json.encode(data);
 
   var response = await http.post(url,
-      headers: {"Content-Type": "application/json"},
-      body: body
-  );
+      headers: {"Content-Type": "application/json"}, body: body);
   print("${response.statusCode}");
   print("${response.body}");
 
