@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    const dur = const Duration(seconds: 15);
+    const dur = Duration(seconds: 15);
 
     Timer.periodic(dur, (Timer t) async {
       final response = await http
