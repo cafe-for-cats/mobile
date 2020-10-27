@@ -1,7 +1,6 @@
 {
   "name": "mobile",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
+  "integrations": {},
+  "type": "angular",
+  "id": "37138f9b"
 }
