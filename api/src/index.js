@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
  * @returns An array of Pins
  */
 app.get('/pins', (req, res) => {
-  const query = 'SELECT * FROM PINS';
+  const query = 'SELECT * FROM pins';
 
   const connection = mysql.createConnection({
     host,
@@ -74,7 +74,7 @@ app.get('/pins/:pinId', (req, res) => {
   connection.connect();
 
   connection.query(
-    `SELECT * FROM PINS WHERE PIN_ID='${pinId}'`,
+    `SELECT * FROM pins WHERE pin_id='${pinId}'`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
@@ -109,7 +109,7 @@ app.post('/pins', (req, res) => {
   connection.connect();
 
   connection.query(
-    `INSERT INTO PINS(PIN_ID, USER_ID, LATITUDE, LONGITUDE, LABEL, CREATE_DATE)
+    `INSERT INTO pins(pin_id, user_id, latitude, longitude, label, create_date)
     VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '1000-01-01 00:00:00')`,
     (err, rows, fields) => {
       if (err) res.send(err);
@@ -139,7 +139,7 @@ app.get('/users', (req, res) => {
 
   connection.connect();
 
-  connection.query('SELECT * FROM USERS', (err, rows, fields) => {
+  connection.query('SELECT * FROM users', (err, rows, fields) => {
     if (err) res.send(err);
 
     res.send(rows);
@@ -167,7 +167,7 @@ app.get('/users/:userId', (req, res) => {
   connection.connect();
 
   connection.query(
-    `SELECT * FROM USERS WHERE USER_ID='${userId}'`,
+    `SELECT * FROM users WHERE user_id='${userId}'`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
@@ -197,7 +197,7 @@ app.post('/users', (req, res) => {
   connection.connect();
 
   connection.query(
-    `INSERT INTO PINS(USER_ID)
+    `INSERT INTO pins(user_id)
     VALUES(${userId})`,
     (err, rows, fields) => {
       if (err) res.send(err);
