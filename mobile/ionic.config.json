@@ -1,6 +1,8 @@
 {
   "name": "mobile",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular",
   "id": "37138f9b"
 }
