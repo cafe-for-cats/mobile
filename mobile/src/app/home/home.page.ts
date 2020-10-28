@@ -11,7 +11,14 @@ import { catchError, retry } from 'rxjs/operators';
 export class HomePage {
   constructor(private http: HttpClient) {}
 
-  onClick(key) {
-    this.http.get();
+  handleClick(key) {
+    this.http
+      .post('http://localhost:3000/pins', {
+        label: 'mobile test',
+        latitude: 1.2,
+        longitude: 2.4,
+        userId: 123
+      })
+      .subscribe(res => res);
   }
 }

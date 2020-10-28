@@ -14,6 +14,16 @@ const { host, port, user, password, database } = {
 
 app.use(bodyParser.json());
 
+// TODO: Better implementation of this, plus fix the hardcoded port number
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World' + process.env.DEBUG);
 });
@@ -85,7 +95,8 @@ app.get('/pins/:pinId', (req, res) => {
  * @returns The created Pin
  */
 app.post('/pins', (req, res) => {
-  const { userId, longitude, latitude, label, createDate } = req.body;
+  const { userId, longitude, latitude, label } = req.body;
+  const createDate = new Date();
 
   const connection = mysql.createConnection({
     host: 'mysql',
@@ -99,7 +110,7 @@ app.post('/pins', (req, res) => {
 
   connection.query(
     `INSERT INTO PINS(PIN_ID, USER_ID, LATITUDE, LONGITUDE, LABEL, CREATE_DATE)
-    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '${createDate}')`,
+    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '1000-01-01 00:00:00')`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
