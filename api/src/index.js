@@ -28,11 +28,7 @@ app.get('/', (req, res) => {
   res.send('Hello World' + process.env.DEBUG);
 });
 
-// #region PINS
-/**
- * GET all Pins
- * @returns An array of Pins
- */
+// #region pins
 app.get('/pins', (req, res) => {
   const query = 'SELECT * FROM pins';
 
@@ -55,11 +51,6 @@ app.get('/pins', (req, res) => {
   connection.end();
 });
 
-/**
- * GET a Pin by it's Id
- * @param pinId
- * @returns A Pin meeting the specified criteria
- */
 app.get('/pins/:pinId', (req, res) => {
   const { pinId } = req.params;
 
@@ -85,15 +76,6 @@ app.get('/pins/:pinId', (req, res) => {
   connection.end();
 });
 
-/**
- * POST a PIN
- * @param userId Id of the User associated to this Pin
- * @param longitude The longitude of the location for this Pin
- * @param latitude The latitude of the location for this Pin
- * @param label The Pin's label
- * @param createDate The created Date
- * @returns The created Pin
- */
 app.post('/pins', (req, res) => {
   const { userId, longitude, latitude, label } = req.body;
   const createDate = new Date();
@@ -121,13 +103,9 @@ app.post('/pins', (req, res) => {
   connection.end();
 });
 
-// #endregion PINS
+// #endregion pins
 
-// #region USERS
-/**
- * GET all Users
- * @returns An array of Users
- */
+// #region users
 app.get('/users', (req, res) => {
   const connection = mysql.createConnection({
     host,
@@ -148,11 +126,6 @@ app.get('/users', (req, res) => {
   connection.end();
 });
 
-/**
- * GET a User by their Id
- * @param userId
- * @returns A User meeting the specified criteria
- */
 app.get('/users/:userId', (req, res) => {
   const { userId } = req.params;
 
@@ -178,11 +151,6 @@ app.get('/users/:userId', (req, res) => {
   connection.end();
 });
 
-/**
- * POST a User
- * @param userId
- * @returns The created User
- */
 app.post('/users', (req, res) => {
   const { userId } = req.body;
 
@@ -208,6 +176,6 @@ app.post('/users', (req, res) => {
 
   connection.end();
 });
-// #endregion USERS
+// #endregion users
 
 app.listen(3000);
