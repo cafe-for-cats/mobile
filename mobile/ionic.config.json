@@ -1,8 +1,7 @@
 {
   "name": "mobile",
   "integrations": {
-    "cordova": {}
+    "capacitor": {}
   },
-  "type": "angular",
-  "id": "37138f9b"
+  "type": "angular"
 }

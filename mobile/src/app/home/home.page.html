@@ -1,31 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      codeswag.co.uk Map
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ng-container *ngIf="data$ | async as data">
-  <ion-content [fullscreen]="true">
-    <div id="container">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-fab vertical="bottom" horizontal="end">
-        <ion-fab-button x-large>Add Pin</ion-fab-button>
-        <ion-fab-list side="top">
-          <ion-fab-button large (click)="handleClick('Water')">
-            <ion-icon name="water-outline"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button large (click)="handleClick('Medic')">
-            <ion-icon name="medkit-outline"></ion-icon>
-          </ion-fab-button>
-        </ion-fab-list>
-      </ion-fab>
-    </div>
-  </ion-content>
-</ng-container>
+<ion-content [fullscreen]="true">
+  <div #map id="map"></div>
+</ion-content>

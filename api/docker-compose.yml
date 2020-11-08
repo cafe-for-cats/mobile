@@ -11,7 +11,6 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/sites-available/default
     links:
       - app
-    env_file: ./.env
 
   app:
     image: node:latest
@@ -24,12 +23,10 @@ services:
     ports:
       - '9000'
     entrypoint: /application/start_application.sh
-    env_file: ./.env
     environment:
       'NODE_ENV': 'development'
 
   mysql:
-    env_file: ./.env
     image: mysql:5.7
     container_name: mysql
     volumes:
