@@ -21,27 +21,23 @@ export class HomePage {
   /** Tracks which info window is currently open */
   openedInfoWindows: google.maps.InfoWindow[] = [];
 
-  data$;
-
   @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
   constructor(private http: HttpClient) {}
 
   ionViewDidEnter() {
-    this.data$ = this.http
-      .get('http://localhost:3000/pins')
-      .subscribe((data: Pin[]) => {
-        const markers = data.map(({ label, latitude, longitude }) => {
-          return {
-            title: label,
-            latitude,
-            longitude
-          };
-        });
-
-        this.showMap(markers[0]);
-        this.addMarkersToMap(markers);
+    this.http.get('http://localhost:3000/pins').subscribe((data: Pin[]) => {
+      const markers = data.map(({ label, latitude, longitude }) => {
+        return {
+          title: label,
+          latitude,
+          longitude
+        };
       });
+
+      this.showMap(markers[0]);
+      this.addMarkersToMap(markers);
+    });
   }
 
   addMarkersToMap(markers) {
