@@ -1,17 +1,24 @@
-/// <reference types="@types/googlemaps" />
-
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss']
+  selector: 'app-google-maps',
+  templateUrl: './google-maps.component.html',
+  styleUrls: ['./google-maps.component.scss']
 })
-export class HomePage {
+export class GoogleMapsComponent implements OnChanges {
+  @Input() data: any;
+
+  private data$: BehaviorSubject<any> = new BehaviorSubject(null);
+
   /** The component responsible for creating the Map within an HTML Element */
   map: google.maps.Map;
 
@@ -23,20 +30,20 @@ export class HomePage {
 
   @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
-  ionViewDidEnter() {
-    this.http.get('http://localhost:3000/pins').subscribe((data: Pin[]) => {
-      const markers = data.map(({ label, latitude, longitude }) => {
-        return {
-          title: label,
-          latitude,
-          longitude
-        };
-      });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.data.previousValue !== changes.data.currentValue) {
+      this.data$.next(this.data);
+    }
 
-      this.showMap(markers[0]);
-      this.addMarkersToMap(markers);
+    this.data$.subscribe(data => {
+      if (data) {
+        this.showMap(data[0]);
+        this.addMarkersToMap(data);
+      } else {
+        // TODO: show message for no pins set
+      }
     });
   }
 
@@ -59,11 +66,11 @@ export class HomePage {
   addInfoWindowToMarker(marker: google.maps.Marker) {
     const pos = marker.getPosition();
     let infoWindowContent = `
-   <div style="color: black" id="content"> 
-     <h2 id="firstHeading" class="firstHeading"> ${marker.getTitle()} </h2>
-     <p>Latitude: ${pos.lat()} </p>
-     <p>Longitude: ${pos.lng()} </p> 
-   </div>`;
+ <div style="color: black" id="content"> 
+   <h2 id="firstHeading" class="firstHeading"> ${marker.getTitle()} </h2>
+   <p>Latitude: ${pos.lat()} </p>
+   <p>Longitude: ${pos.lng()} </p> 
+ </div>`;
 
     let infoWindow = new google.maps.InfoWindow({
       content: infoWindowContent

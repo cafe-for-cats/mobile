@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div #map id="map"></div>
+  <app-google-maps [data]="data$ | async"></app-google-maps>
   <ion-fab vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add-outline"></ion-icon>
