@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { GoogleMapsModule } from '../../common/google-maps/google-maps.module';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
+    GoogleMapsModule,
     CommonModule,
     // import HttpClientModule after BrowserModule.
     HttpClientModule
