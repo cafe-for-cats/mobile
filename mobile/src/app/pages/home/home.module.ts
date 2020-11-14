@@ -16,7 +16,6 @@ import { GoogleMapsModule } from '../../common/google-maps/google-maps.module';
     IonicModule,
     HomePageRoutingModule,
     GoogleMapsModule,
-
     CommonModule,
     // import HttpClientModule after BrowserModule.
     HttpClientModule

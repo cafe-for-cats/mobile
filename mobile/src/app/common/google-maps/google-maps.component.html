@@ -1,3 +1,24 @@
 <ion-content [fullscreen]="true">
   <div #map id="map"></div>
+  <div *ngIf="selectionRectangle">
+    <ion-fab vertical="bottom" horizontal="center">
+      <ion-button (click)="onClick()"
+        >Place '{{ currentMenuKey }}' Pin.</ion-button
+      >
+      <ion-button color="danger" (click)="cancel()">X</ion-button>
+    </ion-fab>
+  </div>
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button (click)="paramsChanged('water')">
+        <ion-icon name="water-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button (click)="paramsChanged('first aid')">
+        <ion-icon name="medkit-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>
