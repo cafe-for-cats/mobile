@@ -13,6 +13,8 @@ export class HomePage implements OnInit {
   /** Tracks refresh state for the component */
   refresh$: BehaviorSubject<any> = new BehaviorSubject(true);
 
+  showSelectionUI = false;
+
   /** The component responsible for creating the Map within an HTML Element. */
   map: google.maps.Map;
 
@@ -55,29 +57,61 @@ export class HomePage implements OnInit {
    * @private
    */
   onMenuSelection(key: string) {
-    if (this.selectionRectangle) {
-      this.selectionRectangle.setMap(null);
+    if (navigator.geolocation) {
+      // This line doesn't behave properly within the `getCurrentPosition`.
+      // Find a better fix, there's probably a timing issue somewhere.
+      // Also, make a bug for it to track.
+      this.showSelectionUI = true;
+
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          this.map.setCenter(pos);
+
+          let latLng: google.maps.LatLng = new google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+          let mapMarker: google.maps.Marker = new google.maps.Marker({
+            position: latLng,
+            title: this.titleCase(key)
+          });
+
+          mapMarker.setMap(this.map);
+        },
+        () => {
+          console.log('error');
+        }
+      );
     }
 
-    const center = this.map.getCenter();
-    const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
+    // if (this.selectionRectangle) {
+    //   this.selectionRectangle.setMap(null);
+    // }
 
-    const bounds = {
-      north: center.lat(),
-      south: center.lat() - sizeFactor,
-      east: center.lng(),
-      west: center.lng() - sizeFactor
-    };
+    // const center = this.map.getCenter();
+    // const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
 
-    this.selectionRectangle = new google.maps.Rectangle({
-      bounds,
-      editable: true,
-      draggable: true
-    });
+    // const bounds = {
+    //   north: center.lat(),
+    //   south: center.lat() - sizeFactor,
+    //   east: center.lng(),
+    //   west: center.lng() - sizeFactor
+    // };
 
-    this.currentMenuKey = key;
+    // this.selectionRectangle = new google.maps.Rectangle({
+    //   bounds,
+    //   editable: true,
+    //   draggable: true
+    // });
 
-    this.selectionRectangle.setMap(this.map);
+    // this.currentMenuKey = key;
+
+    // this.selectionRectangle.setMap(this.map);
   }
 
   /** Handles canceling Pin selection

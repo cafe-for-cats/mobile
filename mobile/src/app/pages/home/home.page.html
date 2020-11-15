@@ -8,7 +8,7 @@
 
 <ion-content [fullscreen]="true">
   <div #map id="map" style="height: 100%;"></div>
-  <div *ngIf="selectionRectangle">
+  <div *ngIf="showSelectionUI">
     <ion-fab vertical="bottom" horizontal="center">
       <ion-button (click)="onAdd()"
         >Place '{{ currentMenuKey }}' Pin.</ion-button
