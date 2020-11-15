@@ -48,7 +48,13 @@ export class HomePage implements OnInit {
     });
   }
 
-  paramsChanged(key: string) {
+  /** Handles the Pin menu selection from a user.
+   * If a user has location services on, place pin at their location,
+   * otherwise, show a selection rectangle on the map.
+   * @param key The menu item selected.
+   * @private
+   */
+  onMenuSelection(key: string) {
     if (this.selectionRectangle) {
       this.selectionRectangle.setMap(null);
     }
@@ -74,12 +80,18 @@ export class HomePage implements OnInit {
     this.selectionRectangle.setMap(this.map);
   }
 
+  /** Handles canceling Pin selection
+   * @private
+   */
   onCancel() {
     this.selectionRectangle.setMap(null);
     this.selectionRectangle = null;
     this.currentMenuKey = null;
   }
 
+  /** Handles the POST operation of a Pin after selection
+   * @private
+   */
   onAdd() {
     const center = this.selectionRectangle.getBounds().getCenter();
     const pin = {
@@ -98,6 +110,10 @@ export class HomePage implements OnInit {
     });
   }
 
+  /** Initializes the Google Map instances with given options
+   * @param position The given position to initialize the map with
+   * @private
+   */
   initializeMap(position) {
     const options = {
       center: new google.maps.LatLng(position.latitude, position.longitude),
@@ -108,6 +124,10 @@ export class HomePage implements OnInit {
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
   }
 
+  /** Initialize and associate Markers to the Map
+   * @param markers The Markers to associate
+   * @private
+   */
   addMarkersToMap(markers) {
     for (let marker of markers) {
       let position: google.maps.LatLng = new google.maps.LatLng(
@@ -135,6 +155,10 @@ export class HomePage implements OnInit {
       .join(' ');
   }
 
+  /** Associates InfoWindows to their respective Marker
+   * @param marker The Marker to be associated
+   * @private
+   */
   addInfoWindowToMarker(marker: google.maps.Marker) {
     const pos = marker.getPosition();
     let infoWindowContent = `
