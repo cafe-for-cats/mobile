@@ -9,8 +9,8 @@ import {
   OnInit
 } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, of } from 'rxjs';
-import { switchMap, startWith, filter } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, of, combineLatest } from 'rxjs';
+import { switchMap, startWith, filter, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home-page',
@@ -18,32 +18,34 @@ import { switchMap, startWith, filter } from 'rxjs/operators';
   styleUrls: ['./home.page.scss']
 })
 export class HomePage implements OnInit {
-  data$: Observable<any> = of([]);
+  /** Tracks refresh state for the component */
   refresh$: BehaviorSubject<any> = new BehaviorSubject(true);
 
-  /** The component responsible for creating the Map within an HTML Element */
+  /** The component responsible for creating the Map within an HTML Element. */
   map: google.maps.Map;
 
-  /**  */
+  /** Draggable, editable rectangle that appears for selecting the Marker position. */
   selectionRectangle: google.maps.Rectangle;
 
-  /** Each pop-up window that provides additional information about a marker */
+  /** Each pop-up window that provides additional information about a marker. */
   infoWindows: google.maps.InfoWindow[] = [];
 
-  /** Tracks which info window is currently open */
+  /** Tracks which info window is currently open. */
   openedInfoWindow: google.maps.InfoWindow = null;
 
-  currentMenuKey: string; // No <3
+  /** Tracks which Pin is currently selected for placement. */
+  currentMenuKey: string;
 
+  /** Contains the Google Map element ref. */
   @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http
-      .get('http://localhost:3000/pins')
-      .pipe(filter(x => !!x))
-      .subscribe(data => {
+    const request = this.http.get('http://localhost:3000/pins');
+
+    this.refresh$.subscribe(() => {
+      request.subscribe(data => {
         if (data) {
           this.initializeMap(data[0]);
           this.addMarkersToMap(data);
@@ -51,6 +53,7 @@ export class HomePage implements OnInit {
           // TODO: show message for no pins set
         }
       });
+    });
   }
 
   paramsChanged(key: string) {
