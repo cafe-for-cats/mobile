@@ -1,16 +1,8 @@
 /// <reference types="@types/googlemaps" />
 
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  SimpleChanges,
-  EventEmitter,
-  OnInit
-} from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, of, combineLatest } from 'rxjs';
-import { switchMap, startWith, filter, shareReplay } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
@@ -50,7 +42,7 @@ export class HomePage implements OnInit {
           this.initializeMap(data[0]);
           this.addMarkersToMap(data);
         } else {
-          // TODO: show message for no pins set
+          // TODO: show message for no pins set, center map either at users location or at setting-defined location
         }
       });
     });
@@ -72,7 +64,7 @@ export class HomePage implements OnInit {
     };
 
     this.selectionRectangle = new google.maps.Rectangle({
-      bounds: bounds,
+      bounds,
       editable: true,
       draggable: true
     });
@@ -99,9 +91,7 @@ export class HomePage implements OnInit {
 
     this.http.post('http://localhost:3000/pins', pin).subscribe(response => {
       if (response) {
-        this.selectionRectangle.setMap(null);
-        this.selectionRectangle = null;
-        this.currentMenuKey = null;
+        this.onCancel();
 
         this.refresh$.next(true);
       }
