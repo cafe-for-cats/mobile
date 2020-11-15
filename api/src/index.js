@@ -14,17 +14,23 @@ const { host, port, user, password, database } = {
 
 app.use(bodyParser.json());
 
+// TODO: Better implementation of this, plus fix the hardcoded port number
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
+
 app.get('/', (req, res) => {
   res.send('Hello World' + process.env.DEBUG);
 });
 
-// #region PINS
-/**
- * GET all Pins
- * @returns An array of Pins
- */
+// #region pins
 app.get('/pins', (req, res) => {
-  const query = 'SELECT * FROM PINS';
+  const query = 'SELECT * FROM pins';
 
   const connection = mysql.createConnection({
     host,
@@ -45,11 +51,6 @@ app.get('/pins', (req, res) => {
   connection.end();
 });
 
-/**
- * GET a Pin by it's Id
- * @param pinId
- * @returns A Pin meeting the specified criteria
- */
 app.get('/pins/:pinId', (req, res) => {
   const { pinId } = req.params;
 
@@ -64,7 +65,7 @@ app.get('/pins/:pinId', (req, res) => {
   connection.connect();
 
   connection.query(
-    `SELECT * FROM PINS WHERE PIN_ID='${pinId}'`,
+    `SELECT * FROM pins WHERE pin_id='${pinId}'`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
@@ -75,17 +76,9 @@ app.get('/pins/:pinId', (req, res) => {
   connection.end();
 });
 
-/**
- * POST a PIN
- * @param userId Id of the User associated to this Pin
- * @param longitude The longitude of the location for this Pin
- * @param latitude The latitude of the location for this Pin
- * @param label The Pin's label
- * @param createDate The created Date
- * @returns The created Pin
- */
 app.post('/pins', (req, res) => {
-  const { userId, longitude, latitude, label, createDate } = req.body;
+  const { userId, longitude, latitude, label } = req.body;
+  const createDate = new Date();
 
   const connection = mysql.createConnection({
     host: 'mysql',
@@ -98,8 +91,8 @@ app.post('/pins', (req, res) => {
   connection.connect();
 
   connection.query(
-    `INSERT INTO PINS(PIN_ID, USER_ID, LATITUDE, LONGITUDE, LABEL, CREATE_DATE)
-    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '${createDate}')`,
+    `INSERT INTO pins(pin_id, user_id, latitude, longitude, label, create_date)
+    VALUES(UUID(), ${userId}, ${longitude}, ${latitude}, '${label}', '1000-01-01 00:00:00')`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
@@ -110,13 +103,9 @@ app.post('/pins', (req, res) => {
   connection.end();
 });
 
-// #endregion PINS
+// #endregion pins
 
-// #region USERS
-/**
- * GET all Users
- * @returns An array of Users
- */
+// #region users
 app.get('/users', (req, res) => {
   const connection = mysql.createConnection({
     host,
@@ -128,7 +117,7 @@ app.get('/users', (req, res) => {
 
   connection.connect();
 
-  connection.query('SELECT * FROM USERS', (err, rows, fields) => {
+  connection.query('SELECT * FROM users', (err, rows, fields) => {
     if (err) res.send(err);
 
     res.send(rows);
@@ -137,11 +126,6 @@ app.get('/users', (req, res) => {
   connection.end();
 });
 
-/**
- * GET a User by their Id
- * @param userId
- * @returns A User meeting the specified criteria
- */
 app.get('/users/:userId', (req, res) => {
   const { userId } = req.params;
 
@@ -156,7 +140,7 @@ app.get('/users/:userId', (req, res) => {
   connection.connect();
 
   connection.query(
-    `SELECT * FROM USERS WHERE USER_ID='${userId}'`,
+    `SELECT * FROM users WHERE user_id='${userId}'`,
     (err, rows, fields) => {
       if (err) res.send(err);
 
@@ -167,11 +151,6 @@ app.get('/users/:userId', (req, res) => {
   connection.end();
 });
 
-/**
- * POST a User
- * @param userId
- * @returns The created User
- */
 app.post('/users', (req, res) => {
   const { userId } = req.body;
 
@@ -186,7 +165,7 @@ app.post('/users', (req, res) => {
   connection.connect();
 
   connection.query(
-    `INSERT INTO PINS(USER_ID)
+    `INSERT INTO pins(user_id)
     VALUES(${userId})`,
     (err, rows, fields) => {
       if (err) res.send(err);
@@ -197,6 +176,6 @@ app.post('/users', (req, res) => {
 
   connection.end();
 });
-// #endregion USERS
+// #endregion users
 
 app.listen(3000);
