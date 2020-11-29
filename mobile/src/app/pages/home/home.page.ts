@@ -3,6 +3,7 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home-page',
@@ -11,7 +12,10 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class HomePage implements OnInit {
   /** Tracks refresh state for the component */
-  refresh$: BehaviorSubject<any> = new BehaviorSubject(true);
+  refresh$: BehaviorSubject<{
+    latitude?: number;
+    longitude?: number;
+  }> = new BehaviorSubject({ latitude: null, longitude: null });
 
   showSelectionUI = false;
 
@@ -33,15 +37,19 @@ export class HomePage implements OnInit {
   /** Contains the Google Map element ref. */
   @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private toastController: ToastController,
+    private settingsService: SettingsServiceMock
+  ) {}
 
   ngOnInit() {
     const request = this.http.get('http://localhost:3000/pins');
 
-    this.refresh$.subscribe(() => {
+    this.refresh$.subscribe(lastPos => {
       request.subscribe(data => {
         if (data) {
-          this.initializeMap(data[0]);
+          this.initializeMap(lastPos.latitude ? lastPos : data[0]);
           this.addMarkersToMap(data);
         } else {
           // TODO: show message for no pins set, center map either at users location or at setting-defined location
@@ -50,84 +58,105 @@ export class HomePage implements OnInit {
     });
   }
 
-  /** Handles the Pin menu selection from a user.
-   * If a user has location services on, place pin at their location,
-   * otherwise, show a selection rectangle on the map.
+  /**
+   * Handles the Pin menu selection from a user.
+   * If a user has location services on, place pin at their location [1],
+   * otherwise, show a selection rectangle on the map [2].
    * @param key The menu item selected.
-   * @private
+   * @docs-private
    */
   onMenuSelection(key: string) {
-    if (navigator.geolocation) {
-      // This line doesn't behave properly within the `getCurrentPosition`.
-      // Find a better fix, there's probably a timing issue somewhere.
-      // Also, make a bug for it to track.
+    this.currentMenuKey = key;
+
+    if (this.settingsService.userHasLocationPermissions()) {
+      if (navigator.geolocation) {
+        // [1]
+        navigator.geolocation.getCurrentPosition(
+          (position: Position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            this.map.setCenter(pos);
+
+            let latLng: google.maps.LatLng = new google.maps.LatLng(
+              position.coords.latitude,
+              position.coords.longitude
+            );
+            let mapMarker: google.maps.Marker = new google.maps.Marker({
+              position: latLng,
+              title: this.titleCase(key)
+            });
+
+            mapMarker.setMap(this.map);
+
+            this.onAdd();
+          },
+          e => {
+            console.log('error', e);
+          }
+        );
+      }
+    } else {
       this.showSelectionUI = true;
 
-      navigator.geolocation.getCurrentPosition(
-        (position: Position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
+      if (this.selectionRectangle) {
+        this.selectionRectangle.setMap(null);
+      }
 
-          this.map.setCenter(pos);
+      const center = this.map.getCenter();
+      const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
 
-          let latLng: google.maps.LatLng = new google.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          let mapMarker: google.maps.Marker = new google.maps.Marker({
-            position: latLng,
-            title: this.titleCase(key)
-          });
+      const bounds = {
+        north: center.lat(),
+        south: center.lat() - sizeFactor,
+        east: center.lng(),
+        west: center.lng() - sizeFactor
+      };
 
-          mapMarker.setMap(this.map);
-        },
-        () => {
-          console.log('error');
-        }
-      );
+      this.selectionRectangle = new google.maps.Rectangle({
+        bounds,
+        editable: true,
+        draggable: true
+      });
+
+      this.currentMenuKey = key;
+
+      this.selectionRectangle.setMap(this.map);
     }
-
-    // if (this.selectionRectangle) {
-    //   this.selectionRectangle.setMap(null);
-    // }
-
-    // const center = this.map.getCenter();
-    // const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
-
-    // const bounds = {
-    //   north: center.lat(),
-    //   south: center.lat() - sizeFactor,
-    //   east: center.lng(),
-    //   west: center.lng() - sizeFactor
-    // };
-
-    // this.selectionRectangle = new google.maps.Rectangle({
-    //   bounds,
-    //   editable: true,
-    //   draggable: true
-    // });
-
-    // this.currentMenuKey = key;
-
-    // this.selectionRectangle.setMap(this.map);
   }
 
-  /** Handles canceling Pin selection
-   * @private
+  /**
+   * Handles canceling Pin selection
+   * @docs-private
    */
   onCancel() {
-    this.selectionRectangle.setMap(null);
-    this.selectionRectangle = null;
-    this.currentMenuKey = null;
+    this.resetUiState();
   }
 
-  /** Handles the POST operation of a Pin after selection
-   * @private
+  private resetUiState() {
+    if (this.selectionRectangle) {
+      this.selectionRectangle.setMap(null);
+      this.selectionRectangle = null;
+    }
+    this.currentMenuKey = null;
+    this.showSelectionUI = false;
+  }
+
+  /**
+   * Handles the POST operation of a Pin after selection
+   * @docs-private
    */
   onAdd() {
-    const center = this.selectionRectangle.getBounds().getCenter();
+    let center;
+
+    if (this.selectionRectangle) {
+      center = this.selectionRectangle.getBounds().getCenter();
+    } else {
+      center = this.map.getCenter();
+    }
+
     const pin = {
       userId: '329e85ff-a699-4415-a9d8-118889e219ce',
       latitude: center.lat(),
@@ -137,16 +166,42 @@ export class HomePage implements OnInit {
 
     this.http.post('http://localhost:3000/pins', pin).subscribe(response => {
       if (response) {
-        this.onCancel();
+        this.selectionRectangle && this.resetUiState();
 
-        this.refresh$.next(true);
+        this.refresh$.next({
+          latitude: pin.latitude,
+          longitude: pin.longitude
+        });
       }
     });
+
+    this.presentToast(
+      this.selectionRectangle
+        ? `'${this.titleCase(
+            this.currentMenuKey
+          )}' pin placed at selected location.`
+        : `'${this.titleCase(
+            this.currentMenuKey
+          )}' pin placed at your location.`
+    );
   }
 
-  /** Initializes the Google Map instances with given options
+  /**
+   * Presents a Toast on the screen with a given message.
+   * @param message The message to display on the toast.
+   */
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500
+    });
+    toast.present();
+  }
+
+  /**
+   * Initializes the Google Map instances with given options
    * @param position The given position to initialize the map with
-   * @private
+   * @docs-private
    */
   initializeMap(position) {
     const options = {
@@ -158,9 +213,10 @@ export class HomePage implements OnInit {
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
   }
 
-  /** Initialize and associate Markers to the Map
+  /**
+   * Initialize and associate Markers to the Map
    * @param markers The Markers to associate
-   * @private
+   * @docs-private
    */
   addMarkersToMap(markers) {
     for (let marker of markers) {
@@ -179,7 +235,7 @@ export class HomePage implements OnInit {
   }
 
   // https://www.freecodecamp.org/news/three-ways-to-title-case-a-sentence-in-javascript-676a9175eb27/
-  private titleCase(str) {
+  private titleCase(str): string {
     return str
       .toLowerCase()
       .split(' ')
@@ -191,7 +247,7 @@ export class HomePage implements OnInit {
 
   /** Associates InfoWindows to their respective Marker
    * @param marker The Marker to be associated
-   * @private
+   * @docs-private
    */
   addInfoWindowToMarker(marker: google.maps.Marker) {
     const pos = marker.getPosition();
@@ -217,11 +273,8 @@ export class HomePage implements OnInit {
   }
 }
 
-interface Pin {
-  pin_id: string;
-  user_id: string;
-  latitude: number;
-  longitude: number;
-  label: string;
-  create_date?: Date;
+export class SettingsServiceMock {
+  userHasLocationPermissions() {
+    return true;
+  }
 }
