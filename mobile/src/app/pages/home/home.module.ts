@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { HomePage } from './home.page';
+import { HomePage, SettingsServiceMock } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     // import HttpClientModule after BrowserModule.
     HttpClientModule
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  providers: [SettingsServiceMock]
 })
 export class HomePageModule {}
