@@ -1,9 +1,16 @@
 /// <reference types="@types/googlemaps" />
 
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  ChangeDetectorRef
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import { MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'app-home-page',
@@ -15,41 +22,46 @@ export class HomePage implements OnInit {
   refresh$: BehaviorSubject<{
     latitude?: number;
     longitude?: number;
-  }> = new BehaviorSubject({ latitude: null, longitude: null });
+  }> = new BehaviorSubject({ latitude: 35, longitude: -78 });
 
   showSelectionUI = false;
-
-  /** The component responsible for creating the Map within an HTML Element. */
-  map: google.maps.Map;
 
   /** Draggable, editable rectangle that appears for selecting the Marker position. */
   selectionRectangle: google.maps.Rectangle;
 
-  /** Each pop-up window that provides additional information about a marker. */
-  infoWindows: google.maps.InfoWindow[] = [];
-
-  /** Tracks which info window is currently open. */
-  openedInfoWindow: google.maps.InfoWindow = null;
-
   /** Tracks which Pin is currently selected for placement. */
   currentMenuKey: string;
 
-  /** Contains the Google Map element ref. */
-  @ViewChild('map', { read: ElementRef, static: false }) mapRef: ElementRef;
+  /** Tracks the center of the map displayed on the screen. */
+  center = { lat: 0, lng: 0 };
+
+  markerOptions = { draggable: false };
+
+  options = { draggable: true, editable: true };
+
+  markerPositions: google.maps.LatLngLiteral[] = [];
+
+  zoom = 12;
+
+  display?: google.maps.LatLngLiteral;
+
+  bounds;
 
   constructor(
     private http: HttpClient,
     private toastController: ToastController,
-    private settingsService: SettingsServiceMock
+    private settingsService: SettingsServiceMock,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     const request = this.http.get('http://localhost:3000/pins');
 
-    this.refresh$.subscribe(lastPos => {
+    this.refresh$.subscribe(_ => {
       request.subscribe(data => {
         if (data) {
-          this.initializeMap(lastPos.latitude ? lastPos : data[0]);
+          this.markerPositions = []; // reset markers
+          // this.initializeMap(lastPos.latitude ? lastPos : data[0]);
           this.addMarkersToMap(data);
         } else {
           // TODO: show message for no pins set, center map either at users location or at setting-defined location
@@ -78,7 +90,7 @@ export class HomePage implements OnInit {
               lng: position.coords.longitude
             };
 
-            this.map.setCenter(pos);
+            this.center = pos;
 
             let latLng: google.maps.LatLng = new google.maps.LatLng(
               position.coords.latitude,
@@ -89,7 +101,7 @@ export class HomePage implements OnInit {
               title: this.titleCase(key)
             });
 
-            mapMarker.setMap(this.map);
+            this.markerPositions.push(latLng.toJSON());
 
             this.onAdd();
           },
@@ -105,15 +117,16 @@ export class HomePage implements OnInit {
         this.selectionRectangle.setMap(null);
       }
 
-      const center = this.map.getCenter();
       const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
 
-      const bounds = {
-        north: center.lat(),
-        south: center.lat() - sizeFactor,
-        east: center.lng(),
-        west: center.lng() - sizeFactor
+      const bounds: google.maps.LatLngBoundsLiteral = {
+        north: this.center.lat,
+        south: this.center.lat - sizeFactor,
+        east: this.center.lng,
+        west: this.center.lng - sizeFactor
       };
+
+      this.bounds = bounds;
 
       this.selectionRectangle = new google.maps.Rectangle({
         bounds,
@@ -122,8 +135,6 @@ export class HomePage implements OnInit {
       });
 
       this.currentMenuKey = key;
-
-      this.selectionRectangle.setMap(this.map);
     }
   }
 
@@ -151,16 +162,16 @@ export class HomePage implements OnInit {
   onAdd() {
     let center;
 
-    if (this.selectionRectangle) {
-      center = this.selectionRectangle.getBounds().getCenter();
+    if (this.bounds) {
+      center = this.bounds.north;
     } else {
-      center = this.map.getCenter();
+      center = this.center;
     }
 
     const pin = {
       userId: '329e85ff-a699-4415-a9d8-118889e219ce',
-      latitude: center.lat(),
-      longitude: center.lng(),
+      latitude: center.lat,
+      longitude: center.lng,
       label: this.currentMenuKey
     };
 
@@ -199,39 +210,26 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Initializes the Google Map instances with given options
-   * @param position The given position to initialize the map with
+   * Associate Markers to the Map
+   * @param pins The Markers to associate
    * @docs-private
    */
-  initializeMap(position) {
-    const options = {
-      center: new google.maps.LatLng(position.latitude, position.longitude),
-      zoom: 15,
-      disableDefaultUI: true
-    };
+  addMarkersToMap(pins) {
+    let position = new google.maps.LatLng(pins[0].latitude, pins[0].longitude);
 
-    this.map = new google.maps.Map(this.mapRef.nativeElement, options);
+    this.center = position.toJSON();
+
+    for (let marker of pins) {
+      position = new google.maps.LatLng(marker.latitude, marker.longitude);
+
+      this.markerPositions.push(position.toJSON());
+    }
+
+    // this.cdr.markForCheck();
   }
 
-  /**
-   * Initialize and associate Markers to the Map
-   * @param markers The Markers to associate
-   * @docs-private
-   */
-  addMarkersToMap(markers) {
-    for (let marker of markers) {
-      let position: google.maps.LatLng = new google.maps.LatLng(
-        marker.latitude,
-        marker.longitude
-      );
-      let mapMarker: google.maps.Marker = new google.maps.Marker({
-        position: position,
-        title: this.titleCase(marker.label)
-      });
-
-      mapMarker.setMap(this.map);
-      this.addInfoWindowToMarker(mapMarker);
-    }
+  addMarker(event: google.maps.MouseEvent) {
+    this.markerPositions.push(event.latLng.toJSON());
   }
 
   // https://www.freecodecamp.org/news/three-ways-to-title-case-a-sentence-in-javascript-676a9175eb27/
@@ -244,37 +242,10 @@ export class HomePage implements OnInit {
       })
       .join(' ');
   }
-
-  /** Associates InfoWindows to their respective Marker
-   * @param marker The Marker to be associated
-   * @docs-private
-   */
-  addInfoWindowToMarker(marker: google.maps.Marker) {
-    const pos = marker.getPosition();
-    let infoWindowContent = `
-      <div style="color: black" id="content"> 
-        <h2 id="firstHeading" class="firstHeading"> ${marker.getTitle()} </h2>
-        <p>Latitude: ${pos.lat()} </p>
-        <p>Longitude: ${pos.lng()} </p> 
-      </div>
-    `;
-
-    let infoWindow = new google.maps.InfoWindow({
-      content: infoWindowContent
-    });
-
-    marker.addListener('click', () => {
-      this.openedInfoWindow && this.openedInfoWindow.close();
-
-      infoWindow.open(this.map, marker);
-      this.openedInfoWindow = infoWindow;
-    });
-    this.infoWindows.push(infoWindow);
-  }
 }
 
 export class SettingsServiceMock {
   userHasLocationPermissions() {
-    return true;
+    return false;
   }
 }
