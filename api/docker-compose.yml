@@ -22,7 +22,7 @@ services:
       - mysql
     ports:
       - '9000'
-    entrypoint: /application/start_application.sh
+    # entrypoint: /application/start_application.sh
     environment:
       'NODE_ENV': 'development'
 
