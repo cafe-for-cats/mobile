@@ -1,13 +1,13 @@
 FROM node:latest
 
-RUN mkdir -p /usr/src/app
-
 WORKDIR /usr/src/app
 
-COPY . ./ 
+COPY package*.json ./
 
 RUN npm install
 
-EXPOSE 3000:3000
+COPY . .
 
-CMD ["yarn", "start"]
+EXPOSE 8005
+
+CMD [ "npm", "start" ]

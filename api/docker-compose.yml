@@ -1,39 +1,25 @@
-version: '3.1'
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
     ports:
-      - '8000:80'
-      - '443'
+      - '3000:3000'
     volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default
-      - ./docker/nginx/nginx.conf:/etc/nginx/sites-available/default
-    links:
-      - app
-
-  app:
-    image: node:latest
-    container_name: my-app
-    working_dir: /application
-    volumes:
-      - .:/application
-    links:
-      - mysql
-    ports:
-      - '9000'
-    entrypoint: /application/start_application.sh
-    environment:
-      'NODE_ENV': 'development'
-
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    volumes:
-      - ./data/db:/var/lib/mysql
-    restart: always
+      - .:/home/node/app
+      - ./node_modules:/home/node/app/node_modules
+    command: /home/node/app/node_modules/.bin/nodemon src/index.js
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: unless-stopped
     ports:
       - '3306:3306'
+    volumes:
+      - ./dbdata:/data/db
     environment:
       'MYSQL_DATABASE': 'master'
       'MYSQL_ROOT_PASSWORD': '1234'
