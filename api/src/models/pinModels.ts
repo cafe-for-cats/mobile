@@ -2,12 +2,18 @@ import { Document, Model, model, Schema } from 'mongoose';
 
 export interface IPin extends Document {
   id: string;
-  label: string;
+  userId: Number;
+  label: String;
+  showOnMap: Boolean;
+  imageUrl: String;
 }
 
 const pinSchema: Schema = new Schema({
   id: Schema.Types.ObjectId,
-  label: String
+  userId: Number,
+  label: String,
+  showOnMap: Boolean,
+  imageUrl: String
 });
 
 const Pin: Model<IPin> = model('Pin', pinSchema);
