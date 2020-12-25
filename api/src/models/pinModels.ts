@@ -1,11 +1,12 @@
 import { Document, Model, model, Schema } from 'mongoose';
 
 export interface IPin extends Document {
-  id: string;
+  id?: string;
   userId: Number;
   label: String;
   showOnMap: Boolean;
   imageUrl: String;
+  createDate: Date;
 }
 
 const pinSchema: Schema = new Schema({

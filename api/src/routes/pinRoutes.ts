@@ -1,8 +1,7 @@
 import { Router, Response, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
-import auth from '../middleware/auth';
 import Pin, { IPin } from '../models/pinModels';
-import { Schema, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 const router: Router = Router();
 
@@ -60,33 +59,65 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 /**
  * @route POST pins/
- * @desc Create `n` number of new pins
+ * @desc Create a new pin
  */
 router.post('/', async (req: Request, res: Response) => {
   const now = new Date();
 
-  const fields: any[] = req.body.input.map((x: any) => {
-    return {
-      label: x.label,
-      userId: x.userId,
-      createDate: now,
-      showOnMap: true
-    };
-  });
+  const { label, userId } = req.body;
+
+  const fields = {
+    label,
+    userId,
+    createDate: now,
+    showOnMap: true,
+    imageUrl: ''
+  };
 
   try {
-    let savedItems: any[] = [];
+    let newItem = new Pin(fields);
+    await newItem.save();
 
-    const promises = fields.map(async x => {
-      let newItem = new Pin(x);
-      await newItem.save();
+    res.json(newItem);
+  } catch (e) {
+    console.error(e.message);
 
-      savedItems.push(newItem);
-    });
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+  }
+});
 
-    await Promise.all(promises);
+/**
+ * @route UPDATE pins/
+ */
+router.patch('/:id', async (req: Request, res: Response) => {
+  try {
+    await Pin.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          showOnMap: req.body.showOnMap,
+          label: req.body.label,
+          userId: req.body.userId
+        }
+      }
+    );
 
-    res.json(savedItems);
+    res.json('Updated Successfully');
+  } catch (e) {
+    console.error(e.message);
+
+    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+  }
+});
+/**
+ * @route DELETE pins/
+ * @desc Deletes a pin by its given id
+ */
+router.delete('/:id', async (req: Request, res: Response) => {
+  try {
+    await Pin.findOneAndRemove({ _id: req.params.id });
+
+    res.json('Removed Pin');
   } catch (e) {
     console.error(e.message);
 
