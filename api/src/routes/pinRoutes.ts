@@ -65,10 +65,16 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post(
   '/',
   [
-    check('label', 'First Name is required')
+    check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),
-    check('userId', 'Last Name is required')
+    check('userId', `'userId' is a required field.`)
+      .not()
+      .isEmpty(),
+    check('lat', `'lat' is a required field.`)
+      .not()
+      .isEmpty(),
+    check('lng', `'lng' is a required field.`)
       .not()
       .isEmpty()
   ],
@@ -79,16 +85,28 @@ router.post(
         .status(HttpStatusCodes.UNPROCESSABLE_ENTITY)
         .json({ errors: errors.array() });
     }
-    const now = new Date();
 
-    const { label, userId, showOnMap = false, imageUrl = null } = req.body;
+    const {
+      label,
+      userId,
+      showOnMap = false,
+      imageUrl = null,
+      lat = 0.0,
+      lng = 0.0
+    } = req.body;
 
     const fields = {
       label,
-      userId,
-      createDate: now,
       showOnMap,
-      imageUrl
+      imageUrl,
+      trackable: {
+        createDate: new Date(),
+        userId
+      },
+      position: {
+        lat,
+        lng
+      }
     };
 
     try {
@@ -115,12 +133,20 @@ router.patch('/:id', async (req: Request, res: Response) => {
         $set: {
           showOnMap: req.body.showOnMap,
           label: req.body.label,
-          userId: req.body.userId
+          userId: req.body.userId,
+          position: {
+            lat: req.body.lat,
+            lng: req.body.lng
+          },
+          trackable: {
+            userId: req.body.userId,
+            createDate: req.body.createDate
+          }
         }
       }
     );
 
-    res.json('Updated Successfully');
+    res.send('Updated Successfully');
   } catch (e) {
     console.error(e.message);
 

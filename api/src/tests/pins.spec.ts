@@ -14,16 +14,14 @@ describe('route pins/', () => {
 
   it('should GET one pin', async () => {
     await supertest(server)
-      .get('/pins/5fe5937154e12d1c44e725f6')
+      .get('/pins/5fe6d05a07e2e1401b003106')
       .expect(200)
       .then(res => {
         expect(res.body._id).to.exist;
-        expect(res.body.label).to.exist;
-        expect(res.body.userId).to.exist;
       });
   });
 
-  it('should fail on POST a pin with no fields', async () => {
+  it('should not POST a pin with no fields', async () => {
     const data = {};
 
     await supertest(server)
@@ -37,17 +35,53 @@ describe('route pins/', () => {
       label: 'automation_test',
       userId: 999999,
       showOnMap: true,
-      imageUrl: 'www.imgurl.com/5aiUkl'
+      imageUrl: 'www.imgurl.com/5aiUkl',
+      lat: 5.2,
+      lng: -9.01
     };
 
     await supertest(server)
       .post('/pins')
       .send(data)
+      .expect(200);
+  });
+
+  it('should PATCH a pin', async () => {
+    const data = {
+      label: 'automation_test',
+      userId: 999999,
+      showOnMap: false,
+      imageUrl: 'www.imgurl.com/5aiUkl',
+      lat: 5.2,
+      lng: -9.01
+    };
+
+    const id = '5fe6d05a07e2e1401b003106';
+
+    await supertest(server)
+      .patch(`/pins/${id}`)
+      .send(data)
+      .expect(200)
       .then(res => {
-        expect(res.body.label).to.equal('automation_test');
-        expect(res.body.userId).to.equal(999999);
-        expect(res.body.showOnMap).to.be.true;
-        expect(res.body.imageUrl).to.equal('www.imgurl.com/5aiUkl');
+        expect(res.body).to.exist;
+      });
+  });
+
+  it('should DELETE a pin', async () => {
+    const data = {
+      label: 'automation_test',
+      userId: 999999,
+      lat: 5.2,
+      lng: -9.01
+    };
+
+    await supertest(server)
+      .post('/pins')
+      .send(data)
+      .then(async res => {
+        await supertest(server)
+          .delete(`/pins/${res.body._id}`)
+          .expect(200);
       });
   });
 });
