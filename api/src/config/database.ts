@@ -3,8 +3,7 @@ import { ConnectionOptions, connect } from 'mongoose';
 
 const connectDB = async () => {
   try {
-    const mongoURI: string =
-      'mongodb+srv://user:d01YCo6Ua1rkqt56@cluster0.tyrfy.mongodb.net/master?retryWrites=true&w=majority';
+    const mongoURI: string = process.env.MONGO_URI || '';
 
     const options: ConnectionOptions = {
       useNewUrlParser: true,

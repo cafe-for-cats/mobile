@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // @desc    Test Base API
 // @access  Public
 app.get('/', (_req, res) => {
-  res.send('API Running');
+  res.send('Hello, world!');
 });
 
 app.use('/pins', pins);

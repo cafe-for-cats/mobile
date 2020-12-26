@@ -2,6 +2,7 @@ import { Router, Response, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
 import Pin, { IPin } from '../models/pinModels';
 import { Types } from 'mongoose';
+import { check, validationResult } from 'express-validator/check';
 
 const router: Router = Router();
 
@@ -15,7 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
 
     if (!profile)
       return res
-        .status(HttpStatusCodes.BAD_REQUEST)
+        .status(HttpStatusCodes.NOT_FOUND)
         .json({ msg: 'Profile not found' });
 
     res.json(profile);
@@ -42,7 +43,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 
     if (!profile)
       return res
-        .status(HttpStatusCodes.BAD_REQUEST)
+        .status(HttpStatusCodes.NOT_FOUND)
         .json({ msg: 'Profile not found' });
 
     res.json(profile);
@@ -61,30 +62,47 @@ router.get('/:id', async (req: Request, res: Response) => {
  * @route POST pins/
  * @desc Create a new pin
  */
-router.post('/', async (req: Request, res: Response) => {
-  const now = new Date();
+router.post(
+  '/',
+  [
+    check('label', 'First Name is required')
+      .not()
+      .isEmpty(),
+    check('userId', 'Last Name is required')
+      .not()
+      .isEmpty()
+  ],
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(HttpStatusCodes.UNPROCESSABLE_ENTITY)
+        .json({ errors: errors.array() });
+    }
+    const now = new Date();
 
-  const { label, userId } = req.body;
+    const { label, userId, showOnMap = false, imageUrl = null } = req.body;
 
-  const fields = {
-    label,
-    userId,
-    createDate: now,
-    showOnMap: true,
-    imageUrl: ''
-  };
+    const fields = {
+      label,
+      userId,
+      createDate: now,
+      showOnMap,
+      imageUrl
+    };
 
-  try {
-    let newItem = new Pin(fields);
-    await newItem.save();
+    try {
+      let newItem = new Pin(fields);
+      await newItem.save();
 
-    res.json(newItem);
-  } catch (e) {
-    console.error(e.message);
+      res.json(newItem);
+    } catch (e) {
+      console.error(e.message);
 
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+    }
   }
-});
+);
 
 /**
  * @route UPDATE pins/

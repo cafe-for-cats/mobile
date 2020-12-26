@@ -14,7 +14,8 @@ const pinSchema: Schema = new Schema({
   userId: Number,
   label: String,
   showOnMap: Boolean,
-  imageUrl: String
+  imageUrl: String,
+  createDate: Date
 });
 
 const Pin: Model<IPin> = model('Pin', pinSchema);
