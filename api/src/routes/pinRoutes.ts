@@ -11,7 +11,7 @@ const router: Router = Router();
  * @route GET pins/
  * @desc  Gets all pins
  */
-router.get('/', [auth], async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
     const profile: IPin[] | null = await Pin.find({});
 
@@ -37,7 +37,7 @@ router.get('/', [auth], async (req: Request, res: Response) => {
  * @route GET pins/:id
  * @desc  Get a pin by its id
  */
-router.get('/:id', [auth], async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
     const id = Types.ObjectId(req.params.id);
 
@@ -66,7 +66,6 @@ router.get('/:id', [auth], async (req: Request, res: Response) => {
 router.post(
   '/',
   [
-    auth,
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),
@@ -131,7 +130,6 @@ router.post(
 router.patch(
   '/:id',
   [
-    auth,
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),
@@ -179,7 +177,7 @@ router.patch(
  * @route DELETE pins/
  * @desc Deletes a pin by its given id
  */
-router.delete('/:id', [auth], async (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   try {
     await Pin.findOneAndRemove({ _id: req.params.id });
 

@@ -1,4 +1,3 @@
-import config from 'config';
 import { ConnectionOptions, connect } from 'mongoose';
 
 /**
