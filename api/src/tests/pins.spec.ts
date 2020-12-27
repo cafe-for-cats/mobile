@@ -21,15 +21,6 @@ describe('route pins/', () => {
       });
   });
 
-  it('should not POST a pin with no fields', async () => {
-    const data = {};
-
-    await supertest(server)
-      .post('/pins')
-      .send(data)
-      .expect(422);
-  });
-
   it('should POST a pin with all fields', async () => {
     const data = {
       label: 'automation_test',
@@ -46,6 +37,15 @@ describe('route pins/', () => {
       .expect(200);
   });
 
+  it('should not POST a pin with no fields', async () => {
+    const data = {};
+
+    await supertest(server)
+      .post('/pins')
+      .send(data)
+      .expect(422);
+  });
+
   it('should PATCH a pin', async () => {
     const data = {
       label: 'automation_test',
@@ -55,6 +55,20 @@ describe('route pins/', () => {
       lat: 5.2,
       lng: -9.01
     };
+
+    const id = '5fe6d05a07e2e1401b003106';
+
+    await supertest(server)
+      .patch(`/pins/${id}`)
+      .send(data)
+      .expect(200)
+      .then(res => {
+        expect(res.body).to.exist;
+      });
+  });
+
+  it('should not PATCH a pin with no fields', async () => {
+    const data = {};
 
     const id = '5fe6d05a07e2e1401b003106';
 

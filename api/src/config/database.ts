@@ -1,6 +1,9 @@
 import config from 'config';
 import { ConnectionOptions, connect } from 'mongoose';
 
+/**
+ * Attempt to establish a connection to the database based on `process.env.MONGO_URI`.
+ */
 const connectDB = async () => {
   try {
     const mongoURI: string = process.env.MONGO_URI || '';

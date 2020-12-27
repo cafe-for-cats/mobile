@@ -3,14 +3,15 @@ import HttpStatusCodes from 'http-status-codes';
 import Pin, { IPin } from '../models/pinModels';
 import { Types } from 'mongoose';
 import { check, validationResult } from 'express-validator/check';
+import auth from '../middleware/auth';
 
 const router: Router = Router();
 
 /**
- * @route   GET pins/
- * @desc    Gets all pins
+ * @route GET pins/
+ * @desc  Gets all pins
  */
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', [auth], async (req: Request, res: Response) => {
   try {
     const profile: IPin[] | null = await Pin.find({});
 
@@ -21,7 +22,8 @@ router.get('/', async (req: Request, res: Response) => {
 
     res.json(profile);
   } catch (err) {
-    console.error(err.message);
+    console.error('GET pins', err.message);
+
     if (err.kind === 'ObjectId') {
       return res
         .status(HttpStatusCodes.BAD_REQUEST)
@@ -32,10 +34,10 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 /**
- * @route   GET pins/:id
- * @desc    Get a pin by its id
+ * @route GET pins/:id
+ * @desc  Get a pin by its id
  */
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', [auth], async (req: Request, res: Response) => {
   try {
     const id = Types.ObjectId(req.params.id);
 
@@ -47,12 +49,11 @@ router.get('/:id', async (req: Request, res: Response) => {
         .json({ msg: 'Profile not found' });
 
     res.json(profile);
-  } catch (err) {
-    console.error(err.message);
-    if (err.kind === 'ObjectId') {
-      return res
-        .status(HttpStatusCodes.BAD_REQUEST)
-        .json({ msg: 'Profile not found' });
+  } catch (e) {
+    console.error(e.message);
+
+    if (e.kind === 'ObjectId') {
+      return res.status(HttpStatusCodes.BAD_REQUEST).json({ msg: e.message });
     }
     res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
   }
@@ -65,6 +66,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post(
   '/',
   [
+    auth,
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),
@@ -124,40 +126,60 @@ router.post(
 
 /**
  * @route UPDATE pins/
+ * @desc Updates each field based on it's provided value.
  */
-router.patch('/:id', async (req: Request, res: Response) => {
-  try {
-    await Pin.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: {
-          showOnMap: req.body.showOnMap,
-          label: req.body.label,
-          userId: req.body.userId,
-          position: {
-            lat: req.body.lat,
-            lng: req.body.lng
-          },
-          trackable: {
+router.patch(
+  '/:id',
+  [
+    auth,
+    check('label', `'label' is a required field.`)
+      .not()
+      .isEmpty(),
+    check('userId', `'userId' is a required field.`)
+      .not()
+      .isEmpty(),
+    check('lat', `'lat' is a required field.`)
+      .not()
+      .isEmpty(),
+    check('lng', `'lng' is a required field.`)
+      .not()
+      .isEmpty()
+  ],
+  async (req: Request, res: Response) => {
+    try {
+      await Pin.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: {
+            showOnMap: req.body.showOnMap,
+            label: req.body.label,
             userId: req.body.userId,
-            createDate: req.body.createDate
+            position: {
+              lat: req.body.lat,
+              lng: req.body.lng
+            },
+            trackable: {
+              userId: req.body.userId,
+              createDate: req.body.createDate
+            }
           }
         }
-      }
-    );
+      );
 
-    res.send('Updated Successfully');
-  } catch (e) {
-    console.error(e.message);
+      res.send('Updated Successfully');
+    } catch (e) {
+      console.error(e.message);
 
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+    }
   }
-});
+);
+
 /**
  * @route DELETE pins/
  * @desc Deletes a pin by its given id
  */
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/:id', [auth], async (req: Request, res: Response) => {
   try {
     await Pin.findOneAndRemove({ _id: req.params.id });
 
