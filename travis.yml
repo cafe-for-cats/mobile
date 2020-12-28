@@ -1,0 +1,25 @@
+matrix:
+  include:
+    # api build
+    - language: node_js
+      node_js: 13
+      os: linux
+      dist: bionic
+      before_script:
+        - cd api
+      script:
+        - npm install && npm run test
+      git:
+        quiet: true
+    # mobile build
+    # - language: node_js
+    #   node_js: 13
+    #   os: linux
+    #   dist: bionic
+    #   before_script:
+    #     - cd mobile
+    #   script:
+    #     - npm install && npm run test
+    #   git:
+    #     quiet: true
+    # here will be another build for mobile
