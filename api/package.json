@@ -7,8 +7,8 @@
     "build": "tsc",
     "dev": "nodemon -r ./src/server.ts",
     "start": "nodemon -r dotenv/config ./build/server.js",
-    "prod": "npm run build && npm run start -r dotenv/config",
-    "test": "nodemon --watch . --ext ts --exec \"mocha -r dotenv/config -r ts-node/register ./src/tests/**/*.spec.ts\""
+    "prod": "npm run build && npm run start",
+    "test": "nodemon --watch . --ext ts --exec \"mocha -r ts-node/register ./src/tests/**/*.spec.ts\""
   },
   "keywords": [],
   "author": "",
