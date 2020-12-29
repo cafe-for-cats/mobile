@@ -1,6 +1,5 @@
 matrix:
   include:
-    # api build
     - language: node_js
       node_js: 13
       os: linux
@@ -11,18 +10,6 @@ matrix:
         - npm install && npm run test
       git:
         quiet: true
-      env:
-        global:
-          secure: 'aMV1Bp4meKN0masQWlFtaqUnnNRaoRCEGIqcI5PGWhJWAYDe/HwhR/QGYvbNhYNzhKGxWsEwGx56cuCbL2YcTjr5owFi0CHS3gOmvZbEfVRDmgNO4hHK58k4ZpRX2pXUlcn9S8Mng1YHwYR57FKFYIj3K4n7L/RmVwR8kWWlTVeg9+z2lb6NO8z42jpQhN4zkhZ+LkbBu2FeeGAW+LvjtEX2BnGnnAeOmpHC+BUkiwnXWzmF8mNO5ICt6KI8azYXrHFWSbJhcA2D93o7m03T0OnLOqr3Y6Fq4J6jWDUPtqWTDtTno77jRy0XUYpVPwnJ0mLlJgToCiqTMNm9WTs3E9ghrSRj+g7NX1hwp/zVoyLWOXtpC+NYU4nfT7Xf5AXAaAUvZS5bd5Rb0FH/z55CMGGoKuqHqVbBXfgngS288B04HoYaT3PdNxUs9y8FKiP4/gQaQAQKYGFP54hFxuMxKn1Noj3rLa31kiLoKN7X+teJ0PYOacq0kUwc7ZV4kl4s+2nvytwUJMwsAYf5HwwzKYljp4xJp04qvxxq2LODx7rkGrivRajAudZQOfMNJfuOAFtpBytvwIPEN+b0xP+F53QEC89yPJkfhGljixjSxdFvv8wIXnoezQJpUa7a3wicagaMnOZvP5XUM9pFs0cJ/3HBYR5jUXZS2lXB2Y0wbeA='
-    # mobile build
-    # - language: node_js
-    #   node_js: 13
-    #   os: linux
-    #   dist: bionic
-    #   before_script:
-    #     - cd mobile
-    #   script:
-    #     - npm install && npm run test
-    #   git:
-    #     quiet: true
-    # here will be another build for mobile
+env:
+  global:
+    secure: Ad0SzsW/PU36ZGV0beUpq2wj0lk0NCIPKRhmvqeOZvMdUoZPodCsEwRVhxRQaETTy/U5AHztknhWZYsndOFnVizCUlT3NmTqmk1x1E29sx+twXnKo0rT1zvJYrWxbPmPMUpNZmeWmlJQOMx0pN1zBKgtSljgb0jYwBZE4Cdh2VJdPW2B9ZayNjB6RSCGy6R76ddRstt5fWu54jcIHHLLNVbrKAK8WgMiRJtctKnCO3qtyicgMpSffUSJAf/JNFaCyvDKXASgsSlruySUykKfPFonY+ZM6S4PqHURSrJphehz9b8n79a8iZj9QUj17qW8Tp6VbnAPwOQ1Sbq3QxHvDWh3e3wePEUg4VeEYno8QCyzp6XDY03xzK45D/f3KhPdkgDsMlUV2MPXc9W6bRoWh3NQcNqDuWi74vADgLLOUmMA3LcKNknkSwFMZHGQxUr5XWcGBM21EiiwXsiLj1o2qy72/TFOHxAA4qj07Z6Ag76fTHehq7djiNZsKveJbjbO//VvHCXVxpAoMauueY8JDlp2KM8GbGadEzsySqpNxoRfe9x/8BLLXgATomiW78MTmnNs5Zdx9jtW26Fzm0oYpy65KI0I47Co8xs+OwsD6iNpf9hUCSgVHjIfapIHn5cxsz4Nv70ciHoVPrXc6BFm2kRE9GKvP+Vstj/Oh+CxODk=
