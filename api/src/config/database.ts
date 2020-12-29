@@ -1,4 +1,4 @@
-import { ConnectionOptions, connect } from 'mongoose';
+import { ConnectionOptions, connect, mongo } from 'mongoose';
 
 /**
  * Attempt to establish a connection to the database based on `process.env.MONGO_URI`.
@@ -6,6 +6,8 @@ import { ConnectionOptions, connect } from 'mongoose';
 const connectDB = async () => {
   try {
     const mongoURI: string = process.env.MONGO_URI || '';
+
+    console.log(mongoURI.split('/')[0]);
 
     const options: ConnectionOptions = {
       useNewUrlParser: true,
