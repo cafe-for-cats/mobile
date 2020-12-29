@@ -10,6 +10,3 @@ matrix:
         - npm install && npm run test
       git:
         quiet: true
-env:
-  global:
-    secure: Ad0SzsW/PU36ZGV0beUpq2wj0lk0NCIPKRhmvqeOZvMdUoZPodCsEwRVhxRQaETTy/U5AHztknhWZYsndOFnVizCUlT3NmTqmk1x1E29sx+twXnKo0rT1zvJYrWxbPmPMUpNZmeWmlJQOMx0pN1zBKgtSljgb0jYwBZE4Cdh2VJdPW2B9ZayNjB6RSCGy6R76ddRstt5fWu54jcIHHLLNVbrKAK8WgMiRJtctKnCO3qtyicgMpSffUSJAf/JNFaCyvDKXASgsSlruySUykKfPFonY+ZM6S4PqHURSrJphehz9b8n79a8iZj9QUj17qW8Tp6VbnAPwOQ1Sbq3QxHvDWh3e3wePEUg4VeEYno8QCyzp6XDY03xzK45D/f3KhPdkgDsMlUV2MPXc9W6bRoWh3NQcNqDuWi74vADgLLOUmMA3LcKNknkSwFMZHGQxUr5XWcGBM21EiiwXsiLj1o2qy72/TFOHxAA4qj07Z6Ag76fTHehq7djiNZsKveJbjbO//VvHCXVxpAoMauueY8JDlp2KM8GbGadEzsySqpNxoRfe9x/8BLLXgATomiW78MTmnNs5Zdx9jtW26Fzm0oYpy65KI0I47Co8xs+OwsD6iNpf9hUCSgVHjIfapIHn5cxsz4Nv70ciHoVPrXc6BFm2kRE9GKvP+Vstj/Oh+CxODk=
