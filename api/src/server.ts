@@ -4,6 +4,8 @@ import express from 'express';
 import connectDB from './config/database';
 import pins from './routes/pinRoutes';
 
+require('env2')('.env');
+
 const app = express();
 
 // Connect to MongoDB

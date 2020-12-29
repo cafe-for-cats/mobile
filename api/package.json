@@ -5,7 +5,7 @@
   "main": "build/server.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon -r dotenv/config ./src/server.ts",
+    "dev": "nodemon -r ./src/server.ts",
     "start": "nodemon -r dotenv/config ./build/server.js",
     "prod": "npm run build && npm run start -r dotenv/config",
     "test": "nodemon --watch . --ext ts --exec \"mocha -r dotenv/config -r ts-node/register ./src/tests/**/*.spec.ts\""
@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "env2": "^2.2.2",
     "express": "^4.16.4",
     "express-validator": "^6.9.0",
     "http-status-codes": "^1.3.2",

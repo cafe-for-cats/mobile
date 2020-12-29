@@ -7,23 +7,24 @@ const connectDB = async () => {
   try {
     const mongoURI: string = process.env.MONGO_URI || '';
 
-    console.log(mongoURI.split('/')[0]);
-
     const options: ConnectionOptions = {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true
     };
+
     await connect(
       mongoURI,
       options
     );
+
     console.log('MongoDB Connected...');
   } catch (err) {
-    console.error(err.message);
-    // Exit process with failure
-    process.exit(1);
+    console.error('Error connecting to MongoDB: ', err.message);
+    console.log('Trying again...');
+
+    process.exit(1); // Exit after several restries to connect to MongoDB
   }
 };
 

@@ -10,3 +10,5 @@ matrix:
         - npm install && npm run test
       git:
         quiet: true
+env:
+  - MONGO_URI=www.google.com
