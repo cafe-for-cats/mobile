@@ -1,27 +1,30 @@
 import server from '../server';
 import supertest from 'supertest';
 import { expect } from 'chai';
+import { doesNotMatch } from 'assert';
 
 describe('route pins/', () => {
-  it('should GET all pins', async () => {
+  it('should GET all pins', async done => {
     await supertest(server)
       .get('/pins')
       .expect(200)
       .then(res => {
         expect(res.body.length).to.be.greaterThan(1);
+        done();
       });
   });
 
-  it('should GET one pin', async () => {
+  it('should GET one pin', async done => {
     await supertest(server)
       .get('/pins/5fe6d05a07e2e1401b003106')
       .expect(200)
       .then(res => {
         expect(res.body._id).to.exist;
+        done();
       });
   });
 
-  it('should POST a pin with all fields', async () => {
+  it('should POST a pin with all fields', async done => {
     const data = {
       label: 'automation_test',
       userId: 999999,
@@ -35,18 +38,20 @@ describe('route pins/', () => {
       .post('/pins')
       .send(data)
       .expect(200);
+    done();
   });
 
-  it('should not POST a pin with no fields', async () => {
+  it('should not POST a pin with no fields', async done => {
     const data = {};
 
     await supertest(server)
       .post('/pins')
       .send(data)
       .expect(422);
+    done();
   });
 
-  it('should PATCH a pin', async () => {
+  it('should PATCH a pin', async done => {
     const data = {
       label: 'automation_test',
       userId: 999999,
@@ -64,10 +69,11 @@ describe('route pins/', () => {
       .expect(200)
       .then(res => {
         expect(res.body).to.exist;
+        done();
       });
   });
 
-  it('should not PATCH a pin with no fields', async () => {
+  it('should not PATCH a pin with no fields', async done => {
     const data = {};
 
     const id = '5fe6d05a07e2e1401b003106';
@@ -78,10 +84,11 @@ describe('route pins/', () => {
       .expect(200)
       .then(res => {
         expect(res.body).to.exist;
+        done();
       });
   });
 
-  it('should DELETE a pin', async () => {
+  it('should DELETE a pin', async done => {
     const data = {
       label: 'automation_test',
       userId: 999999,
@@ -96,6 +103,7 @@ describe('route pins/', () => {
         await supertest(server)
           .delete(`/pins/${res.body._id}`)
           .expect(200);
+        done();
       });
   });
 });
