@@ -8,6 +8,7 @@
     "dev": "nodemon -r ./src/server.ts",
     "start": "nodemon -r dotenv/config ./build/server.js",
     "prod": "npm run build && npm run start",
+    "test-prod": "mocha --timeout 10000 -r ts-node/register ./src/tests/**/*.spec.ts",
     "test": "nodemon --watch . --ext ts --exec \"mocha --timeout 10000 -r ts-node/register ./src/tests/**/*.spec.ts\""
   },
   "keywords": [],
