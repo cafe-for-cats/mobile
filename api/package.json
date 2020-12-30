@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "env2": "^2.2.2",
     "express": "^4.16.4",
     "express-validator": "^6.9.0",
