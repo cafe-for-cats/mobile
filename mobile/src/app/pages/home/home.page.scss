@@ -7,6 +7,14 @@
   transform: translateY(-50%);
 }
 
+ion-toast.success .toast-wrapper {
+  background: green;
+}
+
+ion-toast.error .toast-wrapper {
+  background: rgb(209, 71, 71);
+}
+
 #container strong {
   font-size: 20px;
   line-height: 26px;

@@ -1,0 +1,14 @@
+matrix:
+  include:
+    - language: node_js
+      node_js: 13
+      os: linux
+      dist: bionic
+      before_script:
+        - cd api
+      script:
+        - npm install && npm run test-prod
+      git:
+        quiet: true
+      env:
+        secure: 'XFWgjmpzU9LKj9xUg4FBWEY6bg8dmnoJ51ygb8AA7vc8Fr4YpfLmRmfytP4r/deQOKN9LrWzlt6sIZu/WVfMjcuXFnKn8DCdZMNZVJpYp2EYPHquPUa5dOEg8CQcP6u07pol7eIAzW+c7W5KN9Hr96r0ISv9RFMYEvzP8TP8ujrghFqGw0md1gt1kR0bIw2WpythwQ7ileniZ/qRI/O6GtRKah2uC1X+iMCo+OIDtcshmzY+1ZIlfa84Hrj3AOZkjKjk3WgRCGxMPdzQ8XbCaOhqSa/dONYqVd8EduFY1DvTqf2FcfxbZjt14pdQcZ7RtVeEyKjzh9CdJu+2ShJ81gG8SbUjmeQSm8ioAJYUHX9ZsKO+Wnla4qDGs0oNDRnX17fSGRya2/vS1/Rl07zqpywFBuF5kxsYH7Xzk/u5OPVDu1dQUH15r5BkzfFeyvHc/H3tMljLEavBFoogEAsAR8EUKkrba9ItIpw7p376PEItDnl9V7gGU/nelpYVVXVY81WKURIVVuYDLmgXx9pio4ZkuwIKtyUWPzfIGYrEIyLawfSWt6UdDeNWuq5fbTboRqMW07vyERWgOzMd+F5IUdl8PTpLQW+dbSJT5u71AuTmfYW9zjjrda21mS+S+YDGXZkRdpNOy9dDHQhyuGz/P3WcZfyxhJTqfeXlI2waZP8='
