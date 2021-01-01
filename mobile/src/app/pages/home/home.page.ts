@@ -60,7 +60,7 @@ export class HomePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    const request = this.http.get('http://localhost:3000/pins');
+    const request = this.http.get('http://localhost:3000/pins/');
 
     this.refresh$.subscribe(
       (lastPos: { latitude?: number; longitude?: number }) => {
