@@ -64,7 +64,7 @@ export class HomePage implements OnInit {
 
     this.refresh$.subscribe(
       (lastPos: { latitude?: number; longitude?: number }) => {
-        request.subscribe(data => {
+        request.subscribe((data: IPin[]) => {
           if (data) {
             this.addMarkersToMap(data, lastPos);
           } else {
@@ -81,7 +81,7 @@ export class HomePage implements OnInit {
    * @param lastPos Last emitted position; Non-null if user has just added a pin.
    * @docs-private
    */
-  addMarkersToMap(pins, lastPos) {
+  addMarkersToMap(pins: IPin[], lastPos) {
     this.markerPositions = []; // reset markers
 
     let position;
@@ -89,17 +89,21 @@ export class HomePage implements OnInit {
     if (lastPos && lastPos.latitude) {
       position = new google.maps.LatLng(lastPos.latitude, lastPos.longitude);
     } else {
-      position = new google.maps.LatLng(pins[0].latitude, pins[0].longitude);
+      position = new google.maps.LatLng(
+        pins[0].position.lat,
+        pins[0].position.lng
+      );
     }
 
-    this.map.googleMap.setCenter(position.toJSON());
+    this.markerPositions = pins.map(pin => {
+      const { lat, lng } = pin.position;
 
-    // TODO: more efficient way to do this than a `for loop` for every single request?
-    for (let marker of pins) {
-      position = new google.maps.LatLng(marker.latitude, marker.longitude);
+      if (lat && lng) {
+        return new google.maps.LatLng(lat, lng).toJSON();
+      }
+    });
 
-      this.markerPositions.push(position.toJSON());
-    }
+    this.map.googleMap.setCenter(this.markerPositions[0]);
   }
 
   /**
@@ -177,13 +181,13 @@ export class HomePage implements OnInit {
     }
 
     const pin = {
-      userId: '329e85ff-a699-4415-a9d8-118889e219ce', // TODO: implement unique identifers per device (doesn't need to be from device, just unique to the device? idk, lots of security stuff to think about)
-      latitude: center.lat(),
-      longitude: center.lng(),
+      userId: '394749694', // TODO: implement unique identifers per device (doesn't need to be from device, just unique to the device? idk, lots of security stuff to think about)
+      lat: center.lat(),
+      lng: center.lng(),
       label: this.currentMenuKey
     };
 
-    this.http.post('http://localhost:3000/pins', pin).subscribe(response => {
+    this.http.post('http://localhost:3000/pins/', pin).subscribe(response => {
       if (response) {
         this.presentToast(
           this.settingsService.userHasLocationPermissions()
@@ -198,8 +202,8 @@ export class HomePage implements OnInit {
         this.resetUiState();
 
         this.refresh$.next({
-          latitude: pin.latitude,
-          longitude: pin.longitude
+          latitude: pin.lat,
+          longitude: pin.lng
         });
       }
     });
@@ -235,4 +239,23 @@ export class SettingsServiceMock {
   userHasLocationPermissions() {
     return false;
   }
+
+  locationChoice() {
+    return 'choose';
+  }
+}
+
+interface IPin {
+  trackable: {
+    createDate: Date;
+    userId: number;
+  };
+  position: {
+    lat: number;
+    lng: number;
+  };
+  _id: string;
+  label: string;
+  showOnMap: boolean;
+  imageUrl: string;
 }

@@ -18,11 +18,8 @@ const allowedOrigins = [
 const corsOptions = {
   origin: (origin: any, callback: any) => {
     if (allowedOrigins.includes(origin) || !origin) {
-      console.log('resolves true', origin);
       callback(null, true);
     } else {
-      console.log('resolves fales', origin);
-
       callback(new Error('Origin not allowed by CORS'));
     }
   }
@@ -60,7 +57,7 @@ router.get('/', cors(corsOptions), async (req: Request, res: Response) => {
  * @route GET pins/:id
  * @desc  Get a pin by its id
  */
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', cors(corsOptions), async (req: Request, res: Response) => {
   try {
     const id = Types.ObjectId(req.params.id);
 
@@ -88,6 +85,7 @@ router.get('/:id', async (req: Request, res: Response) => {
  */
 router.post(
   '/',
+  cors(corsOptions),
   [
     check('label', `'label' is a required field.`)
       .not()
