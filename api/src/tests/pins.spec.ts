@@ -14,7 +14,7 @@ describe('route pins/', () => {
 
   it('should GET one pin', async () => {
     return await supertest(server)
-      .get('/pins/5fe6d05a07e2e1401b003106')
+      .get('/pins/5fefdbd93aac124e60b394d4')
       .expect(200)
       .then(res => {
         expect(res.body._id).to.exist;

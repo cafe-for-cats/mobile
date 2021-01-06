@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <google-map [center]="center" [zoom]="zoom">
+  <google-map [zoom]="zoom">
     <map-rectangle
       *ngIf="showSelectionUI"
       [options]="options"

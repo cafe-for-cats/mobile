@@ -7,8 +7,10 @@ var body_parser_1 = __importDefault(require("body-parser"));
 var express_1 = __importDefault(require("express"));
 var database_1 = __importDefault(require("./config/database"));
 var pinRoutes_1 = __importDefault(require("./routes/pinRoutes"));
+var cors_1 = __importDefault(require("cors"));
 require('env2')('.env');
 var app = express_1.default();
+app.use(cors_1.default());
 // Connect to MongoDB
 database_1.default();
 // Express configuration

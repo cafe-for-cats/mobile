@@ -50,7 +50,6 @@
     "cordova-ios": "^6.1.1",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
-    "cordova-plugin-googlemaps-sdk": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps-sdk.git",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-splashscreen": "^5.0.2",

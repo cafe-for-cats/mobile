@@ -60,7 +60,7 @@ describe('route pins/', function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, supertest_1.default(server_1.default)
-                        .get('/pins/5fe6d05a07e2e1401b003106')
+                        .get('/pins/5fefdbd93aac124e60b394d4')
                         .expect(200)
                         .then(function (res) {
                         chai_1.expect(res.body._id).to.exist;

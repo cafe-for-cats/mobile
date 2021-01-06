@@ -28,29 +28,18 @@ export class HomePage implements OnInit {
     latitude?: number;
     longitude?: number;
   }> = new BehaviorSubject({ latitude: null, longitude: null });
-
   showSelectionUI = false;
-
   /** Tracks which Pin is currently selected for placement. */
   currentMenuKey: string;
-
   /** Tracks the center of the map displayed on the screen. */
   center = { lat: 0, lng: 0 };
-
   markerOptions = { draggable: false };
-
   options = { draggable: true, editable: true };
-
   markerPositions: google.maps.LatLngLiteral[] = [];
-
   zoom = 12;
-
-  display?: google.maps.LatLngLiteral;
-
   bounds: google.maps.LatLngBoundsLiteral;
 
   @ViewChild(GoogleMap) map: GoogleMap;
-
   @ViewChild(MapRectangle) rectangle: MapRectangle;
 
   constructor(
@@ -82,18 +71,12 @@ export class HomePage implements OnInit {
    * @docs-private
    */
   addMarkersToMap(pins: IPin[], lastPos) {
-    this.markerPositions = []; // reset markers
+    this.markerPositions = [];
 
-    let position;
-
-    if (lastPos && lastPos.latitude) {
-      position = new google.maps.LatLng(lastPos.latitude, lastPos.longitude);
-    } else {
-      position = new google.maps.LatLng(
-        pins[0].position.lat,
-        pins[0].position.lng
-      );
-    }
+    const position =
+      lastPos && lastPos.latitude
+        ? new google.maps.LatLng(lastPos.latitude, lastPos.longitude)
+        : new google.maps.LatLng(pins[0].position.lat, pins[0].position.lng);
 
     this.markerPositions = pins.map(pin => {
       const { lat, lng } = pin.position;
@@ -103,7 +86,7 @@ export class HomePage implements OnInit {
       }
     });
 
-    this.map.googleMap.setCenter(this.markerPositions[0]);
+    this.map.googleMap.setCenter(position || this.markerPositions[0]);
   }
 
   /**
@@ -172,13 +155,9 @@ export class HomePage implements OnInit {
    * @docs-private
    */
   onAdd(usingGeolocation: boolean) {
-    let center;
-
-    if (usingGeolocation) {
-      center = this.map.getCenter();
-    } else {
-      center = this.rectangle.getBounds().getCenter();
-    }
+    const center = usingGeolocation
+      ? this.map.getCenter()
+      : this.rectangle.getBounds().getCenter();
 
     const pin = {
       userId: '394749694', // TODO: implement unique identifers per device (doesn't need to be from device, just unique to the device? idk, lots of security stuff to think about)
