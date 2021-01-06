@@ -3,7 +3,6 @@ import HttpStatusCodes from 'http-status-codes';
 import Pin, { IPin } from '../models/pinModels';
 import { Types } from 'mongoose';
 import { check, validationResult } from 'express-validator/check';
-import auth from '../middleware/auth';
 const cors = require('cors'); // TODO: Fix type
 
 const allowedOrigins = [
@@ -85,8 +84,9 @@ router.get('/:id', cors(corsOptions), async (req: Request, res: Response) => {
  */
 router.post(
   '/',
-  cors(corsOptions),
   [
+    cors(corsOptions),
+
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),

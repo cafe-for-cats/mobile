@@ -4,9 +4,13 @@ import express from 'express';
 import connectDB from './config/database';
 import pins from './routes/pinRoutes';
 
+import cors from 'cors';
+
 require('env2')('.env');
 
 const app = express();
+
+app.use(cors());
 
 // Connect to MongoDB
 connectDB();
