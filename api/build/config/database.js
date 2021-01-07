@@ -37,13 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
+/**
+ * Attempt to establish a connection to the database based on `process.env.MONGO_URI`.
+ */
 var connectDB = function () { return __awaiter(void 0, void 0, void 0, function () {
     var mongoURI, options, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                mongoURI = 'mongodb+srv://user:d01YCo6Ua1rkqt56@cluster0.tyrfy.mongodb.net/master?retryWrites=true&w=majority';
+                mongoURI = process.env.MONGO_URI || '';
                 options = {
                     useNewUrlParser: true,
                     useCreateIndex: true,
@@ -57,8 +60,7 @@ var connectDB = function () { return __awaiter(void 0, void 0, void 0, function 
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
-                console.error(err_1.message);
-                // Exit process with failure
+                console.error('Error connecting to MongoDB: ', err_1.message);
                 process.exit(1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

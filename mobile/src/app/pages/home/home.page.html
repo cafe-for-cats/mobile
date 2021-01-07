@@ -7,10 +7,22 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div #map id="map" style="height: 100%;"></div>
+  <google-map [zoom]="zoom">
+    <map-rectangle
+      *ngIf="showSelectionUI"
+      [bounds]="bounds"
+      [options]="options"
+    ></map-rectangle>
+    <map-marker
+      #marker="mapMarker"
+      *ngFor="let position of markerPositions"
+      [position]="position"
+    ></map-marker>
+  </google-map>
+
   <div *ngIf="showSelectionUI">
     <ion-fab vertical="bottom" horizontal="center">
-      <ion-button (click)="onAdd()"
+      <ion-button (click)="onAdd(false)"
         >Place '{{ currentMenuKey }}' Pin.</ion-button
       >
       <ion-button color="danger" (click)="onCancel()">X</ion-button>

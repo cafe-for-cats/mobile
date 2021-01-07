@@ -3,7 +3,27 @@ import HttpStatusCodes from 'http-status-codes';
 import Pin, { IPin } from '../models/pinModels';
 import { Types } from 'mongoose';
 import { check, validationResult } from 'express-validator/check';
-import auth from '../middleware/auth';
+const cors = require('cors'); // TODO: Fix type
+
+const allowedOrigins = [
+  'capacitor://localhost',
+  'ionic://localhost',
+  'http://localhost',
+  'http://localhost:8080',
+  'http://localhost:8100',
+  'http://localhost:4200',
+  'http://192.168.1.7:8100'
+];
+
+const corsOptions = {
+  origin: (origin: any, callback: any) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin not allowed by CORS'));
+    }
+  }
+};
 
 const router: Router = Router();
 
@@ -11,7 +31,7 @@ const router: Router = Router();
  * @route GET pins/
  * @desc  Gets all pins
  */
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', cors(corsOptions), async (req: Request, res: Response) => {
   try {
     const profile: IPin[] | null = await Pin.find({});
 
@@ -37,7 +57,7 @@ router.get('/', async (req: Request, res: Response) => {
  * @route GET pins/:id
  * @desc  Get a pin by its id
  */
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', cors(corsOptions), async (req: Request, res: Response) => {
   try {
     const id = Types.ObjectId(req.params.id);
 
@@ -66,6 +86,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post(
   '/',
   [
+    cors(corsOptions),
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),
