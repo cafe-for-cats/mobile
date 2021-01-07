@@ -7,7 +7,6 @@ import { HomePage, SettingsServiceMock } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { GoogleMap } from './google-maps.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
@@ -21,7 +20,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
     HttpClientModule,
     GoogleMapsModule
   ],
-  declarations: [HomePage, GoogleMap],
+  declarations: [HomePage],
   providers: [SettingsServiceMock]
 })
 export class HomePageModule {}
