@@ -87,7 +87,6 @@ router.post(
   '/',
   [
     cors(corsOptions),
-
     check('label', `'label' is a required field.`)
       .not()
       .isEmpty(),

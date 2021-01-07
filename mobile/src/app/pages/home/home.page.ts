@@ -12,20 +12,34 @@ import { MapRectangle, GoogleMap } from '@angular/google-maps';
   styleUrls: ['./home.page.scss']
 })
 export class HomePage implements OnInit {
-  /** Tracks refresh state for the component */
+  /** Tracks refresh state of component */
   refresh$: BehaviorSubject<{
     latitude?: number;
     longitude?: number;
   }> = new BehaviorSubject({ latitude: null, longitude: null });
+
+  /** Tracks whether to show pin placement UI */
   showSelectionUI = false;
-  /** Tracks which Pin is currently selected for placement. */
+
+  /** Tracks which pin menu item is currently selected */
   currentMenuKey: string;
+
+  /** All marker position on the map, filtered by valid lat/lng's */
   markerPositions: google.maps.LatLngLiteral[] = [];
+
+  /** Zoom level of the map */
   zoom = 12;
+
+  /** Bounds of the `<map-rectangle>`. */
   bounds: google.maps.LatLngBoundsLiteral;
+
+  /** Customizable options passed to the map. */
   options = { draggable: true, editable: true };
 
+  /** The `<google-map>` component */
   @ViewChild(GoogleMap) map: GoogleMap;
+
+  /** The `<map-rectangle>` component that displays on the map */
   @ViewChild(MapRectangle) rectangle: MapRectangle;
 
   constructor(
