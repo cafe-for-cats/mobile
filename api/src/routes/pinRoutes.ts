@@ -11,7 +11,8 @@ const allowedOrigins = [
   'http://localhost',
   'http://localhost:8080',
   'http://localhost:8100',
-  'http://localhost:4200'
+  'http://localhost:4200',
+  'http://192.168.1.7:8100'
 ];
 
 const corsOptions = {
