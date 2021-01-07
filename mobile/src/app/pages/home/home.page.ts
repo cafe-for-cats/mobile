@@ -1,21 +1,10 @@
 /// <reference types="@types/googlemaps" />
 
-import {
-  Component,
-  ElementRef,
-  ViewChild,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { ToastController } from '@ionic/angular';
-import {
-  MapInfoWindow,
-  MapMarker,
-  MapRectangle,
-  GoogleMap
-} from '@angular/google-maps';
+import { MapRectangle, GoogleMap } from '@angular/google-maps';
 
 @Component({
   selector: 'app-home-page',
@@ -31,13 +20,10 @@ export class HomePage implements OnInit {
   showSelectionUI = false;
   /** Tracks which Pin is currently selected for placement. */
   currentMenuKey: string;
-  /** Tracks the center of the map displayed on the screen. */
-  center = { lat: 0, lng: 0 };
-  markerOptions = { draggable: false };
-  options = { draggable: true, editable: true };
   markerPositions: google.maps.LatLngLiteral[] = [];
   zoom = 12;
   bounds: google.maps.LatLngBoundsLiteral;
+  options = { draggable: true, editable: true };
 
   @ViewChild(GoogleMap) map: GoogleMap;
   @ViewChild(MapRectangle) rectangle: MapRectangle;
@@ -74,7 +60,7 @@ export class HomePage implements OnInit {
     this.markerPositions = [];
 
     const position =
-      lastPos && lastPos.latitude
+      lastPos && lastPos.latitude && lastPos.longitude
         ? new google.maps.LatLng(lastPos.latitude, lastPos.longitude)
         : new google.maps.LatLng(pins[0].position.lat, pins[0].position.lng);
 

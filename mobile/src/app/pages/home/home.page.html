@@ -10,9 +10,8 @@
   <google-map [zoom]="zoom">
     <map-rectangle
       *ngIf="showSelectionUI"
-      [options]="options"
       [bounds]="bounds"
-      [draggable]="true"
+      [options]="options"
     ></map-rectangle>
     <map-marker
       #marker="mapMarker"

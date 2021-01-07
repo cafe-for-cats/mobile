@@ -20,9 +20,6 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// @route   GET /
-// @desc    Test Base API
-// @access  Public
 app.get('/', (_req, res) => {
   res.send('Hello, world!');
 });
