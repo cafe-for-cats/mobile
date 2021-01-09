@@ -4,4 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      <h5>Pin Settings</h5>
+    </ion-list-header>
+    <ion-radio-group
+      value="manual"
+      (ionChange)="radioGroupChange('locationPreference', $event)"
+    >
+      <ion-list-header>
+        <ion-label>How will the location of the pin be picked?</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label>Place the pin location myself.</ion-label>
+        <ion-radio slot="start" value="manual"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label
+          >Have the pin placed automatically based on my current
+          position.</ion-label
+        >
+        <ion-radio slot="start" value="automatic"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+  <ion-button [disabled]="!changes.length" (click)="handleClick($event)">
+    Apply Changes
+  </ion-button>
+</ion-content>
