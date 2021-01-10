@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -9,7 +10,10 @@ import { Storage } from '@ionic/storage';
 export class SettingsPage {
   changes: { settingName: string; value: string }[] = [];
 
-  constructor(private storage: Storage) {}
+  constructor(
+    private storage: Storage,
+    private toastController: ToastController
+  ) {}
 
   radioGroupChange(settingName, event) {
     const settingWithGivenName = this.changes.find(
@@ -29,8 +33,7 @@ export class SettingsPage {
     this.changes &&
       this.changes.forEach(async change => {
         await this.set(change.settingName, change.value);
-        const name = await this.get(change.settingName);
-        console.log(name);
+        this.presentToast('Changes saved.');
       });
 
     this.changes = [];
@@ -51,5 +54,14 @@ export class SettingsPage {
   async clear() {
     await this.storage.clear();
     return;
+  }
+
+  private async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500
+    });
+
+    toast.present();
   }
 }

@@ -14,6 +14,7 @@ import { Storage } from '@ionic/storage';
 })
 export class HomePage implements OnInit {
   setting;
+
   /** Tracks refresh state of component */
   refresh$: BehaviorSubject<{
     latitude?: number;
@@ -207,7 +208,7 @@ export class HomePage implements OnInit {
   }
 
   // https://www.freecodecamp.org/news/three-ways-to-title-case-a-sentence-in-javascript-676a9175eb27/
-  private titleCase(str): string {
+  public titleCase(str): string {
     return str
       .toLowerCase()
       .split(' ')
