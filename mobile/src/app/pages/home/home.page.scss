@@ -1,8 +1,3 @@
-// google-map.map-container {
-//   height: 100% !important;
-//   width: 100% !important;
-// }
-
 .menu-buttons {
   margin-bottom: 50px;
 }
@@ -21,24 +16,6 @@ ion-toast.success .toast-wrapper {
 
 ion-toast.error .toast-wrapper {
   background: rgb(209, 71, 71);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
 }
 
 ion-content ion-toolbar {

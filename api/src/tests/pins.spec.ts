@@ -14,10 +14,13 @@ describe('route pins/', () => {
 
   it('should GET one pin', async () => {
     return await supertest(server)
-      .get('/pins/5fe6d05a07e2e1401b003106')
-      .expect(200)
-      .then(res => {
-        expect(res.body._id).to.exist;
+      .get('/pins')
+      .then(async res => {
+        return await supertest(server)
+          .get(`/pins/${res.body[0]._id}`)
+          .then(_res => {
+            expect(_res.body.length).to.be.equal(undefined);
+          });
       });
   });
 

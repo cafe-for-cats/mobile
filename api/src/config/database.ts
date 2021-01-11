@@ -1,7 +1,7 @@
-import { ConnectionOptions, connect, mongo } from 'mongoose';
+import { ConnectionOptions, connect } from 'mongoose';
 
 /**
- * Attempt to establish a connection to the database based on `process.env.MONGO_URI`.
+ * Attempt to establish a connection to the database.
  */
 const connectDB = async () => {
   try {
