@@ -6,15 +6,12 @@
 
 <ion-content>
   <ion-list>
-    <ion-list-header>
-      <h5>Pin Settings</h5>
-    </ion-list-header>
     <ion-radio-group
-      value="manual"
       (ionChange)="radioGroupChange('locationPreference', $event)"
+      [(ngModel)]="setting"
     >
       <ion-list-header>
-        <ion-label>How will the pin be placed on the map?</ion-label>
+        <ion-label>Pins</ion-label>
       </ion-list-header>
 
       <ion-item>
@@ -31,6 +28,7 @@
       </ion-item>
     </ion-radio-group>
   </ion-list>
+
   <ion-button [disabled]="!changes.length" (click)="handleClick($event)">
     Apply Changes
   </ion-button>

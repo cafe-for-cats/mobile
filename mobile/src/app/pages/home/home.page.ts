@@ -2,7 +2,7 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, using } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { MapRectangle, GoogleMap } from '@angular/google-maps';
 import { Storage } from '@ionic/storage';
@@ -28,6 +28,7 @@ export class HomePage implements OnInit {
   currentMenuKey: string;
 
   /** All marker position on the map, filtered by valid lat/lng's */
+  /* These should probably be requested by passing a set of coords and it queries within that geographic area */
   markerPositions: google.maps.LatLngLiteral[] = [];
 
   /** Zoom level of the map */
@@ -52,7 +53,7 @@ export class HomePage implements OnInit {
   ) {}
 
   async ionViewDidEnter() {
-    this.setting = await this.storage.get(`setting:locationPreference`);
+    this.setting = await this.storage.get('setting:locationPreference');
   }
 
   ngOnInit() {
@@ -106,7 +107,9 @@ export class HomePage implements OnInit {
   async onMenuSelection(key: string) {
     this.currentMenuKey = key;
 
-    if (this.setting == 'automatic') {
+    const setting = await this.storage.get('setting:locationPreference');
+
+    if (setting == 'automatic') {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position: Position) => {
@@ -176,7 +179,7 @@ export class HomePage implements OnInit {
     this.http.post('http://localhost:3000/pins/', pin).subscribe(response => {
       if (response) {
         this.presentToast(
-          this.setting == 'automatic'
+          usingGeolocation
             ? `'${this.titleCase(
                 this.currentMenuKey
               )}' pin placed at your location.`

@@ -9,11 +9,16 @@ import { ToastController } from '@ionic/angular';
 })
 export class SettingsPage {
   changes: { settingName: string; value: string }[] = [];
+  setting;
 
   constructor(
     private storage: Storage,
     private toastController: ToastController
   ) {}
+
+  async ngOnInit() {
+    this.setting = await this.storage.get('setting:locationPreference');
+  }
 
   radioGroupChange(settingName, event) {
     const settingWithGivenName = this.changes.find(
