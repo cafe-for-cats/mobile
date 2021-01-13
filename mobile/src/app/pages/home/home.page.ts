@@ -2,9 +2,10 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, using } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { MapRectangle, GoogleMap } from '@angular/google-maps';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-home-page',
@@ -12,6 +13,8 @@ import { MapRectangle, GoogleMap } from '@angular/google-maps';
   styleUrls: ['./home.page.scss']
 })
 export class HomePage implements OnInit {
+  setting;
+
   /** Tracks refresh state of component */
   refresh$: BehaviorSubject<{
     latitude?: number;
@@ -25,6 +28,7 @@ export class HomePage implements OnInit {
   currentMenuKey: string;
 
   /** All marker position on the map, filtered by valid lat/lng's */
+  /* These should probably be requested by passing a set of coords and it queries within that geographic area */
   markerPositions: google.maps.LatLngLiteral[] = [];
 
   /** Zoom level of the map */
@@ -45,8 +49,12 @@ export class HomePage implements OnInit {
   constructor(
     private http: HttpClient,
     private toastController: ToastController,
-    private settingsService: SettingsServiceMock
+    private storage: Storage
   ) {}
+
+  async ionViewDidEnter() {
+    this.setting = await this.storage.get('setting:locationPreference');
+  }
 
   ngOnInit() {
     const request = this.http.get('http://localhost:3000/pins/');
@@ -96,10 +104,12 @@ export class HomePage implements OnInit {
    * @param key The menu item selected.
    * @docs-private
    */
-  onMenuSelection(key: string) {
+  async onMenuSelection(key: string) {
     this.currentMenuKey = key;
 
-    if (this.settingsService.userHasLocationPermissions()) {
+    const setting = await this.storage.get('setting:locationPreference');
+
+    if (setting == 'automatic') {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position: Position) => {
@@ -169,7 +179,7 @@ export class HomePage implements OnInit {
     this.http.post('http://localhost:3000/pins/', pin).subscribe(response => {
       if (response) {
         this.presentToast(
-          this.settingsService.userHasLocationPermissions()
+          usingGeolocation
             ? `'${this.titleCase(
                 this.currentMenuKey
               )}' pin placed at your location.`
@@ -177,9 +187,7 @@ export class HomePage implements OnInit {
                 this.currentMenuKey
               )}' pin placed at selected location.`
         );
-
         this.resetUiState();
-
         this.refresh$.next({
           latitude: pin.lat,
           longitude: pin.lng
@@ -203,7 +211,7 @@ export class HomePage implements OnInit {
   }
 
   // https://www.freecodecamp.org/news/three-ways-to-title-case-a-sentence-in-javascript-676a9175eb27/
-  private titleCase(str): string {
+  public titleCase(str): string {
     return str
       .toLowerCase()
       .split(' ')
@@ -211,16 +219,6 @@ export class HomePage implements OnInit {
         return word.replace(word[0], word[0].toUpperCase());
       })
       .join(' ');
-  }
-}
-
-export class SettingsServiceMock {
-  userHasLocationPermissions() {
-    return false;
-  }
-
-  locationChoice() {
-    return 'choose';
   }
 }
 

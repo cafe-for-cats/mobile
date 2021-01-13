@@ -19,26 +19,27 @@
       [position]="position"
     ></map-marker>
   </google-map>
-
-  <div *ngIf="showSelectionUI">
-    <ion-fab vertical="bottom" horizontal="center">
-      <ion-button (click)="onAdd(false)"
-        >Place '{{ currentMenuKey }}' Pin.</ion-button
-      >
-      <ion-button color="danger" (click)="onCancel()">X</ion-button>
+  <div>
+    <div *ngIf="showSelectionUI">
+      <ion-fab vertical="bottom" class="selection-ui">
+        <ion-button color="danger" (click)="onCancel()">X</ion-button>
+        <ion-button (click)="onAdd(false)"
+          >Place {{ titleCase(currentMenuKey) }} Pin.</ion-button
+        >
+      </ion-fab>
+    </div>
+    <ion-fab vertical="bottom" horizontal="end" class="menu-buttons">
+      <ion-fab-button>
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button (click)="onMenuSelection('water')">
+          <ion-icon name="water-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-button (click)="onMenuSelection('first aid')">
+          <ion-icon name="medkit-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab-list>
     </ion-fab>
   </div>
-  <ion-fab vertical="bottom" horizontal="end">
-    <ion-fab-button>
-      <ion-icon name="add-outline"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button (click)="onMenuSelection('water')">
-        <ion-icon name="water-outline"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button (click)="onMenuSelection('first aid')">
-        <ion-icon name="medkit-outline"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
 </ion-content>
