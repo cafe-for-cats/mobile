@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-radio-group
+      (ionChange)="radioGroupChange('locationPreference', $event)"
+      [(ngModel)]="setting"
+    >
+      <ion-list-header>
+        <ion-label>Pins</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label>Place the pin location myself.</ion-label>
+        <ion-radio slot="start" value="manual"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label
+          >Have the pin placed automatically based on my current
+          position.</ion-label
+        >
+        <ion-radio slot="start" value="automatic"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-button [disabled]="!changes.length" (click)="handleClick($event)">
+    Apply Changes
+  </ion-button>
+</ion-content>

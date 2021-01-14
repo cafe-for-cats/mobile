@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { HomePage, SettingsServiceMock } from './home.page';
+import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   imports: [
@@ -16,9 +16,10 @@ import { HttpClientModule } from '@angular/common/http';
     HomePageRoutingModule,
     CommonModule,
     // import HttpClientModule after BrowserModule.
-    HttpClientModule
+    HttpClientModule,
+    GoogleMapsModule
   ],
   declarations: [HomePage],
-  providers: [SettingsServiceMock]
+  providers: []
 })
 export class HomePageModule {}

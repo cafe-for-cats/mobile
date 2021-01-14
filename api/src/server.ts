@@ -1,24 +1,23 @@
 import bodyParser from 'body-parser';
 import express from 'express';
-
 import connectDB from './config/database';
 import pins from './routes/pinRoutes';
+import cors from 'cors';
 
 require('env2')('.env');
 
 const app = express();
 
+app.use(cors());
+
 // Connect to MongoDB
 connectDB();
 
 // Express configuration
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// @route   GET /
-// @desc    Test Base API
-// @access  Public
 app.get('/', (_req, res) => {
   res.send('Hello, world!');
 });
