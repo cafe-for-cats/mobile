@@ -7,7 +7,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <google-map [zoom]="zoom">
+  <input
+    ngx-google-places-autocomplete
+    id="autocomplete-input"
+    [options]="options"
+    (onAddressChange)="handleAddressChange($event)"
+    style="color: black"
+  />
+  <google-map>
     <map-rectangle
       *ngIf="showSelectionUI"
       [bounds]="bounds"

@@ -17,6 +17,7 @@
     "@angular/core": "~10.0.0",
     "@angular/forms": "~10.0.0",
     "@angular/google-maps": "^11.0.1",
+    "@angular/material": "^11.0.4",
     "@angular/platform-browser": "~10.0.0",
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
@@ -35,6 +36,7 @@
     "cordova-plugin-android-permissions": "^1.1.2",
     "cordova-sqlite-storage": "^5.1.0",
     "cordova.plugins.diagnostic": "^6.0.2",
+    "ngx-google-places-autocomplete": "^2.0.5",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

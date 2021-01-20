@@ -6,6 +6,7 @@ import { BehaviorSubject, using } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { MapRectangle, GoogleMap } from '@angular/google-maps';
 import { Storage } from '@ionic/storage';
+import { Address } from 'ngx-google-places-autocomplete/objects/address';
 
 @Component({
   selector: 'app-home-page',
@@ -53,6 +54,20 @@ export class HomePage implements OnInit {
   ) {}
 
   async ionViewDidEnter() {
+    google.maps.event.addListenerOnce(this.map.googleMap, 'tilesloaded', () => {
+      const input = document.getElementById(
+        'autocomplete-input'
+      ) as HTMLInputElement;
+      const searchBox = new google.maps.places.SearchBox(input);
+      this.map.googleMap.controls[google.maps.ControlPosition.TOP_LEFT].push(
+        input
+      );
+
+      searchBox.setBounds(
+        this.map.googleMap.getBounds() as google.maps.LatLngBounds
+      );
+    });
+
     this.setting = await this.storage.get('setting:locationPreference');
   }
 
@@ -70,6 +85,13 @@ export class HomePage implements OnInit {
         });
       }
     );
+  }
+
+  handleAddressChange(address: Address) {
+    const lat = address.geometry.location.lat();
+    const lng = address.geometry.location.lng();
+
+    this.map.googleMap.setCenter({ lat, lng });
   }
 
   /**
