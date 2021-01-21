@@ -6,7 +6,7 @@ import { BehaviorSubject, using } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { MapRectangle, GoogleMap } from '@angular/google-maps';
 import { Storage } from '@ionic/storage';
-import { Address } from 'ngx-google-places-autocomplete/objects/address';
+import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 
 @Component({
   selector: 'app-home-page',
@@ -47,6 +47,8 @@ export class HomePage implements OnInit {
   /** The `<map-rectangle>` component that displays on the map */
   @ViewChild(MapRectangle) rectangle: MapRectangle;
 
+  @ViewChild('placesRef') placesRef: GooglePlaceDirective;
+
   constructor(
     private http: HttpClient,
     private toastController: ToastController,
@@ -58,10 +60,23 @@ export class HomePage implements OnInit {
       const input = document.getElementById(
         'autocomplete-input'
       ) as HTMLInputElement;
-      const searchBox = new google.maps.places.SearchBox(input);
+
       this.map.googleMap.controls[google.maps.ControlPosition.TOP_LEFT].push(
         input
       );
+
+      const searchBox = new google.maps.places.SearchBox(input);
+
+      /* Uses event listener instead of `onAddressChange` event so user doesn't
+      have to double-select their address. */
+      searchBox.addListener('places_changed', () => {
+        const places = searchBox.getPlaces();
+
+        const lat = places[0].geometry.location.lat();
+        const lng = places[0].geometry.location.lng();
+
+        this.map.googleMap.setCenter({ lat, lng });
+      });
 
       searchBox.setBounds(
         this.map.googleMap.getBounds() as google.maps.LatLngBounds
@@ -85,13 +100,6 @@ export class HomePage implements OnInit {
         });
       }
     );
-  }
-
-  handleAddressChange(address: Address) {
-    const lat = address.geometry.location.lat();
-    const lng = address.geometry.location.lng();
-
-    this.map.googleMap.setCenter({ lat, lng });
   }
 
   /**

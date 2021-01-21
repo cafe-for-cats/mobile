@@ -10,9 +10,8 @@
   <input
     ngx-google-places-autocomplete
     id="autocomplete-input"
+    #placesRef="ngx-places"
     [options]="options"
-    (onAddressChange)="handleAddressChange($event)"
-    style="color: black"
   />
   <google-map>
     <map-rectangle
