@@ -14,7 +14,6 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    CommonModule,
     HttpClientModule,
     GoogleMapsModule,
     GooglePlaceModule

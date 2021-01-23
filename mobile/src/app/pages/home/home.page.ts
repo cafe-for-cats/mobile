@@ -1,6 +1,4 @@
-/// <reference types="@types/googlemaps" />
-
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, using } from 'rxjs';
 import { ToastController } from '@ionic/angular';
@@ -33,7 +31,7 @@ export class HomePage implements OnInit {
   markerPositions: google.maps.LatLngLiteral[] = [];
 
   /** Zoom level of the map */
-  zoom = 12;
+  zoom = 15; // https://developers.google.com/maps/documentation/ios-sdk/views?hl=en
 
   /** Bounds of the `<map-rectangle>`. */
   bounds: google.maps.LatLngBoundsLiteral;
@@ -52,7 +50,8 @@ export class HomePage implements OnInit {
   constructor(
     private http: HttpClient,
     private toastController: ToastController,
-    private storage: Storage
+    private storage: Storage,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   async ionViewDidEnter() {
@@ -71,11 +70,23 @@ export class HomePage implements OnInit {
       have to double-select their address. */
       searchBox.addListener('places_changed', () => {
         const places = searchBox.getPlaces();
+        const sizeFactor = 0.001; // TODO: Have `sizeFactor` change based on zoom.
 
         const lat = places[0].geometry.location.lat();
         const lng = places[0].geometry.location.lng();
 
         this.map.googleMap.setCenter({ lat, lng });
+
+        if (this.showSelectionUI) {
+          this.bounds = {
+            north: places[0].geometry.location.lat() + sizeFactor,
+            south: places[0].geometry.location.lat() - sizeFactor,
+            east: places[0].geometry.location.lng() + sizeFactor,
+            west: places[0].geometry.location.lng() - sizeFactor
+          };
+
+          this.changeDetector.detectChanges();
+        }
       });
 
       searchBox.setBounds(
@@ -159,12 +170,12 @@ export class HomePage implements OnInit {
       }
     } else {
       const center = this.map.getCenter();
-      const sizeFactor = 0.005; // TODO: Have `sizeFactor` change based on zoom.
+      const sizeFactor = 0.001; // TODO: Have `sizeFactor` change based on zoom.
 
       this.bounds = {
-        north: center.lat(),
+        north: center.lat() + sizeFactor,
         south: center.lat() - sizeFactor,
-        east: center.lng(),
+        east: center.lng() + sizeFactor,
         west: center.lng() - sizeFactor
       };
 
