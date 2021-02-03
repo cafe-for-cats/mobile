@@ -54,20 +54,20 @@ export class HomePage implements OnInit {
     private changeDetector: ChangeDetectorRef
   ) {}
 
-  async ionViewDidEnter() {
-    google.maps.event.addListenerOnce(this.map.googleMap, 'tilesloaded', () => {
+  ionViewDidEnter() {
+    google.maps.event.addListener(this.map.googleMap, 'tilesloaded', () => {
       const input = document.getElementById(
         'autocomplete-input'
       ) as HTMLInputElement;
 
-      this.map.googleMap.controls[google.maps.ControlPosition.TOP_LEFT].push(
+      this.map.googleMap.controls[google.maps.ControlPosition.TOP_CENTER].push(
         input
       );
 
       const searchBox = new google.maps.places.SearchBox(input);
 
       /* Uses event listener instead of `onAddressChange` event so user doesn't
-      have to double-select their address. */
+        have to double-select their address. */
       searchBox.addListener('places_changed', () => {
         const places = searchBox.getPlaces();
         const sizeFactor = 0.001; // TODO: Have `sizeFactor` change based on zoom.
@@ -88,16 +88,10 @@ export class HomePage implements OnInit {
           this.changeDetector.detectChanges();
         }
       });
-
-      searchBox.setBounds(
-        this.map.googleMap.getBounds() as google.maps.LatLngBounds
-      );
     });
-
-    this.setting = await this.storage.get('setting:locationPreference');
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const request = this.http.get('http://localhost:3000/pins/');
 
     this.refresh$.subscribe(
@@ -111,6 +105,8 @@ export class HomePage implements OnInit {
         });
       }
     );
+
+    this.setting = await this.storage.get('setting:locationPreference');
   }
 
   /**

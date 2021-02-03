@@ -8,15 +8,22 @@ import {
   HttpClientTestingModule,
   HttpTestingController
 } from '@angular/common/http/testing';
+import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
+import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 
-fdescribe('HomePage', () => {
+describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
-      imports: [IonicModule.forRoot(), HttpClientTestingModule, MaterialModule],
+      imports: [
+        IonicModule.forRoot(),
+        HttpClientTestingModule,
+        GoogleMapsModule,
+        GooglePlaceModule
+      ],
       providers: [
         {
           provide: Storage,
