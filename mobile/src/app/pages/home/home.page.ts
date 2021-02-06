@@ -116,8 +116,11 @@ export class HomePage implements OnInit {
    * @docs-private
    */
   addMarkersToMap(pins: IPin[], lastPos) {
+    // TODO: should these parameters instead be Observables that are consumed through a combineLatest or something similar?
     this.markerPositions = [];
 
+    // If the user has just placed a pin, center the map on the position that they just placed. Else,
+    // place the first marker in the list provided by the caller.
     const position =
       lastPos && lastPos.latitude && lastPos.longitude
         ? new google.maps.LatLng(lastPos.latitude, lastPos.longitude)
@@ -198,7 +201,8 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Handles the POST operation of a Pin after selection
+   * Handles the POST operation of a Pin after selection.
+   * @param usingGeolocation Caller of the function decides if this logic should be Geolocation-centric or not.
    * @docs-private
    */
   onAdd(usingGeolocation: boolean) {
@@ -252,7 +256,7 @@ export class HomePage implements OnInit {
     return str
       .toLowerCase()
       .split(' ')
-      .map(function(word) {
+      .map(word => {
         return word.replace(word[0], word[0].toUpperCase());
       })
       .join(' ');
