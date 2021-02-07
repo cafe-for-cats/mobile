@@ -55,6 +55,9 @@ export class HomePage implements OnInit {
   ) {}
 
   ionViewDidEnter() {
+    // Using `addListenerOnce` because the event would repeatedly kick off,
+    // causing the search bar rendering to re-run, compounding the DOM coordinates
+    // and shifting it off the map.
     google.maps.event.addListenerOnce(this.map.googleMap, 'tilesloaded', () => {
       const input = document.getElementById(
         'autocomplete-input'
