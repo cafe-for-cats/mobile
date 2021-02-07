@@ -88,7 +88,7 @@ export class HomePage implements OnInit {
             west: places[0].geometry.location.lng() - sizeFactor
           };
 
-          this.changeDetector.detectChanges();
+          this.changeDetector.detectChanges(); // is this still needed?
         }
       });
     });
@@ -97,6 +97,7 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     const request = this.http.get('http://localhost:3000/pins/');
 
+    // no-no on the nested subscribes. maybe two observables?
     this.refresh$.subscribe(
       (lastPos: { latitude?: number; longitude?: number }) => {
         request.subscribe((data: IPin[]) => {
