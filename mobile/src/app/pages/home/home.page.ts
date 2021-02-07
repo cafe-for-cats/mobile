@@ -55,7 +55,7 @@ export class HomePage implements OnInit {
   ) {}
 
   ionViewDidEnter() {
-    google.maps.event.addListener(this.map.googleMap, 'tilesloaded', () => {
+    google.maps.event.addListenerOnce(this.map.googleMap, 'tilesloaded', () => {
       const input = document.getElementById(
         'autocomplete-input'
       ) as HTMLInputElement;
