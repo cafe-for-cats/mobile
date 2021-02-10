@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, using } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { MapRectangle, GoogleMap } from '@angular/google-maps';
 import { Storage } from '@ionic/storage';
@@ -26,8 +26,9 @@ export class HomePage implements OnInit {
   /** Tracks which pin menu item is currently selected */
   currentMenuKey: string;
 
-  /** All marker position on the map, filtered by valid lat/lng's */
-  /* These should probably be requested by passing a set of coords and it queries within that geographic area */
+  /** All marker position on the map, filtered by non-null lat/lng's. (this filtering should be done in the API) */
+  /* These should probably be requested by passing a set of coords and it queries within that geographic area.
+  We don't want to pull the entire globes worth of markers for each person. */
   markerPositions: google.maps.LatLngLiteral[] = [];
 
   /** Zoom level of the map */
@@ -54,10 +55,27 @@ export class HomePage implements OnInit {
     private changeDetector: ChangeDetectorRef
   ) {}
 
-  ionViewDidEnter() {
+  async ngOnInit() {
+    const request = this.http.get('http://localhost:3000/pins/');
+
+    // no-no on the nested subscribes. maybe two observables?
+    this.refresh$.subscribe(
+      (lastPos: { latitude?: number; longitude?: number }) => {
+        request.subscribe((data: IPin[]) => {
+          if (data) {
+            this.addMarkersToMap(data, lastPos);
+          } else {
+            // TODO: show message for no pins set, center map either at users location or at setting-defined location
+          }
+        });
+      }
+    );
+
+    this.setting = await this.storage.get('setting:locationPreference');
+
     // Using `addListenerOnce` because the event would repeatedly kick off,
-    // causing the search bar rendering to re-run, compounding the DOM coordinates
-    // and shifting it off the map.
+    // causing the search bar rendering to re-run. This would compound the DOM coordinates
+    // and shift the search bar offscreen.
     google.maps.event.addListenerOnce(this.map.googleMap, 'tilesloaded', () => {
       const input = document.getElementById(
         'autocomplete-input'
@@ -73,7 +91,7 @@ export class HomePage implements OnInit {
         have to double-select their address. */
       searchBox.addListener('places_changed', () => {
         const places = searchBox.getPlaces();
-        const sizeFactor = 0.001; // TODO: Have `sizeFactor` change based on zoom.
+        const sizeFactor = 0.001; // TODO: Have `sizeFactor` change based on zoom. Also create a `drawRectangle` function.
 
         const lat = places[0].geometry.location.lat();
         const lng = places[0].geometry.location.lng();
@@ -94,25 +112,6 @@ export class HomePage implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    const request = this.http.get('http://localhost:3000/pins/');
-
-    // no-no on the nested subscribes. maybe two observables?
-    this.refresh$.subscribe(
-      (lastPos: { latitude?: number; longitude?: number }) => {
-        request.subscribe((data: IPin[]) => {
-          if (data) {
-            this.addMarkersToMap(data, lastPos);
-          } else {
-            // TODO: show message for no pins set, center map either at users location or at setting-defined location
-          }
-        });
-      }
-    );
-
-    this.setting = await this.storage.get('setting:locationPreference');
-  }
-
   /**
    * Associate Markers to the Map
    * @param pins The incoming pins
@@ -123,8 +122,6 @@ export class HomePage implements OnInit {
     // TODO: should these parameters instead be Observables that are consumed through a combineLatest or something similar?
     this.markerPositions = [];
 
-    // If the user has just placed a pin, center the map on the position that they just placed. Else,
-    // place the first marker in the list provided by the caller.
     const position =
       lastPos && lastPos.latitude && lastPos.longitude
         ? new google.maps.LatLng(lastPos.latitude, lastPos.longitude)
