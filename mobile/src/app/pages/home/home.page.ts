@@ -98,6 +98,7 @@ export class HomePage implements OnInit {
 
         this.map.googleMap.setCenter({ lat, lng });
 
+        // If the user has the selection rectangle open while searching an address, make sure to bring it along for the ride.
         if (this.showSelectionUI) {
           this.bounds = {
             north: places[0].geometry.location.lat() + sizeFactor,
@@ -106,7 +107,8 @@ export class HomePage implements OnInit {
             west: places[0].geometry.location.lng() - sizeFactor
           };
 
-          this.changeDetector.detectChanges(); // is this still needed?
+          // Without manually detecting changes, `rectangle` will not show after searching until the view is changed.
+          this.changeDetector.detectChanges();
         }
       });
     });
@@ -118,8 +120,8 @@ export class HomePage implements OnInit {
    * @param lastPos Last emitted position; Non-null if user has just added a pin.
    * @docs-private
    */
+  // TODO: should these parameters instead be Observables that are consumed through a combineLatest or something similar?
   addMarkersToMap(pins: IPin[], lastPos) {
-    // TODO: should these parameters instead be Observables that are consumed through a combineLatest or something similar?
     this.markerPositions = [];
 
     const position =
@@ -206,6 +208,7 @@ export class HomePage implements OnInit {
    * @param usingGeolocation Caller of the function decides if this logic should be Geolocation-centric or not.
    * @docs-private
    */
+  // TODO: Is there a better way to decide `usingGeolocation`?
   onAdd(usingGeolocation: boolean) {
     const center = usingGeolocation
       ? this.map.getCenter()
