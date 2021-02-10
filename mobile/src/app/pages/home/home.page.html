@@ -7,7 +7,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <google-map [zoom]="zoom">
+  <input
+    ngx-google-places-autocomplete
+    id="autocomplete-input"
+    #placesRef="ngx-places"
+    [options]="options"
+  />
+  <google-map>
     <map-rectangle
       *ngIf="showSelectionUI"
       [bounds]="bounds"

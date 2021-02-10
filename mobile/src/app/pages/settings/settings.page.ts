@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ToastController } from '@ionic/angular';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-settings',
@@ -9,51 +10,56 @@ import { ToastController } from '@ionic/angular';
 })
 export class SettingsPage {
   changes: { settingName: string; value: string }[] = [];
-  setting;
+  settings: { locationPreference: string } = { locationPreference: '' };
+
+  form: FormGroup;
 
   constructor(
     private storage: Storage,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private formBuilder: FormBuilder
   ) {}
 
   async ngOnInit() {
-    this.setting = await this.storage.get('setting:locationPreference');
-  }
+    this.form = this.formBuilder.group({
+      location: ['']
+    });
 
-  radioGroupChange(settingName, event) {
-    const settingWithGivenName = this.changes.find(
-      x => x.settingName == settingName
+    const keys = await this.storage.keys();
+
+    // Set default settings if they haven't been loaded in before.
+    if (!keys.find(x => x == Settings.LocationPreference)) {
+      await this.storage.set(Settings.LocationPreference, 'manual');
+    }
+
+    this.settings.locationPreference = await this.storage.get(
+      Settings.LocationPreference
     );
 
-    if (settingWithGivenName) {
-      settingWithGivenName.value = event.detail.value;
-    } else {
-      this.changes.push({ settingName, value: event.detail.value });
-    }
+    this.form.setValue({
+      location: this.settings.locationPreference
+    });
   }
 
-  async handleClick() {
-    this.remove(this.changes[0].settingName);
+  async onSubmit() {
+    await this.storage.set(
+      Settings.LocationPreference,
+      this.form.value.location
+    );
 
-    this.changes &&
-      this.changes.forEach(async change => {
-        await this.set(change.settingName, change.value);
-        this.presentToast('Changes saved.');
-      });
-
-    this.changes = [];
+    this.presentToast('Changes saved.');
   }
 
   async set(settingName, value) {
-    return await this.storage.set(`setting:${settingName}`, value);
+    return await this.storage.set(settingName, value);
   }
 
   async get(settingName) {
-    return await this.storage.get(`setting:${settingName}`);
+    return await this.storage.get(settingName);
   }
 
   async remove(settingName) {
-    return await this.storage.remove(`setting:${settingName}`);
+    return await this.storage.remove(settingName);
   }
 
   async clear() {
@@ -69,4 +75,9 @@ export class SettingsPage {
 
     toast.present();
   }
+}
+
+export enum Settings {
+  LocationPreference = 'setting:locationPreference',
+  TimeZone = 'setting:timeZone'
 }
