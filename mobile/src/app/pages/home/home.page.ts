@@ -65,7 +65,7 @@ export class HomePage implements OnInit {
           if (data) {
             this.addMarkersToMap(data, lastPos);
           } else {
-            // TODO: show message for no pins set, center map either at users location or at setting-defined location
+            // TODO: show message for no pins set, center map either at users location or at setting-defined location.
           }
         });
       }
