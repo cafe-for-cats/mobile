@@ -2,6 +2,9 @@ import { Response, NextFunction, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 
+/**
+ * Is not implemented anywhere right now. Needs to be revisited with a better understanding of JWT.
+ */
 export default function(req: Request, res: Response, next: NextFunction) {
   // Get token from header
   const token: string = req.headers['authorization'] || '';
