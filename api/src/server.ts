@@ -1,32 +1,28 @@
-import bodyParser from 'body-parser';
 import express from 'express';
-import connectDB from './config/database';
-import pins from './routes/pinRoutes';
-import cors from 'cors';
-
-require('env2')('.env');
+import * as socketio from 'socket.io';
+import * as path from 'path';
 
 const app = express();
-
-app.use(cors());
-
-// Connect to MongoDB
-connectDB();
-
-// Express configuration
 app.set('port', process.env.PORT || 3000);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (_req, res) => {
-  res.send('Hello, world!');
+let http = require('http').Server(app);
+// set up socket.io and bind it to our
+// http server.
+let io = require('socket.io')(http);
+
+app.get('/', (req: any, res: any) => {
+  res.sendFile(path.resolve('./src/view/index.html'));
 });
 
-app.use('/pins', pins);
+// whenever a user connects on port 3000 via
+// a websocket, log that a user has connected
+io.on('connection', function(socket: any) {
+  console.log('a user connected');
+  socket.on('message', function(message: any) {
+    console.log(message);
+  });
+});
 
-const port = app.get('port');
-const server = app.listen(port, () =>
-  console.log(`Server started on port ${port}`)
-);
-
-export default server;
+const server = http.listen(3000, function() {
+  console.log('listening on *:3000');
+});
