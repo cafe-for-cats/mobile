@@ -8,14 +8,34 @@
     <title>Document</title>
   </head>
   <body>
-    <button onClick="sendMsg()">Hit Me</button>
+    <div>
+      <button onClick="getPins()">Get Pins</button>
+      <p id="get-pins"></p>
+    </div>
+
+    <div>
+      <button onClick="updatePin()">Update Pin</button>
+      <p id="update-pin"></p>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
     <script>
       const socket = io('http://localhost:3000');
 
-      function sendMsg() {
-        socket.emit('message', 'HELLO WORLD');
+      socket.on('getPins', data => {
+        document.getElementById('get-pins').innerText = data;
+      });
+
+      socket.on('updatePin', data => {
+        document.getElementById('update-pin').innerText = data;
+      });
+
+      function getPins() {
+        socket.emit('getPins');
+      }
+
+      function updatePin() {
+        socket.emit('updatePin');
       }
     </script>
   </body>
