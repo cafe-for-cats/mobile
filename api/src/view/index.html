@@ -9,18 +9,52 @@
   </head>
   <body>
     <div>
+      <button onClick="addPin()">Add Pin</button>
+      <button onClick="clearElement('add-pin')">Clear</button>
+
+      <div style="display: grid; width: 20px">
+        <input type="text" class="add-pin" name="label" placeholder="label" />
+        <input type="text" class="add-pin" name="userId" placeholder="userId" />
+        <input
+          type="text"
+          class="add-pin"
+          name="showOnMap"
+          placeholder="showOnMap"
+        />
+        <input
+          type="text"
+          class="add-pin"
+          name="imageUrl"
+          placeholder="imageUrl"
+        />
+        <input type="number" class="add-pin" name="lat" placeholder="lat" />
+        <input type="number" class="add-pin" name="lng" placeholder="lng" />
+      </div>
+      <p id="add-pin"></p>
+    </div>
+
+    <div>
       <button onClick="getPins()">Get Pins</button>
+      <button onClick="clearElement('get-pins')">Clear</button>
       <p id="get-pins"></p>
     </div>
 
     <div>
       <button onClick="updatePin()">Update Pin</button>
+      <input type="text" class="update-pin" name="showOnMap" />
+      <input type="text" class="update-pin" name="position" />
+      <input type="text" class="update-pin" name="imageUrl" />
+
       <p id="update-pin"></p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
     <script>
       const socket = io('http://localhost:3000');
+
+      socket.on('addPin', data => {
+        document.getElementById('add-pin').innerText = data;
+      });
 
       socket.on('getPins', data => {
         document.getElementById('get-pins').innerText = data;
@@ -30,12 +64,33 @@
         document.getElementById('update-pin').innerText = data;
       });
 
+      function clearElement(key) {
+        document.getElementById(key).innerText = '';
+      }
+
       function getPins() {
         socket.emit('getPins');
       }
 
       function updatePin() {
+        const inputs = document.getElementsByClassName('update-pin');
+
         socket.emit('updatePin');
+      }
+
+      function addPin() {
+        const elements = document.querySelectorAll('input.add-pin');
+
+        const input = {
+          label: elements[0].value,
+          userId: elements[1].value,
+          showOnMap: elements[2].value,
+          imageUrl: elements[3].value,
+          lat: elements[4].value,
+          lng: elements[5].value
+        };
+
+        socket.emit('addPin', input);
       }
     </script>
   </body>
