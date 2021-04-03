@@ -36,15 +36,43 @@
     <div>
       <button onClick="getPins()">Get Pins</button>
       <button onClick="clearElement('get-pins')">Clear</button>
-      <p id="get-pins"></p>
+      <p
+        id="get-pins"
+        style="height: 300px; width: 400px; overflow: scroll;"
+      ></p>
     </div>
 
     <div>
       <button onClick="updatePin()">Update Pin</button>
-      <input type="text" class="update-pin" name="showOnMap" />
-      <input type="text" class="update-pin" name="position" />
-      <input type="text" class="update-pin" name="imageUrl" />
-
+      <div style="display: grid; width: 20px;">
+        <input type="text" class="update-pin" name="id" placeholder="id" />
+        <input
+          type="text"
+          class="update-pin"
+          name="label"
+          placeholder="label"
+        />
+        <input
+          type="text"
+          class="update-pin"
+          name="userId"
+          placeholder="userId"
+        />
+        <input
+          type="text"
+          class="update-pin"
+          name="showOnMap"
+          placeholder="showOnMap"
+        />
+        <input
+          type="text"
+          class="update-pin"
+          name="imageUrl"
+          placeholder="imageUrl"
+        />
+        <input type="number" class="update-pin" name="lat" placeholder="lat" />
+        <input type="number" class="update-pin" name="lng" placeholder="lng" />
+      </div>
       <p id="update-pin"></p>
     </div>
 
@@ -73,9 +101,19 @@
       }
 
       function updatePin() {
-        const inputs = document.getElementsByClassName('update-pin');
+        const elements = document.querySelectorAll('input.update-pin');
 
-        socket.emit('updatePin');
+        const input = {
+          id: elements[0].value,
+          label: elements[1].value,
+          userId: elements[2].value,
+          showOnMap: elements[3].value,
+          imageUrl: elements[4].value,
+          lat: elements[5].value,
+          lng: elements[6].value
+        };
+
+        socket.emit('updatePin', input);
       }
 
       function addPin() {
