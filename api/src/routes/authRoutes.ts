@@ -1,8 +1,11 @@
 import { Router, Response, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
-import Pin, { IPin } from '../models/pinModels';
+import Pin from '../models/Pin';
 import { Types } from 'mongoose';
+import bcrypt from 'bcryptjs';
 import { check, validationResult } from 'express-validator/check';
+import jwt from 'jsonwebtoken';
+import User from '../models/User';
 const cors = require('cors'); // TODO: Fix type
 
 const allowedOrigins = [
@@ -13,7 +16,7 @@ const allowedOrigins = [
   'http://localhost:8100',
   'http://localhost:8101',
   'http://localhost:4200',
-  'http://192.168.1.7:8100'
+  'http://192.168.1.7:8100',
 ];
 
 const corsOptions = {
@@ -23,100 +26,116 @@ const corsOptions = {
     } else {
       callback(new Error('Origin not allowed by CORS'));
     }
-  }
+  },
 };
 
 const router: Router = Router();
 
-/**
- * @route GET pins/
- * @desc  Gets all pins
- */
-router.post('/login', cors(corsOptions), async (req: Request, res: Response) => {
+router.post('/login', async (req: any, res: any) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+
+  const { username, password } = req.body;
   try {
-    const profile: IPin[] | null = await Pin.find({});
+    let user = await User.findOne({
+      username,
+    });
+    if (!user)
+      return res.status(400).json({
+        message: 'User Not Exist',
+      });
 
-    if (!profile)
-      return res
-        .status(HttpStatusCodes.NOT_FOUND)
-        .json({ msg: 'Profile not found' });
+    const isMatch = await bcrypt.compare(password, user.get('password'));
+    if (!isMatch)
+      return res.status(400).json({
+        message: 'Incorrect Password!',
+      });
 
-    res.json(profile);
-  } catch (err) {
-    console.error('GET pins', err.message);
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
 
-    if (err.kind === 'ObjectId') {
-      return res
-        .status(HttpStatusCodes.BAD_REQUEST)
-        .json({ msg: 'Profile not found' });
-    }
-    res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
+    jwt.sign(
+      payload,
+      'randomString',
+      {
+        expiresIn: 3600,
+      },
+      (err, token) => {
+        if (err) throw err;
+        res.status(200).json({
+          token,
+        });
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      message: 'Server Error',
+    });
   }
 });
 
-/**
- * @route POST pins/
- * @desc Create a new pin
- */
-router.post(
-  '/register',
-  [
-    cors(corsOptions),
-    check('label', `'label' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('userId', `'userId' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lat', `'lat' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lng', `'lng' is a required field.`)
-      .not()
-      .isEmpty()
-  ],
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res
-        .status(HttpStatusCodes.UNPROCESSABLE_ENTITY)
-        .json({ errors: errors.array() });
+router.post('/register', async (req: any, res: any) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+
+  const { username, password } = req.body; // should req.body be encrypted?
+  try {
+    let user = await User.findOne({
+      username,
+    });
+    if (user) {
+      return res.status(400).json({
+        msg: 'User Already Exists',
+      });
     }
 
-    const {
-      label,
-      userId,
-      showOnMap = false,
-      imageUrl = null,
-      lat = 0.0,
-      lng = 0.0
-    } = req.body;
+    user = new User({
+      username,
+      password,
+    });
 
-    const fields = {
-      label,
-      showOnMap,
-      imageUrl,
-      trackable: {
-        createDate: new Date(),
-        userId
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    user.set('password', hash);
+
+    await user.save();
+
+    const payload = {
+      user: {
+        id: user.id,
       },
-      position: {
-        lat,
-        lng
-      }
     };
 
-    try {
-      let newItem = new Pin(fields);
-      await newItem.save();
-
-      res.json(newItem);
-    } catch (e) {
-      console.error(e.message);
-
-      res.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).send('Server Error');
-    }
+    jwt.sign(
+      payload,
+      'randomString',
+      {
+        expiresIn: 10000,
+      },
+      (err, token) => {
+        if (err) throw err;
+        res.status(200).json({
+          token,
+        });
+      }
+    );
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send('Error in Saving');
   }
-);
+});
 
 export default router;

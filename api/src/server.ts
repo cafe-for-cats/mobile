@@ -1,12 +1,12 @@
 import express from 'express';
 import * as socketio from 'socket.io';
 import * as path from 'path';
-import Pin, { IPin } from './models/pinModels';
-import pino from 'pino';
+import Pin from './models/Pin';
 import connectDB from './config/database';
 import cors from 'cors';
 import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
+import bodyParser from 'body-parser';
 
 const app = express();
 
@@ -27,6 +27,9 @@ app.use(cors());
 
 // Connect to MongoDB
 connectDB();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/auth', auth);
 

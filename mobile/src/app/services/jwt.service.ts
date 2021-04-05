@@ -14,13 +14,13 @@ export class JwtService {
 
   login(username: string, password: string) {
     return this.httpClient
-      .post<{ access_token: string }>('http://localhost:3000/auth/login', {
+      .post<{ token: string }>('http://localhost:3000/auth/login', {
         username,
         password,
       })
       .pipe(
         tap((res) => {
-          localStorage.setItem('access_token', res.access_token);
+          localStorage.setItem('token', res.token);
         })
       );
   }
@@ -39,6 +39,6 @@ export class JwtService {
   }
 
   logout() {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('token');
   }
 }

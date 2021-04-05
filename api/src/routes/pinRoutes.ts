@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
-import Pin, { IPin } from '../models/pinModels';
+import Pin from '../models/Pin';
 import { Types } from 'mongoose';
 import { check, validationResult } from 'express-validator/check';
 const cors = require('cors'); // TODO: Fix type
@@ -13,7 +13,7 @@ const allowedOrigins = [
   'http://localhost:8100',
   'http://localhost:8101',
   'http://localhost:4200',
-  'http://192.168.1.7:8100'
+  'http://192.168.1.7:8100',
 ];
 
 const corsOptions = {
@@ -23,7 +23,7 @@ const corsOptions = {
     } else {
       callback(new Error('Origin not allowed by CORS'));
     }
-  }
+  },
 };
 
 const router: Router = Router();
@@ -34,7 +34,7 @@ const router: Router = Router();
  */
 router.get('/', cors(corsOptions), async (req: Request, res: Response) => {
   try {
-    const profile: IPin[] | null = await Pin.find({});
+    const profile = await Pin.find({});
 
     if (!profile)
       return res
@@ -62,7 +62,7 @@ router.get('/:id', cors(corsOptions), async (req: Request, res: Response) => {
   try {
     const id = Types.ObjectId(req.params.id);
 
-    const profile: IPin | null = await Pin.findById(id);
+    const profile = await Pin.findById(id);
 
     if (!profile)
       return res
@@ -88,18 +88,10 @@ router.post(
   '/',
   [
     cors(corsOptions),
-    check('label', `'label' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('userId', `'userId' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lat', `'lat' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lng', `'lng' is a required field.`)
-      .not()
-      .isEmpty()
+    check('label', `'label' is a required field.`).not().isEmpty(),
+    check('userId', `'userId' is a required field.`).not().isEmpty(),
+    check('lat', `'lat' is a required field.`).not().isEmpty(),
+    check('lng', `'lng' is a required field.`).not().isEmpty(),
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -115,7 +107,7 @@ router.post(
       showOnMap = false,
       imageUrl = null,
       lat = 0.0,
-      lng = 0.0
+      lng = 0.0,
     } = req.body;
 
     const fields = {
@@ -124,12 +116,12 @@ router.post(
       imageUrl,
       trackable: {
         createDate: new Date(),
-        userId
+        userId,
       },
       position: {
         lat,
-        lng
-      }
+        lng,
+      },
     };
 
     try {
@@ -152,18 +144,10 @@ router.post(
 router.patch(
   '/:id',
   [
-    check('label', `'label' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('userId', `'userId' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lat', `'lat' is a required field.`)
-      .not()
-      .isEmpty(),
-    check('lng', `'lng' is a required field.`)
-      .not()
-      .isEmpty()
+    check('label', `'label' is a required field.`).not().isEmpty(),
+    check('userId', `'userId' is a required field.`).not().isEmpty(),
+    check('lat', `'lat' is a required field.`).not().isEmpty(),
+    check('lng', `'lng' is a required field.`).not().isEmpty(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -176,13 +160,13 @@ router.patch(
             userId: req.body.userId,
             position: {
               lat: req.body.lat,
-              lng: req.body.lng
+              lng: req.body.lng,
             },
             trackable: {
               userId: req.body.userId,
-              createDate: req.body.createDate
-            }
-          }
+              createDate: req.body.createDate,
+            },
+          },
         }
       );
 

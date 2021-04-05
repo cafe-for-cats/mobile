@@ -20,9 +20,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmit() {
+  onLogin() {
     this.jwtService
       .login(this.form.value.username, this.form.value.password)
+      .subscribe();
+  }
+
+  onRegister() {
+    this.jwtService
+      .register(this.form.value.username, this.form.value.password)
       .subscribe();
   }
 }
