@@ -10,6 +10,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,8 +24,8 @@ import { JwtModule } from '@auth0/angular-jwt';
     GooglePlaceModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: function tokenGetter() {
-          return localStorage.getItem('access_token');
+        tokenGetter: () => {
+          return localStorage.getItem('token');
         },
         allowedDomains: ['localhost:3000'],
         disallowedRoutes: ['http://localhost:3000/auth/login'],

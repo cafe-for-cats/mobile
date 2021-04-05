@@ -10,10 +10,8 @@ import { LoginComponentRoutingModule } from './login-routing.module';
   imports: [
     LoginComponentRoutingModule,
     CommonModule,
-    FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    FormsModule,
   ],
   declarations: [LoginComponent],
 })

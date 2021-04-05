@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JwtService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private router: Router) {}
 
   public get loggedIn(): boolean {
     return localStorage.getItem('access_token') !== null;
@@ -27,7 +28,7 @@ export class JwtService {
 
   register(username: string, password: string) {
     return this.httpClient
-      .post<{ access_token: string }>('http://localhost:3000/auth/register', {
+      .post<{ token: string }>('http://localhost:3000/auth/register', {
         username,
         password,
       })
@@ -40,5 +41,7 @@ export class JwtService {
 
   logout() {
     localStorage.removeItem('token');
+
+    this.router.navigate(['/']);
   }
 }
