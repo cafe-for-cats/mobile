@@ -6,34 +6,29 @@ import pino from 'pino';
 import connectDB from './config/database';
 import cors from 'cors';
 import { ObjectId } from 'mongodb';
+import auth from './routes/authRoutes';
 
 const app = express();
-
-const logger = pino({
-  level: process.env.LOG_LEVEL || 'trace',
-  prettyPrint: {
-    levelFirst: true,
-    translateTime: true,
-    ignore: 'pid,hostname'
-  }
-});
 
 app.set('port', process.env.PORT || 3000);
 
 const httpServer = require('http').Server(app);
+
 const io = require('socket.io')(httpServer, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 app.use(cors());
 
 // Connect to MongoDB
 connectDB();
+
+app.use('/auth', auth);
 
 app.get('/', (req: any, res: any) => {
   res.sendFile(path.resolve('./src/view/index.html'));
@@ -54,11 +49,11 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     const result = {
       count: pins.length,
-      models: pins
+      models: pins,
     };
 
     // TODO: only emit pins for sessions within the same location
-    sessions.forEach(session => {
+    sessions.forEach((session) => {
       io.emit('getPins', JSON.stringify(result, null, '\t'));
     });
   });
@@ -70,7 +65,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       showOnMap = false,
       imageUrl = null,
       lat = 0.0,
-      lng = 0.0
+      lng = 0.0,
     } = input;
 
     const fields = {
@@ -79,12 +74,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
       imageUrl,
       trackable: {
         createDate: new Date(),
-        userId
+        userId,
       },
       position: {
         lat,
-        lng
-      }
+        lng,
+      },
     };
 
     try {
@@ -109,7 +104,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       showOnMap = false,
       imageUrl = null,
       lat = 0.0,
-      lng = 0.0
+      lng = 0.0,
     } = input;
 
     const fields = {
@@ -118,12 +113,12 @@ io.on('connection', (socket: SocketIO.Socket) => {
       imageUrl,
       trackable: {
         createDate: new Date(),
-        userId
+        userId,
       },
       position: {
         lat,
-        lng
-      }
+        lng,
+      },
     };
 
     const _id = new ObjectId(input.id);
@@ -132,8 +127,8 @@ io.on('connection', (socket: SocketIO.Socket) => {
       { _id },
       {
         $set: {
-          fields
-        }
+          fields,
+        },
       }
     );
 
@@ -145,6 +140,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 });
 
-const server = httpServer.listen(3000, function() {
+const port = app.get('port');
+
+const server = httpServer.listen(port, function () {
   console.log('listening on *:3000');
 });
+
+export default server;
