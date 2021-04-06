@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -23,7 +25,7 @@ export class LoginComponent implements OnInit {
   onLogin() {
     this.jwtService
       .login(this.form.value.username, this.form.value.password)
-      .subscribe();
+      .subscribe(() => this.router.navigate(['welcome']));
   }
 
   onRegister() {

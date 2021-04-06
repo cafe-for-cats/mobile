@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { of } from 'rxjs';
 
 import { JwtService } from './jwt.service';
@@ -7,12 +8,16 @@ import { JwtService } from './jwt.service';
 describe('JwtService', () => {
   let service: JwtService;
   let httpClientSpy: { post: jasmine.Spy };
+  let jwtHelperServiceSpy: { isTokenExpired: jasmine.Spy };
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
 
     httpClientSpy = jasmine.createSpyObj('HttpClient', ['post']);
-    service = new JwtService(httpClientSpy as any);
+    jwtHelperServiceSpy = jasmine.createSpyObj('JwtHelperService', [
+      'isTokenExpired',
+    ]);
+    service = new JwtService(httpClientSpy as any, jwtHelperServiceSpy as any);
   });
 
   it('should be created', () => {
@@ -42,7 +47,7 @@ describe('JwtService', () => {
   it('should get logged in status', () => {
     spyOn(localStorage, 'getItem').and.returnValue(res.token);
 
-    expect(service.loggedIn).toBeTrue();
+    expect(service.isLoggedIn).toBeTrue();
   });
 });
 

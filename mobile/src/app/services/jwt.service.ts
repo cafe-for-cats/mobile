@@ -1,16 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JwtService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+    private jwtHelperService: JwtHelperService
+  ) {}
 
-  public get loggedIn(): boolean {
-    return localStorage.getItem('access_token') !== null;
+  public get isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+
+    if (!token) return false;
+
+    if (this.jwtHelperService.isTokenExpired(token)) return false;
+
+    return true;
   }
 
   login(username: string, password: string) {
