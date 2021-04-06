@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-welcome',
@@ -6,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent implements OnInit {
-
-  constructor() { }
+  constructor(private jwtService: JwtService, private router: Router) {}
 
   ngOnInit() {}
 
+  onLogout() {
+    this.jwtService.logout();
+    this.router.navigate(['login']);
+  }
 }
