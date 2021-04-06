@@ -2,12 +2,12 @@ import server from '../server';
 import supertest from 'supertest';
 import { expect } from 'chai';
 
-describe('route pins/', () => {
+xdescribe('route pins/', () => {
   it('should GET all pins', async () => {
     return await supertest(server)
       .get('/pins')
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body.length).to.be.greaterThan(1);
       });
   });
@@ -15,10 +15,10 @@ describe('route pins/', () => {
   it('should GET one pin', async () => {
     return await supertest(server)
       .get('/pins')
-      .then(async res => {
+      .then(async (res) => {
         return await supertest(server)
           .get(`/pins/${res.body[0]._id}`)
-          .then(_res => {
+          .then((_res) => {
             expect(_res.body.length).to.be.equal(undefined);
           });
       });
@@ -31,22 +31,16 @@ describe('route pins/', () => {
       showOnMap: true,
       imageUrl: 'www.imgurl.com/5aiUkl',
       lat: 5.2,
-      lng: -9.01
+      lng: -9.01,
     };
 
-    return await supertest(server)
-      .post('/pins')
-      .send(data)
-      .expect(200);
+    return await supertest(server).post('/pins').send(data).expect(200);
   });
 
   it('should not POST a pin with no fields', async () => {
     const data = {};
 
-    return await supertest(server)
-      .post('/pins')
-      .send(data)
-      .expect(422);
+    return await supertest(server).post('/pins').send(data).expect(422);
   });
 
   it('should PATCH a pin', async () => {
@@ -56,7 +50,7 @@ describe('route pins/', () => {
       showOnMap: false,
       imageUrl: 'www.imgurl.com/5aiUkl',
       lat: 5.2,
-      lng: -9.01
+      lng: -9.01,
     };
 
     const id = '5fe6d05a07e2e1401b003106';
@@ -65,7 +59,7 @@ describe('route pins/', () => {
       .patch(`/pins/${id}`)
       .send(data)
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body).to.exist;
       });
   });
@@ -79,7 +73,7 @@ describe('route pins/', () => {
       .patch(`/pins/${id}`)
       .send(data)
       .expect(200)
-      .then(res => {
+      .then((res) => {
         expect(res.body).to.exist;
       });
   });
@@ -89,13 +83,13 @@ describe('route pins/', () => {
       label: 'automation_test',
       userId: 999999,
       lat: 5.2,
-      lng: -9.01
+      lng: -9.01,
     };
 
     return await supertest(server)
       .post('/pins')
       .send(data)
-      .then(async res => {
+      .then(async (res) => {
         return await supertest(server)
           .delete(`/pins/${res.body._id}`)
           .expect(200);
