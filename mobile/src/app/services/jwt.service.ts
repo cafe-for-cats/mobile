@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class JwtService {
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  constructor(private httpClient: HttpClient) {}
 
   public get loggedIn(): boolean {
     return localStorage.getItem('access_token') !== null;
@@ -33,15 +33,13 @@ export class JwtService {
         password,
       })
       .pipe(
-        tap((res) => {
-          this.login(username, password);
+        tap(() => {
+          this.login(username, password); // should this send to `login` or set the token and just send to the home page
         })
       );
   }
 
   logout() {
     localStorage.removeItem('token');
-
-    this.router.navigate(['/']);
   }
 }
