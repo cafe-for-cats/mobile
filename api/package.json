@@ -5,7 +5,7 @@
   "main": "build/server.js",
   "scripts": {
     "build": "tsc",
-    "dev": "nodemon -r ./src/server.ts",
+    "dev": "nodemon -r dotenv/config ./src/server.ts",
     "start": "nodemon -r dotenv/config ./build/server.js",
     "prod": "npm run build && npm run start",
     "test-prod": "mocha --timeout  10000 --exit -r ts-node/register ./src/tests/**/*.spec.ts",

@@ -30,9 +30,16 @@ const corsOptions = {
 };
 
 const router: Router = Router();
+const mySecret = process.env.SECRET_KEY; // best solution for the OR? kill the request if no secret to make the key.
 
-router.post('/login', async (req: any, res: any) => {
+router.post('/login', async (req: Request, res: Response) => {
   const errors = validationResult(req);
+
+  if (!mySecret) {
+    return res.status(400).json({
+      message: 'Secret key not found for signing',
+    });
+  }
 
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -46,6 +53,7 @@ router.post('/login', async (req: any, res: any) => {
     let user = await User.findOne({
       username,
     });
+
     if (!user)
       return res.status(400).json({
         message: 'User Not Exist',
@@ -65,7 +73,7 @@ router.post('/login', async (req: any, res: any) => {
 
     jwt.sign(
       payload,
-      'randomString',
+      mySecret,
       {
         expiresIn: 3600,
       },
@@ -86,6 +94,13 @@ router.post('/login', async (req: any, res: any) => {
 
 router.post('/register', async (req: any, res: any) => {
   const errors = validationResult(req);
+
+  if (!mySecret) {
+    return res.status(400).json({
+      message: 'Secret key not found for signing',
+    });
+  }
+
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: errors.array(),
@@ -122,7 +137,7 @@ router.post('/register', async (req: any, res: any) => {
 
     jwt.sign(
       payload,
-      'randomString',
+      mySecret,
       {
         expiresIn: 10000,
       },
