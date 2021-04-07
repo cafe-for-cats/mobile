@@ -30,7 +30,7 @@ const corsOptions = {
 };
 
 const router: Router = Router();
-const mySecret = process.env.SECRET_KEY; // best solution for the OR? kill the request if no secret to make the key.
+const mySecret = process.env.SECRET_KEY;
 
 router.post('/login', async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -50,9 +50,7 @@ router.post('/login', async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   try {
-    let user = await User.findOne({
-      username,
-    });
+    const user = await User.findOne({ username: { $eq: username } });
 
     if (!user)
       return res.status(400).json({
@@ -60,6 +58,7 @@ router.post('/login', async (req: Request, res: Response) => {
       });
 
     const isMatch = await bcrypt.compare(password, user.get('password'));
+
     if (!isMatch)
       return res.status(400).json({
         message: 'Incorrect Password!',
@@ -108,10 +107,10 @@ router.post('/register', async (req: any, res: any) => {
   }
 
   const { username, password } = req.body; // should req.body be encrypted?
+
   try {
-    let user = await User.findOne({
-      username,
-    });
+    let user = await User.findOne({ username: { $eq: username } });
+
     if (user) {
       return res.status(400).json({
         msg: 'User Already Exists',

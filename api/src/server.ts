@@ -7,6 +7,7 @@ import cors from 'cors';
 import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
 import bodyParser from 'body-parser';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 
@@ -30,6 +31,13 @@ connectDB();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
+app.use(limiter);
 
 app.use('/auth', auth);
 
