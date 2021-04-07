@@ -2,7 +2,7 @@ import {
   async,
   ComponentFixture,
   TestBed,
-  inject
+  inject,
 } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -10,7 +10,7 @@ import { SettingsPage, Settings } from './settings.page';
 import {} from 'jasmine'; // No <3
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-fdescribe('SettingsPage', () => {
+describe('SettingsPage', () => {
   let component: SettingsPage;
   let fixture: ComponentFixture<SettingsPage>;
 
@@ -24,10 +24,10 @@ fdescribe('SettingsPage', () => {
           useValue: {
             get: () => 'manual',
             keys: () => ['setting:locationPreference'],
-            set: () => true
-          }
-        }
-      ]
+            set: () => true,
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SettingsPage);
@@ -39,7 +39,7 @@ fdescribe('SettingsPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the permissions on submit', inject([Storage], storage => {
+  it('should set the permissions on submit', inject([Storage], (storage) => {
     const spy = spyOn(storage, 'set');
 
     component.onSubmit();

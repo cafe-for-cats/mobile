@@ -6,12 +6,12 @@ import { Storage } from '@ionic/storage';
 
 import {
   HttpClientTestingModule,
-  HttpTestingController
+  HttpTestingController,
 } from '@angular/common/http/testing';
 import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 
-describe('HomePage', () => {
+xdescribe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
@@ -22,16 +22,16 @@ describe('HomePage', () => {
         IonicModule.forRoot(),
         HttpClientTestingModule,
         GoogleMapsModule,
-        GooglePlaceModule
+        GooglePlaceModule,
       ],
       providers: [
         {
           provide: Storage,
           useValue: {
-            get: () => 'manual'
-          }
-        }
-      ]
+            get: () => 'manual',
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);

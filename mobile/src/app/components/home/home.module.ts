@@ -4,7 +4,6 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
-import { HttpClientModule } from '@angular/common/http';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 
@@ -14,7 +13,6 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    HttpClientModule,
     GoogleMapsModule,
     GooglePlaceModule
   ],
