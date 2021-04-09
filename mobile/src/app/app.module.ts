@@ -11,9 +11,10 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, NavbarComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

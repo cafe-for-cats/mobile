@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtService } from 'src/app/services/jwt.service';
 
@@ -10,8 +10,8 @@ import { JwtService } from 'src/app/services/jwt.service';
 })
 export class LoginComponent implements OnInit {
   form = this.formBuilder.group({
-    username: '',
-    password: '',
+    username: [null, Validators.required],
+    password: [null, Validators.required],
   });
 
   constructor(
@@ -20,7 +20,11 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.jwtService.isLoggedIn) {
+      this.router.navigate(['/welcome']); // is this the best way to handle the redirect when a user goes to the login page but already has their token?
+    }
+  }
 
   onLogin() {
     this.jwtService
