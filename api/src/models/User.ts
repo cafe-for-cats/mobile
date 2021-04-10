@@ -4,8 +4,8 @@ const schema = new Schema({
   id: Schema.Types.ObjectId,
   username: String,
   password: String,
-  accessLevel: String,
   createDate: Date,
+  accessLevels: [String],
 });
 
 const User = model('User', schema);

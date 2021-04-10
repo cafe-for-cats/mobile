@@ -5,6 +5,8 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +14,12 @@ import {
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  constructor() {}
+  constructor(public jwtService: JwtService, private router: Router) {}
 
   ngOnInit() {}
+
+  onLogout() {
+    this.jwtService.logout();
+    this.router.navigate(['login']);
+  }
 }

@@ -1,1 +1,11 @@
-<nav><a href="/">Home</a> | <a href="/map">Map</a> |</nav>
+<div class="menu-items">
+  <a href="/welcome">Welcome</a>
+
+  <a href="/share">Share</a>
+
+  |
+
+  <button *ngIf="jwtService.isLoggedIn" class="button" (click)="onLogout()">
+    Logout
+  </button>
+</div>
