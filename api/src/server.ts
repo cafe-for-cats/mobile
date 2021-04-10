@@ -6,6 +6,7 @@ import connectDB from './config/database';
 import cors from 'cors';
 import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
+import protests from './routes/protestRoutes';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import Protest from './models/Protest';
@@ -41,6 +42,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use('/auth', auth);
+app.use('/protests', protests);
 
 app.get('/', (req: any, res: any) => {
   res.sendFile(path.resolve('./src/view/index.html'));
@@ -57,11 +59,9 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 
   socket.on('getProtests', async () => {
-    // const { id } = input;
-
     const protests = await Protest.find({});
 
-    socket.emit('getProtests', JSON.stringify(protests));
+    socket.emit('protests', JSON.stringify(protests));
   });
 
   socket.on('getPins', async () => {

@@ -3,11 +3,10 @@
 
   <hr color="white" />
 
-  <div class="share__links">
-    <h3>Share to other organizers:</h3>
-    <p>http://bit.ly/alk31p9vmlkeq</p>
+  <button (click)="getOrganizerLink()">share for other organizers</button>
+  <button (click)="getAttendeeLink()">share for other attendees</button>
 
-    <h3>Share to other attendees:</h3>
-    <p>http://bit.ly/alk31p9vmlkeq</p>
+  <div *ngIf="link$ | async as link" class="share__links">
+    {{ link }}
   </div>
 </div>

@@ -1,1 +1,21 @@
-<p>welcome works!</p>
+<div class="welcome">
+  <h1>Add a protest</h1>
+
+  <hr color="white" />
+
+  <div class="welcome__form">
+    <form [formGroup]="form">
+      <div>
+        <input type="text" placeholder="title" formControlName="title" />
+      </div>
+
+      <button class="button" (click)="onAdd()">Add protest</button>
+    </form>
+
+    <div *ngIf="data$ | async as data">
+      {{ data.id }}
+
+      <!-- pull back all share data for a protest on create? or prompt them to gen the urls after create and them save them to the DB? -->
+    </div>
+  </div>
+</div>

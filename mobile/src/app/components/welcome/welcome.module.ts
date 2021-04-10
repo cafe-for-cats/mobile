@@ -3,10 +3,10 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-import { LoginComponent } from './login.component';
+import { WelcomeComponent } from './welcome.component';
 
 @NgModule({
   imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
-  declarations: [LoginComponent],
+  declarations: [WelcomeComponent],
 })
-export class LoginModule {}
+export class WelcomeModule {}

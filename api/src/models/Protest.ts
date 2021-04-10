@@ -1,8 +1,8 @@
 import { model, Schema } from 'mongoose';
-import User from './User';
 
 const schema = new Schema({
   id: Schema.Types.ObjectId,
+  name: String,
   shareUrls: {
     leaderUrl: String,
     organizerUrl: String,

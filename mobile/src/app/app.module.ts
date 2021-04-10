@@ -12,9 +12,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProtestDataService } from './services/protest-data.service';
+import { AsyncPipe } from '@angular/common';
+import { ShareComponent } from './components/share/share.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ShareComponent,
+    WelcomeComponent,
+  ],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -23,6 +32,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     IonicStorageModule.forRoot(),
     AppRoutingModule,
     GooglePlaceModule,
+    FormsModule,
+    ReactiveFormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
@@ -37,6 +48,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    ProtestDataService,
   ],
   bootstrap: [AppComponent],
 })
