@@ -1,11 +1,8 @@
-<div class="menu-items">
+<div *ngIf="jwtService.isLoggedIn" class="menu-items">
   <a href="/welcome">Welcome</a>
-
   <a href="/share">Share</a>
 
   |
 
-  <button *ngIf="jwtService.isLoggedIn" class="button" (click)="onLogout()">
-    Logout
-  </button>
+  <button class="button" (click)="onLogout()">Logout</button>
 </div>

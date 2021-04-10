@@ -8,7 +8,12 @@ const schema = new Schema({
     organizerUrl: String,
     attendeeUrl: String,
   },
-  users: [User],
+  users: [
+    {
+      id: String,
+      accessLevels: [String],
+    },
+  ],
 });
 
 const Protest = model('Protest', schema);

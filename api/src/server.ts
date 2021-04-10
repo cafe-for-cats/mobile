@@ -8,6 +8,7 @@ import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
+import Protest from './models/Protest';
 
 const app = express();
 
@@ -55,6 +56,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
     console.log(`User disconnected with id ${socket.id}`);
   });
 
+  socket.on('getProtests', async () => {
+    // const { id } = input;
+
+    const protests = await Protest.find({});
+
+    socket.emit('getProtests', JSON.stringify(protests));
+  });
+
   socket.on('getPins', async () => {
     const pins = await Pin.find({});
 
@@ -65,7 +74,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     // TODO: only emit pins for sessions within the same location
     sessions.forEach((session) => {
-      io.emit('getPins', JSON.stringify(result, null, '\t'));
+      io.emit('getPins', JSON.stringify(result, null, '\t')); // is this emitting it for all sessions every loop?
     });
   });
 

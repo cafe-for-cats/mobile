@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { LoginModule } from './components/login/login.module';
+import { ShareComponent } from './components/share/share.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -13,6 +14,11 @@ const routes: Routes = [
   {
     path: 'welcome',
     component: WelcomeComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'share',
+    component: ShareComponent,
     canActivate: [AuthGuard],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }, //redirect to home if logged in
