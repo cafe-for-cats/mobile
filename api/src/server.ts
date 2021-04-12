@@ -58,6 +58,24 @@ io.on('connection', (socket: SocketIO.Socket) => {
     console.log(`User disconnected with id ${socket.id}`);
   });
 
+  socket.on('getProtest', async (input: { id: string }) => {
+    const protest = await Protest.findById(input);
+
+    socket.emit('getProtest', JSON.stringify(protest));
+  });
+
+  socket.on('updateProtest', async (input: { id: string; title: string }) => {
+    const _id = new ObjectId(input.id);
+
+    const fields = {
+      title: input.title,
+    };
+
+    const item = await Protest.findByIdAndUpdate(_id, fields, { new: true });
+
+    socket.emit('updateProtest', JSON.stringify(item));
+  });
+
   socket.on('getProtests', async () => {
     const protests = await Protest.find({});
 

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ShareComponent } from './share.component';
+import { ProtestOverviewComponent } from './protest-overview.component';
 
-describe('ShareComponent', () => {
-  let component: ShareComponent;
-  let fixture: ComponentFixture<ShareComponent>;
+describe('ProtestOverviewComponent', () => {
+  let component: ProtestOverviewComponent;
+  let fixture: ComponentFixture<ProtestOverviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShareComponent ],
+      declarations: [ ProtestOverviewComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ShareComponent);
+    fixture = TestBed.createComponent(ProtestOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

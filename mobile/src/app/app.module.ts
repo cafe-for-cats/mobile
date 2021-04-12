@@ -12,17 +12,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ProtestDataService } from './services/protest-data.service';
 import { AsyncPipe } from '@angular/common';
-import { ShareComponent } from './components/share/share.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
+import { ProtestOverviewComponent } from './components/protest-overview/protest-overview.component';
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    ShareComponent,
     WelcomeComponent,
+    ProtestOverviewComponent,
   ],
   entryComponents: [],
   imports: [
@@ -34,6 +36,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     GooglePlaceModule,
     FormsModule,
     ReactiveFormsModule,
+    SocketIoModule.forRoot(config),
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
@@ -48,7 +51,6 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    ProtestDataService,
   ],
   bootstrap: [AppComponent],
 })

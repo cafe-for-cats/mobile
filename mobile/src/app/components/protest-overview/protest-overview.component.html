@@ -1,0 +1,19 @@
+<div class="protest">
+  <h1>Protest overview</h1>
+
+  <div *ngIf="data$ | async as data" class="protest__details">
+    <h3>{{ data.title }}</h3>
+  </div>
+
+  <hr color="white" />
+
+  <h2>Update protest details</h2>
+
+  <form [formGroup]="form" class="protest__edit">
+    <div>
+      <input type="text" placeholder="title" formControlName="title" />
+    </div>
+
+    <button class="button" (click)="onSubmit()">Update</button>
+  </form>
+</div>

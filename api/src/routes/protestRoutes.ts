@@ -41,18 +41,16 @@ router.post('/add', async (req: Request, res: Response) => {
     });
   }
 
-  const { name } = req.body;
+  const { title } = req.body;
 
   try {
-    const newItem = new Protest({ name });
+    const newItem = new Protest({ title });
 
     await newItem.save();
 
     res.json({
       message: 'Success',
-      newItem: {
-        id: newItem._id,
-      },
+      newItem,
     });
   } catch (e) {
     console.error(e);

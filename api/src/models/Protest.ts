@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 
 const schema = new Schema({
   id: Schema.Types.ObjectId,
-  name: String,
+  title: String,
   shareUrls: {
     leaderUrl: String,
     organizerUrl: String,

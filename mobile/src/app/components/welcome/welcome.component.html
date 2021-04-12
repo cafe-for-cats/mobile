@@ -13,9 +13,12 @@
     </form>
 
     <div *ngIf="data$ | async as data">
-      {{ data.id }}
+      {{ data.title }}
 
-      <!-- pull back all share data for a protest on create? or prompt them to gen the urls after create and them save them to the DB? -->
+      <button class="button" (click)="onNavigateToProtest(data._id)">
+        Navigate to Protest
+      </button>
     </div>
+    <!-- show an overview of alel prtoests attached to a user as a welcomer? -->
   </div>
 </div>

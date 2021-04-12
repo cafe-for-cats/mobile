@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, tap } from 'rxjs/operators';
+import { map, pluck, tap } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
@@ -19,7 +19,8 @@ export class WelcomeComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit() {}
@@ -31,6 +32,14 @@ export class WelcomeComponent implements OnInit {
       .post<{ newItem: { id: string } }>('http://localhost:3000/protests/add', {
         title,
       })
-      .pipe(map((res) => res.newItem));
+      .pipe(
+        pluck('newItem'),
+        map((res) => res)
+      );
+  }
+  // put users id in route so it's accessible at all tiomes so i can
+  // associate protest to user on create
+  onNavigateToProtest(id) {
+    this.router.navigateByUrl(`protest/${id}`);
   }
 }
