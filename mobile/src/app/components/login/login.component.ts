@@ -22,19 +22,42 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.jwtService.isLoggedIn) {
-      this.router.navigate(['/welcome']); // is this the best way to handle the redirect when a user goes to the login page but already has their token?
+      this.router.navigate(['/welcome']);
     }
   }
 
-  onLogin() {
-    this.jwtService
-      .login(this.form.value.username, this.form.value.password)
-      .subscribe(() => this.router.navigate(['welcome']));
+  onSubmit($event: SubmitEvent) {
+    const { id } = $event.submitter;
+
+    switch (id) {
+      case 'login': {
+        this.jwtService
+          .login(this.form.value.username, this.form.value.password)
+          .subscribe(() => this.router.navigate(['welcome']));
+        break;
+      }
+      case 'register': {
+        this.jwtService
+          .register(this.form.value.username, this.form.value.password)
+          .subscribe();
+        break;
+      }
+      default: {
+        // error
+        break;
+      }
+    }
   }
 
-  onRegister() {
-    this.jwtService
-      .register(this.form.value.username, this.form.value.password)
-      .subscribe();
+  get username() {
+    return this.form.get('username');
   }
+
+  get password() {
+    return this.form.get('password');
+  }
+}
+
+interface SubmitEvent extends Event {
+  submitter: HTMLElement;
 }

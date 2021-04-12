@@ -1,5 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  inject,
+  TestBed,
+} from '@angular/core/testing';
 import { FormBuilder, FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -37,10 +42,24 @@ describe('LoginComponent', () => {
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should redirect a user if they are already logged in', inject(
+    [Router, JwtService],
+    async (routerService: Router, jwtService: JwtService) => {
+      const routerSpy = spyOn(routerService, 'navigate');
+      spyOnProperty(jwtService, 'isLoggedIn', 'get').and.returnValue(true);
+    }
+  ));
+
+  xit('should log a user in with proper credentials', async () => {
+    fixture.detectChanges();
+
+    await fixture.whenStable();
+    fixture.detectChanges();
   });
 });

@@ -1,13 +1,37 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
   <div>
-    <input type="text" placeholder="username" formControlName="username" />
+    <input
+      type="text"
+      placeholder="username"
+      formControlName="username"
+      required
+    />
   </div>
 
   <div>
-    <input type="text" placeholder="password" formControlName="password" />
+    <input
+      type="text"
+      placeholder="password"
+      formControlName="password"
+      required
+    />
   </div>
 
-  <button class="button" (click)="onLogin()">Login</button>
+  <div
+    *ngIf="username.invalid && (username.dirty || username.touched)"
+    class="alert alert-danger"
+  >
+    <div *ngIf="username.errors.required">Username is required.</div>
+  </div>
+
+  <div
+    *ngIf="password.invalid && (password.dirty || password.touched)"
+    class="alert alert-danger"
+  >
+    <div *ngIf="password.errors.required">Password is required.</div>
+  </div>
+
+  <button class="button" id="login">Login</button>
   <!-- is the form validation not working because i'm using (click) instead of onsubmit? -->
-  <button class="button" (click)="onRegister()">Register</button>
+  <button class="button" id="register">Register</button>
 </form>
