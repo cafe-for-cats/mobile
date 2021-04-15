@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Socket } from 'ngx-socket-io';
-import { merge } from 'rxjs';
+import { merge, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProtestOverviewDataService {
-  all$;
+  all$: Observable<any>;
 
   constructor(private socket: Socket) {
-    const get$ = this.socket.fromEvent('getProtest');
-    const update$ = this.socket.fromEvent('updateProtest');
+    const get$ = this.socket.fromEvent<Protest>('getProtest');
+    const update$ = this.socket.fromEvent<Protest>('updateProtest');
 
     this.all$ = merge(get$, update$);
   }
@@ -20,11 +20,19 @@ export class ProtestOverviewDataService {
     this.socket.emit('getProtest', id);
   }
 
-  requestUpdate(id: string, title: string) {
+  requestUpdate(id: string, title) {
     this.socket.emit('updateProtest', { id, title });
   }
 
+  // how do i break up the edits? i.e. which endpointstare esponsiblefor editing which part of a protest data model.
+
   receive() {
-    return this.all$.pipe(map((data: string) => JSON.parse(data)));
+    return this.all$.pipe(map((data: string): Protest => JSON.parse(data)));
   }
+}
+
+interface Protest {
+  _id: string;
+  users: [];
+  title: string;
 }

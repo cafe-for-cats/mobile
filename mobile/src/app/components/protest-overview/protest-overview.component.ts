@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProtestOverviewComponent implements OnInit {
   data$;
+  id: string;
 
   form = this.formBuilder.group({
     title: [null, Validators.required],
@@ -34,13 +35,15 @@ export class ProtestOverviewComponent implements OnInit {
       .pipe(map((res) => res));
 
     this.route.params.subscribe((res) => {
-      this.protestOverviewDataService.request(res.id);
+      this.id = res.id;
+
+      this.protestOverviewDataService.request(this.id);
     });
   }
 
   onSubmit() {
     this.protestOverviewDataService.requestUpdate(
-      '607262883fd94e20567fd795',
+      this.id,
       this.form.value.title
     );
   }

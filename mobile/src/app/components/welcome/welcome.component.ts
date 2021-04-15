@@ -20,25 +20,28 @@ export class WelcomeComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private httpClient: HttpClient,
-    private router: Router
+    private router: Router,
+    private jwtService: JwtService
   ) {}
 
   ngOnInit() {}
 
   onAdd() {
     const title = this.form.value.title;
+    const userId = this.jwtService.token.user.id;
+    // TODO: make 'add a protest' its own component
 
     this.data$ = this.httpClient
       .post<{ newItem: { id: string } }>('http://localhost:3000/protests/add', {
         title,
+        userId,
       })
       .pipe(
         pluck('newItem'),
         map((res) => res)
       );
   }
-  // put users id in route so it's accessible at all tiomes so i can
-  // associate protest to user on create
+
   onNavigateToProtest(id) {
     this.router.navigateByUrl(`protest/${id}`);
   }

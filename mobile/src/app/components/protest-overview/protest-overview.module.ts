@@ -3,11 +3,11 @@ import { CommonModule, AsyncPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-import { WelcomeComponent } from '../welcome/welcome.component';
 import { ProtestOverviewComponent } from './protest-overview.component';
 
 @NgModule({
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, IonicModule],
   declarations: [ProtestOverviewComponent],
+  exports: [ProtestOverviewComponent],
 })
 export class ProtestOverviewModule {}

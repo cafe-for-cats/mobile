@@ -23,6 +23,16 @@ export class JwtService {
     return true;
   }
 
+  public get token(): { user: { id: string } } {
+    const token = localStorage.getItem('token');
+
+    if (!token) return null;
+
+    const decoded = this.jwtHelperService.decodeToken(token);
+
+    return decoded;
+  }
+
   login(username: string, password: string) {
     return this.httpClient
       .post<{ token: string }>('http://localhost:3000/auth/login', {

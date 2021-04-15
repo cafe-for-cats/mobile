@@ -16,16 +16,14 @@ import { AsyncPipe } from '@angular/common';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { ProtestOverviewComponent } from './components/protest-overview/protest-overview.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { WelcomeModule } from './components/welcome/welcome.module';
+import { ProtestOverviewModule } from './components/protest-overview/protest-overview.module';
+import { NavbarModule } from './components/navbar/navbar.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent,
-    WelcomeComponent,
-    ProtestOverviewComponent,
-  ],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -36,6 +34,9 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     GooglePlaceModule,
     FormsModule,
     ReactiveFormsModule,
+    WelcomeModule,
+    ProtestOverviewModule,
+    NavbarModule,
     SocketIoModule.forRoot(config),
     JwtModule.forRoot({
       config: {

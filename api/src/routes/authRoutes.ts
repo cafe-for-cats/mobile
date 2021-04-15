@@ -66,7 +66,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const payload = {
       user: {
-        id: user.id,
+        id: user._id,
       },
     };
 

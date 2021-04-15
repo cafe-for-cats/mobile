@@ -8,5 +8,6 @@ import { WelcomeComponent } from './welcome.component';
 @NgModule({
   imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
   declarations: [WelcomeComponent],
+  exports: [WelcomeComponent],
 })
 export class WelcomeModule {}
