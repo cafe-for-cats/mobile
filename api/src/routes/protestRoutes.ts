@@ -1,11 +1,7 @@
 import { Router, Response, Request } from 'express';
-import HttpStatusCodes from 'http-status-codes';
-import Pin from '../models/Pin';
-import { Types } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+import { ObjectId } from 'mongodb';
 import { check, validationResult } from 'express-validator/check';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
 import Protest from '../models/Protest';
 const cors = require('cors'); // TODO: Fix type
 
@@ -43,8 +39,16 @@ router.post('/add', async (req: Request, res: Response) => {
 
   const { title } = req.body;
 
+  // Use `uuidv4` instead of `ObjectId` for better uniqueness.
+  const leaderUrlId = uuidv4();
+  const organizerUrlId = uuidv4();
+  const attendeeUrlId = uuidv4();
+
   try {
-    const newItem = new Protest({ title });
+    const newItem = new Protest({
+      title,
+      shareUrls: { leaderUrlId, organizerUrlId, attendeeUrlId },
+    });
 
     await newItem.save();
 
@@ -54,6 +58,7 @@ router.post('/add', async (req: Request, res: Response) => {
     });
   } catch (e) {
     console.error(e);
+
     res.status(500).json({
       message: 'Server Error',
     });

@@ -4,9 +4,9 @@ const schema = new Schema({
   id: Schema.Types.ObjectId,
   title: String,
   shareUrls: {
-    leaderUrlId: Schema.Types.ObjectId,
-    organizerUrlId: Schema.Types.ObjectId,
-    attendeeUrlId: Schema.Types.ObjectId,
+    leaderUrlId: String,
+    organizerUrlId: String,
+    attendeeUrlId: String,
   },
   users: [
     {

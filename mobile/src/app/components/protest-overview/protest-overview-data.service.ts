@@ -25,6 +25,7 @@ export class ProtestOverviewDataService {
   }
 
   // how do i break up the edits? i.e. which endpointstare esponsiblefor editing which part of a protest data model.
+  // annoucements vs protest details vs map info?
 
   receive() {
     return this.all$.pipe(map((data: string): Protest => JSON.parse(data)));
@@ -35,4 +36,9 @@ interface Protest {
   _id: string;
   users: [];
   title: string;
+  shareUrls: {
+    leaderUrlId: string;
+    organizerUrlId: string;
+    attendeeUrlId: string;
+  };
 }

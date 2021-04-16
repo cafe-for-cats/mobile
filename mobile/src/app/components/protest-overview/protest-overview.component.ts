@@ -9,6 +9,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ProtestOverviewDataService } from './protest-overview-data.service';
 import { FormBuilder, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-protest-overview',
@@ -16,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./protest-overview.component.scss'],
 })
 export class ProtestOverviewComponent implements OnInit {
-  data$;
+  data$: Observable<ProtestOverviewView>;
   id: string;
 
   form = this.formBuilder.group({
@@ -26,13 +27,34 @@ export class ProtestOverviewComponent implements OnInit {
   constructor(
     private protestOverviewDataService: ProtestOverviewDataService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
+  // attached DIFFERENT access level objects based on the type of url/access code pair sent.
+
   ngOnInit() {
-    this.data$ = this.protestOverviewDataService
-      .receive()
-      .pipe(map((res) => res));
+    this.data$ = this.protestOverviewDataService.receive().pipe(
+      map((res) => {
+        const { title } = res;
+        const {
+          leaderUrlId: leaderShareId,
+          organizerUrlId: organizerShareId,
+          attendeeUrlId: attendeeShareId,
+        } = res.shareUrls;
+
+        const leaderUrlId = `${this.router.url}?shareLinkId='${leaderShareId}'`;
+        const organizerUrlId = `${this.router.url}?shareLinkId='${organizerShareId}'`;
+        const attendeeUrlId = `${this.router.url}?shareLinkId='${attendeeShareId}'`;
+
+        return {
+          title,
+          leaderUrlId,
+          organizerUrlId,
+          attendeeUrlId,
+        };
+      })
+    );
 
     this.route.params.subscribe((res) => {
       this.id = res.id;
@@ -47,4 +69,11 @@ export class ProtestOverviewComponent implements OnInit {
       this.form.value.title
     );
   }
+}
+
+interface ProtestOverviewView {
+  title: string;
+  leaderUrlId: string;
+  attendeeUrlId: string;
+  organizerUrlId: string;
 }
