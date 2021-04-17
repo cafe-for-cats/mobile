@@ -15,6 +15,9 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { ProtestsModule } from './components/protests/protests.module';
 import { ProtestOverviewModule } from './components/protest-overview/protest-overview.module';
 import { NavbarModule } from './components/navbar/navbar.module';
+import { ProtestOverviewAttendeeModule } from './components/protest-overview-attendee/protest-overview-attendee.module';
+import { ProtestOverviewLeaderModule } from './components/protest-overview-leader/protest-overview-leader.module';
+import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -32,6 +35,9 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ReactiveFormsModule,
     ProtestsModule,
     ProtestOverviewModule,
+    ProtestOverviewAttendeeModule,
+    ProtestOverviewLeaderModule,
+    ProtestOverviewOrganizerModule,
     NavbarModule,
     SocketIoModule.forRoot(config),
     JwtModule.forRoot({

@@ -23,6 +23,7 @@ const routes: Routes = [
     path: 'protest/:id/attendee',
     component: ProtestOverviewAttendeeComponent,
     canActivate: [AuthGuard /* AccessRightsGuard */],
+    data: { protest: {} },
   },
   {
     path: 'protest/:id/organizer',

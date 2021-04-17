@@ -33,8 +33,6 @@ export class ProtestsComponent implements OnInit {
     joinedProtests: Protest[];
   }>;
 
-  @ViewChildren('div') divs: QueryList<ElementRef>;
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -70,7 +68,10 @@ export class ProtestsComponent implements OnInit {
     );
 
     if (usersAccessLevels.includes('CanShareProtest')) {
-      this.router.navigateByUrl(`protest/${protestId}/leader`);
+      this.router.navigate([
+        `protest/${protestId}/leader`,
+        { protest: JSON.stringify(protest) },
+      ]);
     } else if (usersAccessLevels.includes('CanAddAnnoucements')) {
       this.router.navigateByUrl(`protest/${protestId}/organizer`);
     } else if (usersAccessLevels.includes('CanViewProtest')) {
