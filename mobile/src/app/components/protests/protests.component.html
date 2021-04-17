@@ -1,0 +1,34 @@
+<div class="protests">
+  <!-- make add like a modal popup or something -->
+
+  <div class="protests__view-protests" *ngIf="data$ | async as data">
+    <h3>Protests You've Joined</h3>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date</th>
+      </tr>
+      <tr *ngFor="let protest of data.joinedProtests">
+        <td (click)="onNavigateToProtest(protest)">{{ protest.title }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <h3>Protests You've Created</h3>
+    <table>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Date</th>
+      </tr>
+      <tr *ngFor="let protest of data.createdProtests">
+        <td>{{ protest.title }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <hr color="gray" />
+</div>

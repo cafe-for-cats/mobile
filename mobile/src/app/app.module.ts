@@ -11,12 +11,8 @@ import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { HttpClientModule } from '@angular/common/http';
 import { JwtModule } from '@auth0/angular-jwt';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { AsyncPipe } from '@angular/common';
-import { WelcomeComponent } from './components/welcome/welcome.component';
-import { ProtestOverviewComponent } from './components/protest-overview/protest-overview.component';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
-import { WelcomeModule } from './components/welcome/welcome.module';
+import { ProtestsModule } from './components/protests/protests.module';
 import { ProtestOverviewModule } from './components/protest-overview/protest-overview.module';
 import { NavbarModule } from './components/navbar/navbar.module';
 
@@ -34,7 +30,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     GooglePlaceModule,
     FormsModule,
     ReactiveFormsModule,
-    WelcomeModule,
+    ProtestsModule,
     ProtestOverviewModule,
     NavbarModule,
     SocketIoModule.forRoot(config),

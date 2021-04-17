@@ -28,6 +28,42 @@ const corsOptions = {
 
 const router: Router = Router();
 
+router.get(
+  '/getProtestOverviewView/:id',
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+
+    const userId = new ObjectId(req.params.id);
+
+    try {
+      const createdProtests = await Protest.find({
+        creatorId: { $eq: userId },
+      });
+
+      const joinedProtests = await Protest.find({
+        'users.id': { $eq: userId },
+      });
+
+      res.json({
+        createdProtests,
+        joinedProtests,
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        message: 'Server Error',
+      });
+    }
+  }
+);
+
 router.post('/add', async (req: Request, res: Response) => {
   const errors = validationResult(req);
 

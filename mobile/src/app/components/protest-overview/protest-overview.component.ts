@@ -56,10 +56,13 @@ export class ProtestOverviewComponent implements OnInit {
       })
     );
 
-    this.route.params.subscribe((res) => {
-      this.id = res.id;
+    this.route.params.subscribe(({ id }) => {
+      this.id = id;
 
-      this.protestOverviewDataService.request(this.id);
+      this.protestOverviewDataService.request(
+        this.id,
+        '44c84da2-f220-4db8-8449-75e3783d6c70'
+      );
     });
   }
 

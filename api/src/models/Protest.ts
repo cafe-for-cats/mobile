@@ -8,6 +8,7 @@ const schema = new Schema({
     organizerUrlId: String,
     attendeeUrlId: String,
   },
+  creatorId: Schema.Types.ObjectId,
   users: [
     {
       id: String,
@@ -15,6 +16,22 @@ const schema = new Schema({
     },
   ],
 });
+
+interface Protest {
+  id: string;
+  title: string;
+  shareUrls: {
+    leaderUrlId: string;
+    organizerUrlId: string;
+    attendeeUrlId: string;
+  };
+  users: [
+    {
+      id: string;
+      accessLevels: [string];
+    }
+  ];
+}
 
 const Protest = model('Protest', schema);
 

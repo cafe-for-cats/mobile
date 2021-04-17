@@ -1,0 +1,16 @@
+.protests {
+  margin: 3rem;
+}
+
+.protests__view-protests {
+  height: 250px;
+  overflow-y: scroll;
+  table {
+    width: 100%;
+  }
+  table,
+  th,
+  td {
+    border: 1px solid lightgray;
+  }
+}

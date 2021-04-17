@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.jwtService.isLoggedIn) {
-      this.router.navigate(['/welcome']);
+      this.router.navigate(['protests']);
     }
   }
 
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       case 'login': {
         this.jwtService
           .login(this.form.value.username, this.form.value.password)
-          .subscribe(() => this.router.navigate(['welcome']));
+          .subscribe(() => this.router.navigate(['protests']));
         break;
       }
       case 'register': {

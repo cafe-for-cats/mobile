@@ -3,16 +3,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { IonicModule } from '@ionic/angular';
+import { ProtestsComponent } from './protests.component';
 
-import { WelcomeComponent } from './welcome.component';
-
-describe('WelcomeComponent', () => {
-  let component: WelcomeComponent;
-  let fixture: ComponentFixture<WelcomeComponent>;
+describe('ProtestsComponent', () => {
+  let component: ProtestsComponent;
+  let fixture: ComponentFixture<ProtestsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [WelcomeComponent],
+      declarations: [ProtestsComponent],
       imports: [IonicModule.forRoot(), HttpClientTestingModule],
       providers: [
         {
@@ -30,7 +29,7 @@ describe('WelcomeComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(WelcomeComponent);
+    fixture = TestBed.createComponent(ProtestsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

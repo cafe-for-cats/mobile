@@ -58,6 +58,37 @@ io.on('connection', (socket: SocketIO.Socket) => {
     console.log(`User disconnected with id ${socket.id}`);
   });
 
+  socket.on(
+    'addAndReturnNewProtests',
+    async (input: { title: string; userId: string }) => {
+      const { title, userId } = input;
+
+      try {
+        const newItem = new Protest({
+          title,
+          creatorId: new ObjectId(userId),
+        });
+
+        await newItem.save();
+
+        const protests = await Protest.find({
+          creatorId: { $eq: new ObjectId(userId) },
+        });
+
+        console.log(protests);
+
+        socket.emit('addAndReturnNewProtests', JSON.stringify(protests));
+      } catch (e) {
+        console.error(e);
+
+        JSON.stringify({
+          status: 'failed',
+          error: e,
+        });
+      }
+    }
+  );
+
   socket.on('getProtest', async (input: { id: string }) => {
     const protest = await Protest.findById(input);
 
@@ -76,10 +107,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
     socket.emit('updateProtest', JSON.stringify(item));
   });
 
-  socket.on('getProtests', async () => {
-    const protests = await Protest.find({});
+  socket.on('getProtestsView', async (input: { userId: string }) => {
+    const userId = new ObjectId(input.userId);
 
-    socket.emit('protests', JSON.stringify(protests));
+    const protests = await Protest.find({ creatorId: { $eq: userId } });
+
+    console.log(protests);
+
+    socket.emit('getProtestsView', JSON.stringify(protests));
   });
 
   socket.on('getPins', async () => {
