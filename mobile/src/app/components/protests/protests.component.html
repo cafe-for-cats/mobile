@@ -24,7 +24,9 @@
         <th>Date</th>
       </tr>
       <tr *ngFor="let protest of data.createdProtests">
-        <td>{{ protest.title }}</td>
+        <td (click)="onNavigateToCreatedProtests(protest)">
+          {{ protest.title }}
+        </td>
         <td></td>
         <td></td>
       </tr>

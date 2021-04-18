@@ -8,9 +8,7 @@ import { BehaviorSubject, merge, Observable } from 'rxjs';
 })
 export class ProtestOverviewDataService {
   all$: Observable<any>;
-  addAndReturnNewProtests$ = this.socket.fromEvent<string>(
-    'addAndReturnNewProtests'
-  );
+
   getView$ = this.socket.fromEvent<string>('getProtestsView');
 
   protestView: BehaviorSubject<Protest[]> = new BehaviorSubject([]);
@@ -34,20 +32,8 @@ export class ProtestOverviewDataService {
     this.socket.emit('updateProtest', { id, input });
   }
 
-  requestAdd(input: unknown) {
-    this.socket.emit('addAndReturnNewProtests', input);
-  }
-
   // how do i break up the edits? i.e. which endpointstare esponsiblefor editing which part of a protest data model.
   // annoucements vs protest details vs map info?
-
-  receiveView() {
-    const merged = merge(this.getView$, this.addAndReturnNewProtests$);
-
-    merged.pipe(
-      map((data: string): void => this.protestView.next(JSON.parse(data)))
-    );
-  }
 
   receive() {
     return this.all$.pipe(map((data: string): Protest => JSON.parse(data)));

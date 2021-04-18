@@ -89,10 +89,13 @@ io.on('connection', (socket: SocketIO.Socket) => {
     }
   );
 
-  socket.on('getProtest', async (input: { id: string }) => {
-    const protest = await Protest.findById(input);
+  socket.on('getProtestOverviewView', async (input) => {
+    const _id = new ObjectId(input);
+    const protest = await Protest.findOne({ _id: { $eq: _id } }, { title: 1 });
 
-    socket.emit('getProtest', JSON.stringify(protest));
+    console.log('hello');
+
+    socket.emit('getProtestOverviewView', JSON.stringify(protest));
   });
 
   socket.on('updateProtest', async (input: { id: string; title: string }) => {

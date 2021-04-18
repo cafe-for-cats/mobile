@@ -20,6 +20,9 @@ const schema = new Schema({
 interface Protest {
   id: string;
   title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
   shareUrls: {
     leaderUrlId: string;
     organizerUrlId: string;

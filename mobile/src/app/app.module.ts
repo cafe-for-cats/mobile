@@ -18,6 +18,7 @@ import { NavbarModule } from './components/navbar/navbar.module';
 import { ProtestOverviewAttendeeModule } from './components/protest-overview-attendee/protest-overview-attendee.module';
 import { ProtestOverviewLeaderModule } from './components/protest-overview-leader/protest-overview-leader.module';
 import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
+import { ProtestWelcomeModule } from './components/protest-welcome/protest-welcome.module';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
@@ -38,6 +39,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
     ProtestOverviewAttendeeModule,
     ProtestOverviewLeaderModule,
     ProtestOverviewOrganizerModule,
+    ProtestWelcomeModule,
     NavbarModule,
     SocketIoModule.forRoot(config),
     JwtModule.forRoot({

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Socket } from 'ngx-socket-io';
+import { combineLatest, Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Protest } from '../protest-overview/protest-overview-data.service';
 
 @Component({
@@ -11,15 +12,28 @@ import { Protest } from '../protest-overview/protest-overview-data.service';
 })
 export class ProtestOverviewLeaderComponent implements OnInit {
   data$: Observable<Protest>;
-  constructor(private route: ActivatedRoute) {}
+
+  constructor(private route: ActivatedRoute, private socket: Socket) {}
 
   ngOnInit() {
-    this.data$ = this.route.paramMap.pipe(
-      map((res) => {
-        const protest: Protest = JSON.parse(res.get('protest'));
+    const getProtest$: Observable<Protest> = this.socket
+      .fromEvent('getProtestOverviewView')
+      .pipe(map((data: string) => JSON.parse(data)));
 
+    this.data$ = getProtest$.pipe(
+      map((protest) => {
         return protest;
       })
     );
+
+    this.route.paramMap.subscribe((params) => {
+      this.sendMessage(params.get('id'));
+    });
+  }
+
+  // have to destroy and unsubscribe?
+
+  sendMessage(id: string) {
+    this.socket.emit('getProtestOverviewView', id);
   }
 }

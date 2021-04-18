@@ -5,7 +5,7 @@ import { LoginModule } from './components/login/login.module';
 import { ProtestOverviewAttendeeComponent } from './components/protest-overview-attendee/protest-overview-attendee.component';
 import { ProtestOverviewLeaderComponent } from './components/protest-overview-leader/protest-overview-leader.component';
 import { ProtestOverviewOrganizerComponent } from './components/protest-overview-organizer/protest-overview-organizer.component';
-import { ProtestOverviewComponent } from './components/protest-overview/protest-overview.component';
+import { ProtestWelcomeComponent } from './components/protest-welcome/protest-welcome.component';
 import { ProtestsComponent } from './components/protests/protests.component';
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -18,6 +18,11 @@ const routes: Routes = [
     path: 'protests',
     component: ProtestsComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'protest/:protestId/welcome/:shareId', // limits on how many times a link can be used?
+    component: ProtestWelcomeComponent,
+    canActivate: [AuthGuard /* AccessRightsGuard */],
   },
   {
     path: 'protest/:id/attendee',

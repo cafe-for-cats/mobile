@@ -45,10 +45,10 @@ export class ProtestsComponent implements OnInit {
     const id = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestOverviewView';
 
-    const url = `${baseUrl}/${id}`;
-
     this.data$ = this.http
-      .get<{ createdProtests: Protest[]; joinedProtests: Protest[] }>(url)
+      .get<{ createdProtests: Protest[]; joinedProtests: Protest[] }>(
+        `${baseUrl}/${id}`
+      )
       .pipe(
         map(({ createdProtests, joinedProtests }) => {
           return {
@@ -59,27 +59,33 @@ export class ProtestsComponent implements OnInit {
       );
   }
 
-  onNavigateToProtest(protest: Protest) {
-    const userId = this.jwtService.token.user.id;
-    const protestId = protest._id;
+  onNavigateToCreatedProtests(protest: Protest) {
+    const { _id } = protest;
 
-    const { accessLevels: usersAccessLevels } = protest.users.find(
-      (x) => x.id == userId
-    );
-
-    if (usersAccessLevels.includes('CanShareProtest')) {
-      this.router.navigate([
-        `protest/${protestId}/leader`,
-        { protest: JSON.stringify(protest) },
-      ]);
-    } else if (usersAccessLevels.includes('CanAddAnnoucements')) {
-      this.router.navigateByUrl(`protest/${protestId}/organizer`);
-    } else if (usersAccessLevels.includes('CanViewProtest')) {
-      this.router.navigateByUrl(`protest/${protestId}/attendee`);
-    } else {
-      this.router.navigateByUrl(`unauthorized`);
-    }
+    this.router.navigate([`protest/${_id}/leader`]);
   }
+
+  // onNavigateToProtest(protest: Protest) {
+  //   const userId = this.jwtService.token.user.id;
+  //   const protestId = protest._id;
+
+  //   const { accessLevels: usersAccessLevels } = protest.users.find(
+  //     (x) => x.id == userId
+  //   );
+
+  //   if (usersAccessLevels.includes('CanShareProtest')) {
+  //     this.router.navigate([
+  //       `protest/${protestId}/leader`,
+  //       { protest: JSON.stringify(protest) },
+  //     ]);
+  //   } else if (usersAccessLevels.includes('CanAddAnnoucements')) {
+  //     this.router.navigateByUrl(`protest/${protestId}/organizer`);
+  //   } else if (usersAccessLevels.includes('CanViewProtest')) {
+  //     this.router.navigateByUrl(`protest/${protestId}/attendee`);
+  //   } else {
+  //     this.router.navigateByUrl(`unauthorized`);
+  //   }
+  // }
 }
 
 type LeaderAccessLevels = 'CanShareProtests';

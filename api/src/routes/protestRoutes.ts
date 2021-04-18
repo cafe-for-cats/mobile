@@ -28,6 +28,57 @@ const corsOptions = {
 
 const router: Router = Router();
 
+router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
+  }
+
+  const shareId = new ObjectId(req.query.shareId as string);
+  const protestId = new ObjectId(req.query.protestId as string);
+  const urlRequested: AccessLevels = req.query.urlRequested as AccessLevels; //get url share type
+
+  try {
+    let shareUrl;
+
+    switch (urlRequested.toLowerCase()) {
+      case 'organizer':
+        const urlId = new ObjectId(); // TODO: this should expire in 'n' time.
+        const protest = await Protest.findOneAndUpdate(
+          {
+            _id: { $eq: protestId },
+          },
+          {
+            $set: { 'shareUrls.organizerUrlId': urlId },
+          },
+          {
+            returnOriginal: false,
+            projection: {
+              'shareUrls.organizerUrlId': 1,
+            },
+          }
+        );
+
+        shareUrl = protest?.get('shareUrls.organizerUrlId');
+
+      case 'attendee':
+    }
+
+    res.json({
+      shareUrl,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: 'Server Error',
+    });
+  }
+});
+
 router.get(
   '/getProtestOverviewView/:id',
   async (req: Request, res: Response) => {
@@ -38,17 +89,33 @@ router.get(
         errors: errors.array(),
       });
     }
-
+    // TODO: logic around softdeletes will go here (don't want to pull protests that have been deleted)
     const userId = new ObjectId(req.params.id);
 
     try {
-      const createdProtests = await Protest.find({
-        creatorId: { $eq: userId },
-      });
+      const createdProtests = await Protest.find(
+        {
+          creatorId: { $eq: userId },
+        },
+        {
+          title: 1,
+          description: 1,
+          startDate: 1,
+          endDate: 1,
+        }
+      );
 
-      const joinedProtests = await Protest.find({
-        'users.id': { $eq: userId },
-      });
+      const joinedProtests = await Protest.find(
+        {
+          'users.id': { $eq: userId },
+        },
+        {
+          title: 1,
+          description: 1,
+          startDate: 1,
+          endDate: 1,
+        }
+      );
 
       res.json({
         createdProtests,
@@ -100,5 +167,7 @@ router.post('/add', async (req: Request, res: Response) => {
     });
   }
 });
+
+type AccessLevels = 'Organizer' | 'Leader' | 'Attendee';
 
 export default router;
