@@ -52,42 +52,12 @@ const sessions = new Set();
 
 io.on('connection', (socket: SocketIO.Socket) => {
   sessions.add(socket.id);
+
   console.log(`User connected with id ${socket.id}`);
 
   socket.on('disconnect', () => {
     console.log(`User disconnected with id ${socket.id}`);
   });
-
-  socket.on(
-    'addAndReturnNewProtests',
-    async (input: { title: string; userId: string }) => {
-      const { title, userId } = input;
-
-      try {
-        const newItem = new Protest({
-          title,
-          creatorId: new ObjectId(userId),
-        });
-
-        await newItem.save();
-
-        const protests = await Protest.find({
-          creatorId: { $eq: new ObjectId(userId) },
-        });
-
-        console.log(protests);
-
-        socket.emit('addAndReturnNewProtests', JSON.stringify(protests));
-      } catch (e) {
-        console.error(e);
-
-        JSON.stringify({
-          status: 'failed',
-          error: e,
-        });
-      }
-    }
-  );
 
   socket.on('getProtestOverviewView', async (input) => {
     const _id = new ObjectId(input);
@@ -96,28 +66,6 @@ io.on('connection', (socket: SocketIO.Socket) => {
     console.log('hello');
 
     socket.emit('getProtestOverviewView', JSON.stringify(protest));
-  });
-
-  socket.on('updateProtest', async (input: { id: string; title: string }) => {
-    const _id = new ObjectId(input.id);
-
-    const fields = {
-      title: input.title,
-    };
-
-    const item = await Protest.findByIdAndUpdate(_id, fields, { new: true });
-
-    socket.emit('updateProtest', JSON.stringify(item));
-  });
-
-  socket.on('getProtestsView', async (input: { userId: string }) => {
-    const userId = new ObjectId(input.userId);
-
-    const protests = await Protest.find({ creatorId: { $eq: userId } });
-
-    console.log(protests);
-
-    socket.emit('getProtestsView', JSON.stringify(protests));
   });
 
   socket.on('getPins', async () => {
@@ -163,7 +111,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       await newItem.save();
       const pins = await Pin.find({});
 
-      socket.emit('addPin', JSON.stringify(newItem)); // does this NEED to be emited?
+      socket.emit('addPin', JSON.stringify(newItem)); // TODO: does this NEED to be emited? also if so is itonly within the same zip protest?
 
       socket.broadcast.emit('getPins', JSON.stringify(pins, null, '\t'));
     } catch (e) {

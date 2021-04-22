@@ -100,9 +100,6 @@ router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
             },
           }
         );
-        console.log(protestId);
-
-        console.log('protest', protest);
 
         shareUrl = protest?.get('shareUrls.organizerUrlId');
         break;
@@ -125,7 +122,7 @@ router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/getProtestOverviewView', async (req: Request, res: Response) => {
+router.get('/getProtestsView', async (req: Request, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -134,18 +131,14 @@ router.get('/getProtestOverviewView', async (req: Request, res: Response) => {
     });
   }
 
-  console.log(req.query.userId);
-
-  // TODO: logic around softdeletes will go here (don't want to pull protests that have been deleted)
   const userId = new ObjectId(req.query.userId as string);
-
-  console.log('userId', userId);
 
   try {
     const protestsCreated = await Protest.find(
       {
         'associatedUsers.userId': { $eq: userId },
         'associatedUsers.isCreator': { $eq: true },
+        isDeleted: { $eq: false },
       },
       {
         title: 1,
@@ -158,6 +151,7 @@ router.get('/getProtestOverviewView', async (req: Request, res: Response) => {
       {
         'associatedUsers.userId': { $eq: userId },
         'associatedUsers.isCreator': { $eq: false },
+        isDeleted: { $eq: false },
       },
       {
         title: 1,
@@ -165,8 +159,6 @@ router.get('/getProtestOverviewView', async (req: Request, res: Response) => {
         startDate: 1,
       }
     );
-
-    console.log(protestsCreated);
 
     res.json({
       protestsCreated,

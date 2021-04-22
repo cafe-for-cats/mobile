@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
-import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { Protest } from '../protest-overview/protest-overview-data.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Protest } from '../protests/protests.component';
 
 @Component({
   selector: 'app-protest-overview-leader',

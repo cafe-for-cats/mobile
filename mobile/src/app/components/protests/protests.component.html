@@ -8,7 +8,11 @@
         <th>Date</th>
       </tr>
       <tr *ngFor="let protest of data.protestsJoined">
-        <td>{{ protest.title }}</td>
+        <td>
+          <a [routerLink]="['/', id]" routerLinkActive="active">{{
+            protest.title
+          }}</a>
+        </td>
         <td>{{ protest.description }}</td>
         <td>{{ protest.startDate }}</td>
       </tr>

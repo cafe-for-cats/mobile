@@ -41,9 +41,6 @@ const routes: Routes = [
     canActivate: [AuthGuard /* AccessRightsGuard */],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }, //redirect to home if logged in
-
-  // different COMPONENTS based on access rights or just hid e things on the page?
-  // something like a 'your protests' page on the welcome with all the prtoests that thje user is associated with
 ];
 
 @NgModule({
