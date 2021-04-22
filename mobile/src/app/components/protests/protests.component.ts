@@ -29,10 +29,9 @@ export class ProtestsComponent implements OnInit {
   });
 
   data$: Observable<{
-    createdProtests: Protest[];
-    joinedProtests: Protest[];
+    protestsCreated: Protest[];
+    protestsJoined: Protest[];
   }>;
-
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -42,18 +41,21 @@ export class ProtestsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.jwtService.token.user.id;
+    const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestOverviewView';
 
+    const httpParams: HttpParams = new HttpParams().set('userId', userId);
+
     this.data$ = this.http
-      .get<{ createdProtests: Protest[]; joinedProtests: Protest[] }>(
-        `${baseUrl}/${id}`
-      )
+      .get<{
+        protestsCreated: Protest[];
+        protestsJoined: Protest[];
+      }>(`${baseUrl}`, { params: httpParams })
       .pipe(
-        map(({ createdProtests, joinedProtests }) => {
+        map(({ protestsCreated, protestsJoined }) => {
           return {
-            createdProtests,
-            joinedProtests,
+            protestsCreated,
+            protestsJoined,
           };
         })
       );
@@ -87,6 +89,8 @@ export class ProtestsComponent implements OnInit {
   //   }
   // }
 }
+
+interface ProtestResponse {}
 
 type LeaderAccessLevels = 'CanShareProtests';
 

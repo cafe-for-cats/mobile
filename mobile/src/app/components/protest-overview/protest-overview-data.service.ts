@@ -42,16 +42,7 @@ export class ProtestOverviewDataService {
 
 export interface Protest {
   _id: string;
-  users: [
-    {
-      id: string;
-      accessLevels: string[];
-    }
-  ];
   title: string;
-  shareUrls: {
-    leaderUrlId: string;
-    organizerUrlId: string;
-    attendeeUrlId: string;
-  };
+  description: string;
+  startDate: Date;
 }

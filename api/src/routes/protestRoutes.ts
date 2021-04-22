@@ -28,6 +28,45 @@ const corsOptions = {
 
 const router: Router = Router();
 
+router.get(
+  '/getProtestIfShareLinkIsValid',
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+
+    const shareTypeId = req.query.shareId;
+    const protestId = req.query.protestId;
+
+    try {
+      const protest = await Protest.findById(protestId);
+
+      const urls = protest?.get('shareUrls');
+
+      let hasMatchingId = false;
+
+      if (urls.find((x: any) => x.id == shareTypeId)) {
+        hasMatchingId = true; // is there a better way to do this other than just checking if any id matches?
+      }
+
+      if (!protest) {
+        res.send({
+          message: 'No protest found.',
+          status: 'Failure.',
+        });
+      }
+
+      if (hasMatchingId) {
+        //return protest if has matching ids
+      }
+    } catch (error) {}
+  }
+);
+
 router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
   const errors = validationResult(req);
 
@@ -37,14 +76,13 @@ router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
     });
   }
 
-  const shareId = new ObjectId(req.query.shareId as string);
-  const protestId = new ObjectId(req.query.protestId as string);
-  const urlRequested: AccessLevels = req.query.urlRequested as AccessLevels; //get url share type
+  const protestId = req.body.id;
+  const urlType: AccessLevels = req.body.urlType as AccessLevels;
 
   try {
     let shareUrl;
 
-    switch (urlRequested.toLowerCase()) {
+    switch (urlType.toLowerCase()) {
       case 'organizer':
         const urlId = new ObjectId(); // TODO: this should expire in 'n' time.
         const protest = await Protest.findOneAndUpdate(
@@ -57,15 +95,23 @@ router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
           {
             returnOriginal: false,
             projection: {
+              title: 1,
               'shareUrls.organizerUrlId': 1,
             },
           }
         );
+        console.log(protestId);
+
+        console.log('protest', protest);
 
         shareUrl = protest?.get('shareUrls.organizerUrlId');
+        break;
 
-      case 'attendee':
+      default:
+        shareUrl = 'hello';
+        break;
     }
+    console.log('shareurl', shareUrl);
 
     res.json({
       shareUrl,
@@ -79,57 +125,61 @@ router.post('/setProtestShareLinks/', async (req: Request, res: Response) => {
   }
 });
 
-router.get(
-  '/getProtestOverviewView/:id',
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
+router.get('/getProtestOverviewView', async (req: Request, res: Response) => {
+  const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        errors: errors.array(),
-      });
-    }
-    // TODO: logic around softdeletes will go here (don't want to pull protests that have been deleted)
-    const userId = new ObjectId(req.params.id);
-
-    try {
-      const createdProtests = await Protest.find(
-        {
-          creatorId: { $eq: userId },
-        },
-        {
-          title: 1,
-          description: 1,
-          startDate: 1,
-          endDate: 1,
-        }
-      );
-
-      const joinedProtests = await Protest.find(
-        {
-          'users.id': { $eq: userId },
-        },
-        {
-          title: 1,
-          description: 1,
-          startDate: 1,
-          endDate: 1,
-        }
-      );
-
-      res.json({
-        createdProtests,
-        joinedProtests,
-      });
-    } catch (error) {
-      console.error(error);
-
-      res.status(500).json({
-        message: 'Server Error',
-      });
-    }
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      errors: errors.array(),
+    });
   }
-);
+
+  console.log(req.query.userId);
+
+  // TODO: logic around softdeletes will go here (don't want to pull protests that have been deleted)
+  const userId = new ObjectId(req.query.userId as string);
+
+  console.log('userId', userId);
+
+  try {
+    const protestsCreated = await Protest.find(
+      {
+        'associatedUsers.userId': { $eq: userId },
+        'associatedUsers.isCreator': { $eq: true },
+      },
+      {
+        title: 1,
+        description: 1,
+        startDate: 1,
+      }
+    );
+
+    const protestsJoined = await Protest.find(
+      {
+        'associatedUsers.userId': { $eq: userId },
+        'associatedUsers.isCreator': { $eq: false },
+      },
+      {
+        title: 1,
+        description: 1,
+        startDate: 1,
+      }
+    );
+
+    console.log(protestsCreated);
+
+    res.json({
+      protestsCreated,
+      protestsJoined,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: 'Server Error',
+    });
+  }
+});
 
 router.post('/add', async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -142,10 +192,9 @@ router.post('/add', async (req: Request, res: Response) => {
 
   const { title } = req.body;
 
-  // Use `uuidv4` instead of `ObjectId` for better uniqueness.
-  const leaderUrlId = uuidv4();
-  const organizerUrlId = uuidv4();
-  const attendeeUrlId = uuidv4();
+  const leaderUrlId = '';
+  const organizerUrlId = '';
+  const attendeeUrlId = '';
 
   try {
     const newItem = new Protest({

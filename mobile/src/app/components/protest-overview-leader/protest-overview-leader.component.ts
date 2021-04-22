@@ -1,8 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Protest } from '../protest-overview/protest-overview-data.service';
 
 @Component({
@@ -11,9 +12,14 @@ import { Protest } from '../protest-overview/protest-overview-data.service';
   styleUrls: ['./protest-overview-leader.component.scss'],
 })
 export class ProtestOverviewLeaderComponent implements OnInit {
-  data$: Observable<Protest>;
+  data$: Observable<any>;
+  shareId$: Observable<string>;
 
-  constructor(private route: ActivatedRoute, private socket: Socket) {}
+  constructor(
+    private route: ActivatedRoute,
+    private socket: Socket,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
     const getProtest$: Observable<Protest> = this.socket
@@ -27,7 +33,9 @@ export class ProtestOverviewLeaderComponent implements OnInit {
     );
 
     this.route.paramMap.subscribe((params) => {
-      this.sendMessage(params.get('id'));
+      const id = params.get('id');
+
+      this.sendMessage(id);
     });
   }
 
@@ -35,5 +43,23 @@ export class ProtestOverviewLeaderComponent implements OnInit {
 
   sendMessage(id: string) {
     this.socket.emit('getProtestOverviewView', id);
+  }
+
+  generateShareUrl(id, shareUrlType: string) {
+    const input = {
+      id: id,
+      urlType: shareUrlType,
+    };
+
+    const post = this.http.post(
+      'http://localhost:3000/protests/setProtestShareLinks',
+      input
+    );
+
+    post.subscribe((res: any) => {
+      alert(
+        `Share this url to other organizers: 'http://localhost:8100/protest/${id}/${res.shareUrl}'`
+      );
+    });
   }
 }

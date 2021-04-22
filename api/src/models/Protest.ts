@@ -3,13 +3,16 @@ import { model, Schema } from 'mongoose';
 const schema = new Schema({
   id: Schema.Types.ObjectId,
   title: String,
-  shareUrls: {
-    leaderUrlId: String,
-    organizerUrlId: String,
-    attendeeUrlId: String,
-  },
+  description: String,
+  zipcode: String,
+  shareUrls: [
+    {
+      id: Schema.Types.ObjectId,
+      accessLevelCategory: String,
+    },
+  ],
   creatorId: Schema.Types.ObjectId,
-  users: [
+  associatedUsers: [
     {
       id: String,
       accessLevels: [String],
@@ -23,11 +26,12 @@ interface Protest {
   description: string;
   startDate: Date;
   endDate: Date;
-  shareUrls: {
-    leaderUrlId: string;
-    organizerUrlId: string;
-    attendeeUrlId: string;
-  };
+  shareUrls: [
+    {
+      id: String;
+      type: String;
+    }
+  ];
   users: [
     {
       id: string;

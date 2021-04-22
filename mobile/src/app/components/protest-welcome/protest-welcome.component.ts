@@ -19,10 +19,9 @@ export class ProtestWelcomeComponent implements OnInit {
 
       const httpParams: HttpParams = new HttpParams()
         .set('shareId', shareId)
-        .set('protestId', protestId)
-        .set('urlRequested', 'organizer');
+        .set('protestId', protestId);
 
-      const baseUrl = `http://localhost:3000/protests/getProtestShareLinks`;
+      const baseUrl = `http://localhost:3000/protests/getProtestIfShareLinkIsValid`;
 
       this.data$ = this.http.get(`${baseUrl}`, { params: httpParams });
     });
