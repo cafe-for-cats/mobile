@@ -26,21 +26,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // start looking at the access grants stuff. that needs to happen next.
-
   onSubmit($event: SubmitEvent) {
     const { id } = $event.submitter;
 
     switch (id) {
       case 'login': {
         this.jwtService
-          .login(this.form.value.username, this.form.value.password)
+          .login(this.username.value, this.password.value)
           .subscribe(() => this.router.navigate(['protests']));
         break;
       }
       case 'register': {
         this.jwtService
-          .register(this.form.value.username, this.form.value.password)
+          .register(this.username.value, this.password.value)
           .subscribe();
         break;
       }

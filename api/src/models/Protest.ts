@@ -11,33 +11,21 @@ const schema = new Schema({
       accessLevelCategory: String,
     },
   ],
-  creatorId: Schema.Types.ObjectId,
   associatedUsers: [
     {
       id: String,
-      accessLevels: [String],
+      accessLevel: String,
+      isCreator: Boolean,
     },
   ],
 });
 
 interface Protest {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   startDate: Date;
-  endDate: Date;
-  shareUrls: [
-    {
-      id: String;
-      type: String;
-    }
-  ];
-  users: [
-    {
-      id: string;
-      accessLevels: [string];
-    }
-  ];
+  associatedUsers: { _id: string; accessLevel: string }[];
 }
 
 const Protest = model('Protest', schema);

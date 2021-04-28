@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
 import { check, validationResult } from 'express-validator/check';
 import Protest from '../models/Protest';
+import User from '../models/User';
 const cors = require('cors'); // TODO: Fix type
 
 const allowedOrigins = [
@@ -138,12 +139,10 @@ router.get('/getProtestsView', async (req: Request, res: Response) => {
       {
         'associatedUsers.userId': { $eq: userId },
         'associatedUsers.isCreator': { $eq: true },
-        isDeleted: { $eq: false },
       },
       {
         title: 1,
         description: 1,
-        startDate: 1,
       }
     );
 
@@ -151,12 +150,10 @@ router.get('/getProtestsView', async (req: Request, res: Response) => {
       {
         'associatedUsers.userId': { $eq: userId },
         'associatedUsers.isCreator': { $eq: false },
-        isDeleted: { $eq: false },
       },
       {
         title: 1,
         description: 1,
-        startDate: 1,
       }
     );
 
@@ -182,16 +179,24 @@ router.post('/add', async (req: Request, res: Response) => {
     });
   }
 
-  const { title } = req.body;
-
-  const leaderUrlId = '';
-  const organizerUrlId = '';
-  const attendeeUrlId = '';
+  const { title, userId, description } = req.body;
 
   try {
+    const user = await User.findById(userId);
+
+    const _id = user?.get('_id');
+
+    // TODO: throw error if no user found here?
+
     const newItem = new Protest({
       title,
-      shareUrls: { leaderUrlId, organizerUrlId, attendeeUrlId },
+      startDate: new Date(),
+      description,
+      associatedUsers: {
+        _id,
+        isCreator: true,
+        accessLevel: 'leader',
+      },
     });
 
     await newItem.save();

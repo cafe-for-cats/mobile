@@ -14,15 +14,18 @@ import { JwtService } from 'src/app/services/jwt.service';
 export class ProtestsComponent implements OnInit {
   form = this.formBuilder.group({
     title: [null, Validators.required],
+    description: [null, Validators.required],
   });
 
   data$: Observable<{
     protestsCreated: Protest[];
     protestsJoined: Protest[];
   }>;
+
+  protestAdded$: Observable<any>;
+
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private jwtService: JwtService,
     private http: HttpClient
   ) {}
@@ -47,11 +50,40 @@ export class ProtestsComponent implements OnInit {
         })
       );
   }
+
+  onSubmit() {
+    const userId = this.jwtService.token.user.id;
+    const baseUrl = 'http://localhost:3000/protests/add';
+
+    this.protestAdded$ = this.http
+      .post<{
+        newItem: Protest;
+      }>(`${baseUrl}`, {
+        title: this.title.value,
+        description: this.description.value,
+        userId,
+      })
+      .pipe(
+        map(({ newItem }) => {
+          return {
+            newItem,
+          };
+        })
+      );
+  }
+
+  get title() {
+    return this.form.get('title');
+  }
+
+  get description() {
+    return this.form.get('description');
+  }
 }
 
 export interface Protest {
   _id: string;
   title: string;
   description: string;
-  startDate: Date;
+  associatedUsers: { _id: string; accessLevel: string };
 }
