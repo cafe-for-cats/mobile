@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit($event: SubmitEvent) {
-    const { id } = $event.submitter;
+    const { id } = $event.submitter; // TODO: angular method of binding this instead of `id?
 
     switch (id) {
       case 'login': {

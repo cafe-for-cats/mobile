@@ -34,13 +34,13 @@ export class ProtestsComponent implements OnInit {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestsView';
 
-    const httpParams: HttpParams = new HttpParams().set('userId', userId);
+    const params: HttpParams = new HttpParams().append('userId', userId);
 
     this.data$ = this.http
       .get<{
         protestsCreated: Protest[];
         protestsJoined: Protest[];
-      }>(`${baseUrl}`, { params: httpParams })
+      }>(`${baseUrl}`, { params })
       .pipe(
         map(({ protestsCreated, protestsJoined }) => {
           return {

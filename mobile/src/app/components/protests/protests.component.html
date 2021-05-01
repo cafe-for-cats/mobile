@@ -27,40 +27,38 @@
   <!-- add httpinterceptor for checking authentication state -->
 </div>
 
-<div class="protests">
-  <div class="protests__view-protests" *ngIf="data$ | async as data">
-    <h3>Protests You've Joined</h3>
-    <table>
-      <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Date</th>
-      </tr>
-      <tr *ngFor="let protest of data.protestsJoined">
-        <td (click)="navigateToProtestOverview(protest)">
-          {{ protest.title }}
-        </td>
-        <td>{{ protest.description }}</td>
-        <td>{{ protest.startDate }}</td>
-      </tr>
-    </table>
+<div class="protests" *ngIf="data$ | async as data">
+  <h3>Protests You've Joined</h3>
+  <table class="protests__table">
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Date</th>
+    </tr>
+    <tr *ngFor="let protest of data.protestsJoined">
+      <td (click)="navigateToProtestOverview(protest)">
+        {{ protest.title }}
+      </td>
+      <td>{{ protest.description }}</td>
+      <td>{{ protest.startDate }}</td>
+    </tr>
+  </table>
 
-    <hr color="gray" />
+  <hr color="gray" />
 
-    <h3>Protests You've Created</h3>
-    <table>
-      <tr>
-        <th>Tftle</th>
-        <th>Description</th>
-        <th>Date</th>
-      </tr>
-      <tr *ngFor="let protest of data.protestsCreated">
-        <td (click)="navigateToProtestOverview(protest)">
-          {{ protest.title }}
-        </td>
-        <td>{{ protest.description }}</td>
-        <td>{{ protest.startDate }}</td>
-      </tr>
-    </table>
-  </div>
+  <h3>Protests You've Created</h3>
+  <table>
+    <tr>
+      <th>Tftle</th>
+      <th>Description</th>
+      <th>Date</th>
+    </tr>
+    <tr *ngFor="let protest of data.protestsCreated">
+      <td (click)="navigateToProtestOverview(protest)">
+        {{ protest.title }}
+      </td>
+      <td>{{ protest.description }}</td>
+      <td>{{ protest.startDate }}</td>
+    </tr>
+  </table>
 </div>
