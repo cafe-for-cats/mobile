@@ -158,8 +158,6 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     const pin = await Pin.findById(input.id);
 
-    console.log('item', pin);
-
     socket.emit('updatePin', JSON.stringify(pin));
   });
 });
