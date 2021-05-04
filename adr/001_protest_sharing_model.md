@@ -10,7 +10,6 @@ We require an architectural model that allows users to:
 
 - Share protests amongst themselves.
 - Control the access rights of users coming in to the protest, and manage them afterwards.
-- Have different application permissions specified for different access levels.
 
 ## Decision
 
