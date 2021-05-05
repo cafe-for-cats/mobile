@@ -4,15 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { LoginComponent } from './login.component';
-import { LoginComponentRoutingModule } from './login-routing.module';
 
 @NgModule({
-  imports: [
-    LoginComponentRoutingModule,
-    CommonModule,
-    IonicModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, IonicModule, FormsModule, ReactiveFormsModule],
   declarations: [LoginComponent],
 })
 export class LoginModule {}

@@ -66,7 +66,7 @@ router.post('/login', async (req: Request, res: Response) => {
 
     const payload = {
       user: {
-        id: user.id,
+        id: user._id,
       },
     };
 
@@ -94,46 +94,57 @@ router.post('/login', async (req: Request, res: Response) => {
 router.post('/register', async (req: any, res: any) => {
   const errors = validationResult(req);
 
+  // Validates a secret key in the environment variables.
   if (!mySecret) {
     return res.status(400).json({
       message: 'Secret key not found for signing',
     });
   }
 
+  // Checks validation result from input.
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: errors.array(),
     });
   }
 
-  const { username, password } = req.body; // should req.body be encrypted?
+  const { username } = req.body;
 
+  /**
+   * Checks if there is already another user with this username [1].
+   * If there is not, create a new one with an encrypted password [2].
+   * After saving the new user, sign the JWT token with the new user ID [3].
+   */
   try {
     let user = await User.findOne({ username: { $eq: username } });
 
+    // [1]
     if (user) {
       return res.status(400).json({
         msg: 'User Already Exists',
       });
     }
 
-    user = new User({
-      username,
-      password,
-    });
+    const { password } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    user.set('password', hash);
 
+    user = new User({
+      username,
+      password: hash,
+    });
+
+    // [2]
     await user.save();
 
     const payload = {
       user: {
-        id: user.id,
+        id: user._id,
       },
     };
 
+    // [3]
     jwt.sign(
       payload,
       mySecret,

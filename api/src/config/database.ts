@@ -11,13 +11,10 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     };
 
-    await connect(
-      mongoURI,
-      options
-    );
+    await connect(mongoURI, options);
 
     console.log('MongoDB Connected...');
   } catch (err) {

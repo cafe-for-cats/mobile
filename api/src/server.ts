@@ -6,8 +6,10 @@ import connectDB from './config/database';
 import cors from 'cors';
 import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
+import protests from './routes/protestRoutes';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
+import Protest from './models/Protest';
 
 const app = express();
 
@@ -40,6 +42,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use('/auth', auth);
+app.use('/protests', protests);
 
 app.get('/', (req: any, res: any) => {
   res.sendFile(path.resolve('./src/view/index.html'));
@@ -49,10 +52,20 @@ const sessions = new Set();
 
 io.on('connection', (socket: SocketIO.Socket) => {
   sessions.add(socket.id);
+
   console.log(`User connected with id ${socket.id}`);
 
   socket.on('disconnect', () => {
     console.log(`User disconnected with id ${socket.id}`);
+  });
+
+  socket.on('getProtestOverviewView', async (input) => {
+    const _id = new ObjectId(input);
+    const protest = await Protest.findOne({ _id: { $eq: _id } }, { title: 1 });
+
+    console.log('hello');
+
+    socket.emit('getProtestOverviewView', JSON.stringify(protest));
   });
 
   socket.on('getPins', async () => {
@@ -65,7 +78,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     // TODO: only emit pins for sessions within the same location
     sessions.forEach((session) => {
-      io.emit('getPins', JSON.stringify(result, null, '\t'));
+      io.emit('getPins', JSON.stringify(result, null, '\t')); // is this emitting it for all sessions every loop?
     });
   });
 
@@ -98,7 +111,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       await newItem.save();
       const pins = await Pin.find({});
 
-      socket.emit('addPin', JSON.stringify(newItem)); // does this NEED to be emited?
+      socket.emit('addPin', JSON.stringify(newItem)); // TODO: does this NEED to be emited? also if so is itonly within the same zip protest?
 
       socket.broadcast.emit('getPins', JSON.stringify(pins, null, '\t'));
     } catch (e) {
@@ -144,8 +157,6 @@ io.on('connection', (socket: SocketIO.Socket) => {
     );
 
     const pin = await Pin.findById(input.id);
-
-    console.log('item', pin);
 
     socket.emit('updatePin', JSON.stringify(pin));
   });

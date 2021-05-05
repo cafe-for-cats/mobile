@@ -1,0 +1,64 @@
+<div class="add-protests">
+  <h3>Add a Protest</h3>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <input type="text" placeholder="title" formControlName="title" required />
+    </div>
+
+    <div>
+      <input
+        type="text"
+        placeholder="description"
+        formControlName="description"
+        required
+      />
+    </div>
+
+    <button class="button" type="submit">Add protest</button>
+    <button class="button" (click)="onClear()">Cancel</button>
+  </form>
+
+  <div class="add-protests__new-protest" *ngIf="protestAdded$ | async as data">
+    <h5>Created protest</h5>
+    <p>Title: {{ data.newItem.title }}</p>
+    <p>Description: {{ data.newItem.description }}</p>
+  </div>
+
+  <!-- add httpinterceptor for checking authentication state -->
+</div>
+
+<div class="protests" *ngIf="data$ | async as data">
+  <h3>Protests You've Joined</h3>
+  <table class="protests__table">
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Date</th>
+    </tr>
+    <tr *ngFor="let protest of data.protestsJoined">
+      <td (click)="navigateToProtestOverview(protest)">
+        {{ protest.title }}
+      </td>
+      <td>{{ protest.description }}</td>
+      <td>{{ protest.startDate }}</td>
+    </tr>
+  </table>
+
+  <hr color="gray" />
+
+  <h3>Protests You've Created</h3>
+  <table>
+    <tr>
+      <th>Tftle</th>
+      <th>Description</th>
+      <th>Date</th>
+    </tr>
+    <tr *ngFor="let protest of data.protestsCreated">
+      <td (click)="navigateToProtestOverview(protest)">
+        {{ protest.title }}
+      </td>
+      <td>{{ protest.description }}</td>
+      <td>{{ protest.startDate }}</td>
+    </tr>
+  </table>
+</div>

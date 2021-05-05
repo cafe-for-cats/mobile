@@ -9,6 +9,11 @@
   </head>
   <body>
     <div>
+      <button onClick="getProtests()">Get Protests</button>
+
+      <p id="get-protests"></p>
+    </div>
+    <div>
       <button onClick="addPin()">Add Pin</button>
       <button onClick="clearElement('add-pin')">Clear</button>
 
@@ -38,13 +43,13 @@
       <button onClick="clearElement('get-pins')">Clear</button>
       <p
         id="get-pins"
-        style="height: 300px; width: 400px; overflow: scroll;"
+        style="height: 300px; width: 400px; overflow: scroll"
       ></p>
     </div>
 
     <div>
       <button onClick="updatePin()">Update Pin</button>
-      <div style="display: grid; width: 20px;">
+      <div style="display: grid; width: 20px">
         <input type="text" class="update-pin" name="id" placeholder="id" />
         <input
           type="text"
@@ -80,20 +85,29 @@
     <script>
       const socket = io('http://localhost:3000');
 
-      socket.on('addPin', data => {
+      socket.on('addPin', (data) => {
         document.getElementById('add-pin').innerText = data;
       });
 
-      socket.on('getPins', data => {
+      socket.on('getPins', (data) => {
         document.getElementById('get-pins').innerText = data;
       });
 
-      socket.on('updatePin', data => {
+      socket.on('updatePin', (data) => {
         document.getElementById('update-pin').innerText = data;
+      });
+
+      socket.on('getProtests', (data) => {
+        document.getElementById('get-protests').innerText = data;
       });
 
       function clearElement(key) {
         document.getElementById(key).innerText = '';
+      }
+
+      function getProtests() {
+        console.log('emitting');
+        socket.emit('getProtests');
       }
 
       function getPins() {
@@ -110,7 +124,7 @@
           showOnMap: elements[3].value,
           imageUrl: elements[4].value,
           lat: elements[5].value,
-          lng: elements[6].value
+          lng: elements[6].value,
         };
 
         socket.emit('updatePin', input);
@@ -125,7 +139,7 @@
           showOnMap: elements[2].value,
           imageUrl: elements[3].value,
           lat: elements[4].value,
-          lng: elements[5].value
+          lng: elements[5].value,
         };
 
         socket.emit('addPin', input);

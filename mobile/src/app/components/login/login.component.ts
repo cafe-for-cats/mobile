@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtService } from 'src/app/services/jwt.service';
 
@@ -10,8 +10,8 @@ import { JwtService } from 'src/app/services/jwt.service';
 })
 export class LoginComponent implements OnInit {
   form = this.formBuilder.group({
-    username: '',
-    password: '',
+    username: [null, Validators.required],
+    password: [null, Validators.required],
   });
 
   constructor(
@@ -20,17 +20,44 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
-
-  onLogin() {
-    this.jwtService
-      .login(this.form.value.username, this.form.value.password)
-      .subscribe(() => this.router.navigate(['welcome']));
+  ngOnInit() {
+    if (this.jwtService.isLoggedIn) {
+      this.router.navigate(['protests']);
+    }
   }
 
-  onRegister() {
-    this.jwtService
-      .register(this.form.value.username, this.form.value.password)
-      .subscribe();
+  onSubmit($event: SubmitEvent) {
+    const { id } = $event.submitter; // TODO: angular method of binding this instead of `id?
+
+    switch (id) {
+      case 'login': {
+        this.jwtService
+          .login(this.username.value, this.password.value)
+          .subscribe(() => this.router.navigate(['protests']));
+        break;
+      }
+      case 'register': {
+        this.jwtService
+          .register(this.username.value, this.password.value)
+          .subscribe();
+        break;
+      }
+      default: {
+        // error
+        break;
+      }
+    }
   }
+
+  get username() {
+    return this.form.get('username');
+  }
+
+  get password() {
+    return this.form.get('password');
+  }
+}
+
+interface SubmitEvent extends Event {
+  submitter: HTMLElement;
 }
