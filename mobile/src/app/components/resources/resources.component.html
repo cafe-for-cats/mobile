@@ -13,9 +13,7 @@
         <h2 class="ion-text-left">{{item.key}}</h2>
 
         <div *ngFor="let desc of item.value" >
-          <ion-button expand="block" class="ion-hide-sm-up" router-direction="forward" href="{{desc.url}}" 
-          style="width: 80%; text-align: center; margin-left: auto; margin-right: auto;"
-          >
+          <ion-button expand="block" class="ion-hide-sm-up wide-button" router-direction="forward" href="{{desc.url}}">
           {{desc.infoName}}</ion-button>
           <ion-button class="ion-hide-sm-down" href="{{desc.url}}">{{desc.infoName}}</ion-button>
         </div>

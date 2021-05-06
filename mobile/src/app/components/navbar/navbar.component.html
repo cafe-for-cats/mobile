@@ -1,5 +1,9 @@
 <div *ngIf="jwtService.isLoggedIn" class="menu-items">
-  <a href="/protests">Protests</a>
-  |
-  <button class="button" (click)="onLogout()">Logout</button>
+  <div style="flex-direction: row;">
+    <a href="/protests">Protests</a>
+    <a href="/resources">Resources</a>
+  </div>
+  <div style="flex-direction: row;">
+    <button class="button" (click)="onLogout()">Logout</button>
+  </div>
 </div>

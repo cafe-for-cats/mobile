@@ -13,15 +13,13 @@ export class ResourcesComponent implements OnInit {
   ]
 
   constructor() { }
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   //delete later if unused and utilising ionic button href
   redirectTo(url){
     console.log(url)
     window.location.href=url
   }
-
 }
 
 //types and interfaces
