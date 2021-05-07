@@ -2,8 +2,8 @@
 
 - Download software:
 
-  - [Git]()
-  - [Node.js]()
+  - [Git](https://git-scm.com/downloads)
+  - [Node.js](https://nodejs.org/en/download/)
   - [Ionic](https://ionicframework.com/docs/intro/cli); `npm install -g @ionic/cli native-run cordova-res`
 
 - Clone [repository](https://github.com/protest-location-pinger/app.git)

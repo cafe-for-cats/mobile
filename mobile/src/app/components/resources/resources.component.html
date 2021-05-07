@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Resources</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-grid fixed="true">
+  <div *ngFor="let resource of data">
+    <ion-row>
+      <ion-col size-md class="ion-align-items-center">
+        <div *ngFor="let item of resource | keyvalue">
+          <h2 class="ion-text-left">{{ item.key }}</h2>
+
+          <div *ngFor="let desc of item.value">
+            <ion-button
+              expand="block"
+              class="ion-hide-sm-up wide-button"
+              router-direction="forward"
+              href="{{ desc.url }}"
+            >
+              {{ desc.infoName }}
+            </ion-button>
+            <ion-button class="ion-hide-sm-down" href="{{ desc.url }}">
+              {{ desc.infoName }}
+            </ion-button>
+          </div>
+        </div>
+        <div *ngIf="resource != data[data.length - 1]">
+          <hr />
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-grid>

@@ -7,6 +7,7 @@ import { ProtestOverviewLeaderComponent } from './components/protest-overview-le
 import { ProtestOverviewOrganizerComponent } from './components/protest-overview-organizer/protest-overview-organizer.component';
 import { ProtestWelcomeComponent } from './components/protest-welcome/protest-welcome.component';
 import { ProtestsComponent } from './components/protests/protests.component';
+import { ResourcesComponent } from './components/resources/resources.component';
 import { AuthGuard } from './services/auth-guard.service';
 
 const routes: Routes = [
@@ -39,6 +40,10 @@ const routes: Routes = [
     path: 'protest/:id/leader',
     component: ProtestOverviewLeaderComponent,
     canActivate: [AuthGuard /* AccessRightsGuard */],
+  },
+  {
+    path: 'resources',
+    component: ResourcesComponent,
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' }, //redirect to home if logged in
 ];

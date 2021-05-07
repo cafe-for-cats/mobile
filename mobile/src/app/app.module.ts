@@ -18,11 +18,12 @@ import { ProtestOverviewAttendeeModule } from './components/protest-overview-att
 import { ProtestOverviewLeaderModule } from './components/protest-overview-leader/protest-overview-leader.module';
 import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
 import { ProtestWelcomeModule } from './components/protest-welcome/protest-welcome.module';
+import { ResourcesComponent } from './components/resources/resources.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ResourcesComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
