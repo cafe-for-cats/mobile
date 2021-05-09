@@ -14,9 +14,9 @@
           <div *ngFor="let desc of item.value">
             <ion-button
               expand="block"
-              class="wide-button"
-              router-direction="forward"
+              class="wide-button resource-button"
               href="{{ desc.url }}"
+              target="_blank"
             >
               {{ desc.infoName }}
             </ion-button>

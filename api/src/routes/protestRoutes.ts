@@ -5,29 +5,6 @@ import Protest from '../models/Protest';
 import User from '../models/User';
 import HttpStatusCodes from 'http-status-codes';
 
-const cors = require('cors'); // TODO: Fix type
-
-const allowedOrigins = [
-  'capacitor://localhost',
-  'ionic://localhost',
-  'http://localhost',
-  'http://localhost:8080',
-  'http://localhost:8100',
-  'http://localhost:8101',
-  'http://localhost:4200',
-  'http://192.168.1.7:8100',
-];
-
-const corsOptions = {
-  origin: (origin: any, callback: any) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Origin not allowed by CORS'));
-    }
-  },
-};
-
 const router: Router = Router();
 
 router.post(
