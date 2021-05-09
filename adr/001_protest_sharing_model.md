@@ -21,6 +21,7 @@ The tiers specifically will organized as such:
   - User that just joined a protest and is in a "waiting room" until an organizer or leader admits them to the protest.
   - Unassigned can:
     - View protest overview details.
+    - View an area map of the protest, not including locations at the protests placed by organizers and leaders of the protest.
 - Attendee:
   - Attendees are participating in the protest and don't hold any higher organizational level role. They can only view places and announcements.
   - Attendees can (including the rights of lower-tier access):
