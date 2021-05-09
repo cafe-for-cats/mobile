@@ -211,13 +211,15 @@ router.post(
 
       const protestId = newProtestResult?.get('_id');
 
+      // Now how will sharing work? one time code? link? email verificatoin?
+
       const updateUserResult = await User.findOneAndUpdate(
         { _id: userObjectId },
         {
           $push: {
             associatedProtests: {
               protestId,
-              accessLevel: 'Leader',
+              accessLevel: 'Leader', // Creators of a protest automatically get 'Leader' status.
             },
           },
         },
@@ -237,7 +239,6 @@ router.post(
       } else {
         res.json({
           message: 'Success',
-          newItem: { newProtestResult, updateUserResult },
         });
       }
     } catch (e) {
