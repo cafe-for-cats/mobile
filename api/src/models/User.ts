@@ -5,7 +5,12 @@ const schema = new Schema({
   username: String,
   password: String,
   createDate: Date,
-  accessLevels: [String],
+  associatedProtests: [
+    {
+      protestId: String,
+      accessLevel: String,
+    },
+  ],
 });
 
 const User = model('User', schema);

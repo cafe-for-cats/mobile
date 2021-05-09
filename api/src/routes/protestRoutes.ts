@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from 'mongodb';
-import { check, validationResult } from 'express-validator/check';
+import { body, check, validationResult } from 'express-validator/check';
 import Protest from '../models/Protest';
 import User from '../models/User';
 const cors = require('cors'); // TODO: Fix type
@@ -55,7 +55,7 @@ router.get(
       }
 
       if (!protest) {
-        res.send({
+        return res.send({
           message: 'No protest found.',
           status: 'Failure.',
         });
@@ -170,49 +170,85 @@ router.get('/getProtestsView', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/add', async (req: Request, res: Response) => {
-  const errors = validationResult(req);
+router.post(
+  '/add',
+  body('title').exists(),
+  body('userId').exists(),
+  body('description').exists(),
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      errors: errors.array(),
-    });
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array(),
+      });
+    }
+
+    const { title, userId, description, startDate } = req.body;
+
+    try {
+      const user = await User.findById(userId);
+
+      const userObjectId = user?.get('_id');
+
+      if (!user) {
+        return res.send({
+          message: 'No user was found associated to the given id.',
+          status: 'Failure.',
+        });
+      }
+
+      const newProtestResult = await Protest.findOneAndUpdate(
+        { _id: new ObjectId() },
+        {
+          title,
+          startDate,
+          description,
+          associatedUserIds: [userObjectId],
+        },
+        { upsert: true, new: true }
+      );
+
+      const protestId = newProtestResult?.get('_id');
+
+      const updateUserResult = await User.findOneAndUpdate(
+        { _id: userObjectId },
+        {
+          $push: {
+            associatedProtests: {
+              protestId,
+              accessLevel: 'Leader',
+            },
+          },
+        },
+        { new: true }
+      );
+
+      if (!newProtestResult) {
+        if (!updateUserResult) {
+          console.log(
+            'Failure adding a new protest: Failed to link user to the protest. Protest was deleted.'
+          );
+        }
+
+        res.json({
+          message: 'Failure',
+        });
+      } else {
+        res.json({
+          message: 'Success',
+          newItem: { newProtestResult, updateUserResult },
+        });
+      }
+    } catch (e) {
+      console.error(e);
+
+      res.status(500).json({
+        message: 'Server Error',
+      });
+    }
   }
-
-  const { title, userId, description } = req.body;
-
-  try {
-    const user = await User.findById(userId);
-
-    const _id = user?.get('_id');
-
-    // TODO: throw error if no user found here?
-
-    const newItem = new Protest({
-      title,
-      startDate: new Date(),
-      description,
-      associatedUsers: {
-        _id,
-        isCreator: true,
-        accessLevel: 'leader',
-      },
-    });
-
-    await newItem.save();
-
-    res.json({
-      message: 'Success',
-      newItem,
-    });
-  } catch (e) {
-    console.error(e);
-
-    res.status(500).json({
-      message: 'Server Error',
-    });
-  }
-});
+);
 
 type AccessLevels = 'Organizer' | 'Leader' | 'Attendee';
 
