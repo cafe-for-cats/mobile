@@ -4,6 +4,7 @@ const schema = new Schema({
   _id: Schema.Types.ObjectId,
   title: String,
   description: String,
+  startDate: Date,
   associatedUserIds: [String],
 });
 

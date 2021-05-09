@@ -9,6 +9,7 @@ const schema = new Schema({
     {
       protestId: String,
       accessLevel: String,
+      isCreator: Boolean,
     },
   ],
 });
