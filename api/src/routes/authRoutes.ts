@@ -135,8 +135,7 @@ router.post('/register', async (req: any, res: any) => {
     const result = await User.findOneAndUpdate(
       { _id: new ObjectId() },
       {
-        username,
-        password: hash,
+        $set: { username, password: hash },
       },
       { upsert: true, new: true }
     );

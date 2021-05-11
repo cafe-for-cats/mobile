@@ -10,7 +10,7 @@ const router: Router = Router();
 router.post(
   '/create',
   body('title').exists().withMessage('Must provide a valid title.'),
-  body('userId').exists().withMessage('Must provide a valid user id.'),
+  body('creatorId').exists().withMessage('Must provide a valid user id.'),
   body('description').exists().withMessage('Must provide a valid description.'),
   body('startDate')
     .exists()
@@ -26,10 +26,10 @@ router.post(
       });
     }
 
-    const { title, userId, description, startDate } = req.body;
+    const { title, creatorId, description, startDate } = req.body;
 
     try {
-      const user = await User.findById(userId);
+      const user = await User.findById(creatorId);
 
       if (!user) {
         return res.send({

@@ -10,6 +10,7 @@ import protests from './routes/protestRoutes';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import Protest from './models/Protest';
+import expressMongoSanitize from 'express-mongo-sanitize';
 
 const app = express();
 
@@ -33,6 +34,12 @@ connectDB();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(
+  expressMongoSanitize({
+    replaceWith: '_',
+  })
+);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
