@@ -43,10 +43,12 @@ router.post(
       const newProtestResult = await Protest.findOneAndUpdate(
         { _id: new ObjectId() },
         {
-          title,
-          startDate,
-          description,
-          associatedUserIds: [userObjectId],
+          $set: {
+            title,
+            startDate,
+            description,
+            associatedUserIds: [userObjectId],
+          },
         },
         { upsert: true, new: true }
       );
