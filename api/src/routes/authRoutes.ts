@@ -6,6 +6,8 @@ import bcrypt from 'bcryptjs';
 import { check, validationResult } from 'express-validator/check';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
+import { ObjectId } from 'mongodb';
+
 const cors = require('cors'); // TODO: Fix type
 
 const allowedOrigins = [
@@ -130,17 +132,23 @@ router.post('/register', async (req: any, res: any) => {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    user = new User({
-      username,
-      password: hash,
-    });
+    const result = await User.findOneAndUpdate(
+      { _id: new ObjectId() },
+      {
+        $set: { username, password: hash },
+      },
+      { upsert: true, new: true }
+    );
 
-    // [2]
-    await user.save();
+    if (!result.id) {
+      return res.json({
+        message: 'Failure.',
+      });
+    }
 
     const payload = {
       user: {
-        id: user._id,
+        id: result.id,
       },
     };
 
