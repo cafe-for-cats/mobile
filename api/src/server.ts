@@ -112,8 +112,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         );
       }
 
-      socket.emit('protests:addProtest', 'Success');
-      socket.emit('protests:getProtestsForUser', JSON.stringify(''));
+      socket.emit('protests:getProtestsForUser', 'Success');
     } catch (e) {
       console.error(e);
 
@@ -121,6 +120,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
     }
 
     return;
+  });
+
+  socket.on('protests:getProtestsForUser', async (input) => {
+    socket.emit('protests:getProtestsForUser', JSON.stringify('protest'));
   });
 
   socket.on('getProtestOverviewView', async (input) => {
