@@ -9,6 +9,39 @@
   </head>
   <body>
     <div>
+      <div>
+        <button onClick="addProtest()">Add Pin</button>
+        <button onClick="clearElement('add-protest')">Clear</button>
+
+        <div style="display: grid; width: 20px">
+          <input
+            type="text"
+            class="add-protest"
+            name="title"
+            placeholder="title"
+          />
+          <input
+            type="text"
+            class="add-protest"
+            name="creatorId"
+            placeholder="creatorId"
+          />
+          <input
+            type="text"
+            class="add-protest"
+            name="description"
+            placeholder="description"
+          />
+          <input
+            type="text"
+            class="add-protest"
+            name="startDate"
+            placeholder="startDate"
+          />
+        </div>
+        <p id="add-protest"></p>
+      </div>
+
       <button onClick="getProtests()">Get Protests</button>
 
       <p id="get-protests"></p>
@@ -85,6 +118,10 @@
     <script>
       const socket = io('http://localhost:3000');
 
+      socket.on('addProtest', (data) => {
+        document.getElementById('add-protest').innerText = data;
+      });
+
       socket.on('addPin', (data) => {
         document.getElementById('add-pin').innerText = data;
       });
@@ -103,6 +140,19 @@
 
       function clearElement(key) {
         document.getElementById(key).innerText = '';
+      }
+
+      function addProtest() {
+        const elements = document.querySelectorAll('input.add-protest');
+
+        const input = {
+          title: elements[0].value,
+          creatorId: elements[1].value,
+          description: elements[2].value,
+          startDate: elements[3].value,
+        };
+
+        socket.emit('protests:addProtest', input);
       }
 
       function getProtests() {
