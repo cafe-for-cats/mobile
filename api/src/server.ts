@@ -11,6 +11,7 @@ import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import Protest from './models/Protest';
 import expressMongoSanitize from 'express-mongo-sanitize';
+import User from './models/User';
 
 const app = express();
 
@@ -64,6 +65,65 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
   socket.on('disconnect', () => {
     console.log(`User disconnected with id ${socket.id}`);
+  });
+
+  socket.on('protests:addProtest', async (input) => {
+    const { title, description, startDate, creatorId } = input;
+
+    try {
+      const user = await User.findById(creatorId);
+
+      if (!user) {
+        socket.emit('protests:addProtest', 'Failure. User not found.');
+
+        return;
+      }
+
+      const userObjectId = user?.get('_id');
+
+      const newProtestResult = await Protest.findOneAndUpdate(
+        { _id: new ObjectId() },
+        {
+          $set: {
+            title,
+            startDate,
+            description,
+            associatedUserIds: [userObjectId],
+          },
+        },
+        { upsert: true, new: true }
+      );
+
+      const protestId = newProtestResult?.get('_id');
+
+      if (protestId) {
+        await User.findOneAndUpdate(
+          { _id: userObjectId },
+          {
+            $push: {
+              associatedProtests: {
+                protestId,
+                accessLevel: 'Leader', // Creators of a protest automatically get 'Leader' status.
+                isCreator: true,
+              },
+            },
+          },
+          { new: true }
+        );
+      }
+
+      socket.emit('protests:getProtestsForUser', 'Success');
+    } catch (e) {
+      console.error(e);
+
+      socket.emit('protests:addProtest', 'Failure');
+    }
+
+    return;
+  });
+
+  socket.on('protests:getProtestsForUser', async (input) => {
+    socket.emit('protests:getProtestsForUser', JSON.stringify('protest'));
   });
 
   socket.on('getProtestOverviewView', async (input) => {
