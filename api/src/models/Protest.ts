@@ -5,7 +5,7 @@ const schema = new Schema({
   title: String,
   description: String,
   startDate: Date,
-  associatedUserIds: [String],
+  associatedUserIds: [Schema.Types.ObjectId],
 });
 
 const Protest = model('Protest', schema);

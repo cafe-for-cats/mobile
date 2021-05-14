@@ -81,6 +81,8 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
       const userObjectId = user?.get('_id');
 
+      const obj = new ObjectId(userObjectId);
+
       const newProtestResult = await Protest.findOneAndUpdate(
         { _id: new ObjectId() },
         {
@@ -88,7 +90,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             title,
             startDate,
             description,
-            associatedUserIds: [userObjectId],
+            associatedUserIds: [obj],
           },
         },
         { upsert: true, new: true }
@@ -112,7 +114,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         );
       }
 
-      socket.emit('protests:getProtestsForUser', 'Success');
+      socket.emit('protests:addProtest', 'Success');
     } catch (e) {
       console.error(e);
 
@@ -123,7 +125,60 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 
   socket.on('protests:getProtestsForUser', async (input) => {
-    socket.emit('protests:getProtestsForUser', JSON.stringify('protest'));
+    let protestsCreated = [];
+
+    const userId = new ObjectId('60986b84b53a47745c5fb2a7');
+
+    const collectionId = new ObjectId();
+
+    console.log('here');
+
+    const protestsJoined = await Protest.aggregate([
+      {
+        $match: {
+          $expr: { $in: [userId, '$associatedUserIds'] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'associatedUserIds',
+          foreignField: '_id',
+          as: 'user_info',
+        },
+      },
+      // { $unwind: '$user_info' },
+      // {
+      //   $unwind: {
+      //     path: '$user_info.associatedProtests',
+      //     preserveNullAndEmptyArrays: true,
+      //   },
+      // },
+      {
+        $group: {
+          _id: collectionId,
+          protests: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              description: '$description',
+              startDate: '$startdate',
+              usersAssociatedProtests: '$user_info.associatedProtests',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          protests: '$protests',
+          // usersAssociatedProtests: '$usersAssociatedProtests',
+        },
+      },
+    ]);
+
+    console.log(protestsJoined);
+
+    socket.emit('protests:getProtestsForUser', JSON.stringify(protestsJoined));
   });
 
   socket.on('getProtestOverviewView', async (input) => {
