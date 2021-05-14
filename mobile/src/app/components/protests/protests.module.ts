@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ProtestsComponent } from './protests.component';
 import { RouterModule } from '@angular/router';
+import { ProtestsDataService } from './protests-data.service';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
   ],
+  providers: [ProtestsDataService],
   declarations: [ProtestsComponent],
   exports: [ProtestsComponent],
 })

@@ -2,9 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { ModalPage } from '../modal/modal.page';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
+import { ProtestsDataService } from './protests-data.service';
 
 @Component({
   selector: 'app-protests',
@@ -27,14 +30,20 @@ export class ProtestsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private jwtService: JwtService,
-    private http: HttpClient
+    private http: HttpClient,
+    public modalController: ModalController,
+    private dataService: ProtestsDataService
   ) {}
 
   ngOnInit() {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestsView';
 
-    const params: HttpParams = new HttpParams().append('userId', userId);
+    this.data$ = this.dataService.getProtests(); //listens
+
+    this.dataService.requestProtests(); //emits the websocket -> grabs data
+
+    /*const params: HttpParams = new HttpParams().append("userId", userId);
 
     this.data$ = this.http
       .get<{
@@ -49,6 +58,14 @@ export class ProtestsComponent implements OnInit {
           };
         })
       );
+    */
+  }
+
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: ModalPage,
+    });
+    return await modal.present();
   }
 
   onSubmit() {

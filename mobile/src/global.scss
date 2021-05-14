@@ -10,46 +10,25 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
+@import '~@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
 @import '~@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "~@ionic/angular/css/padding.css";
-@import "~@ionic/angular/css/float-elements.css";
-@import "~@ionic/angular/css/text-alignment.css";
-@import "~@ionic/angular/css/text-transformation.css";
-@import "~@ionic/angular/css/flex-utils.css";
-
-:root {
-  /*colors */
-    /* > primary*/
-  --ion-color-primary: #c8e6c9;
-  --ion-color-primary-rgb: 200,230,201;
-  --ion-color-primary-contrast: #000000;
-  --ion-color-primary-contrast-rgb: 0,0,0;
-  --ion-color-primary-shade: #b0cab1;
-  --ion-color-primary-tint: #cee9ce;
-}
-
-/* ionic stylings */
-.ion-color-primary {
-  --ion-color-base: var(--ion-color-primary);
-  --ion-color-base-rgb: var(--ion-color-primary-rgb);
-  --ion-color-contrast: var(--ion-color-primary-contrast);
-  --ion-color-contrast-rgb: var(--ion-color-primary-contrast-rgb);
-  --ion-color-shade: var(--ion-color-primary-shade);
-  --ion-color-tint: var(--ion-color-primary-tint);
-}
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
 
 /* buttons */
 .wide-button {
-  width: 80%; 
-  text-align: center; 
-  margin-left: auto; 
+  width: 80%;
+  text-align: center;
+  margin-left: auto;
   margin-right: auto;
 }

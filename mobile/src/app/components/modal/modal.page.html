@@ -1,0 +1,19 @@
+<div class="ion-page">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div>
+      <input type="text" placeholder="title" formControlName="title" required />
+    </div>
+
+    <div>
+      <input
+        type="text"
+        placeholder="description"
+        formControlName="description"
+        required
+      />
+    </div>
+
+    <button class="button" (click)="presentModal()">Add protest</button>
+    <button class="button" (click)="onClear()">Cancel</button>
+  </form>
+</div>
