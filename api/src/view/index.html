@@ -134,7 +134,7 @@
         document.getElementById('update-pin').innerText = data;
       });
 
-      socket.on('getProtests', (data) => {
+      socket.on('protests:getProtestsForUser', (data) => {
         document.getElementById('get-protests').innerText = data;
       });
 
@@ -157,7 +157,7 @@
 
       function getProtests() {
         console.log('emitting');
-        socket.emit('getProtests');
+        socket.emit('protests:getProtestsForUser');
       }
 
       function getPins() {

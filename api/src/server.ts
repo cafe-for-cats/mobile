@@ -147,13 +147,6 @@ io.on('connection', (socket: SocketIO.Socket) => {
           as: 'user_info',
         },
       },
-      // { $unwind: '$user_info' },
-      // {
-      //   $unwind: {
-      //     path: '$user_info.associatedProtests',
-      //     preserveNullAndEmptyArrays: true,
-      //   },
-      // },
       {
         $group: {
           _id: collectionId,
@@ -162,7 +155,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
               _id: '$_id',
               title: '$title',
               description: '$description',
-              startDate: '$startdate',
+              startDate: '$startDate',
               usersAssociatedProtests: '$user_info.associatedProtests',
             },
           },
@@ -171,12 +164,9 @@ io.on('connection', (socket: SocketIO.Socket) => {
       {
         $project: {
           protests: '$protests',
-          // usersAssociatedProtests: '$usersAssociatedProtests',
         },
       },
     ]);
-
-    console.log(protestsJoined);
 
     socket.emit('protests:getProtestsForUser', JSON.stringify(protestsJoined));
   });
