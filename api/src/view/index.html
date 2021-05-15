@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>☕ Cafe for Cats WS API</title>
   </head>
   <body>
     <div>
       <div>
-        <button onClick="addProtest()">Add Pin</button>
+        <button onClick="addProtest()">Add Protest</button>
         <button onClick="clearElement('add-protest')">Clear</button>
 
         <div style="display: grid; width: 20px">
@@ -42,13 +42,16 @@
         <p id="add-protest"></p>
       </div>
       <div class="get-protest">
-        <input
-          type="text"
-          class="get-protests"
-          name="creator id"
-          placeholder="creator id"
-        />
         <button onClick="getProtests()">Get Protests For User</button>
+
+        <div style="display: grid; width: 20px">
+          <input
+            type="text"
+            class="get-protests"
+            name="creator id"
+            placeholder="creator id"
+          />
+        </div>
 
         <p id="get-protests"></p>
       </div>

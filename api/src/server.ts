@@ -132,7 +132,9 @@ io.on('connection', (socket: SocketIO.Socket) => {
       });
     }
 
-    const userId = new ObjectId('60986b84b53a47745c5fb2a7');
+    const { creatorId } = input;
+
+    const userId = new ObjectId(creatorId);
 
     const protestsJoined = await Protest.aggregate([
       {
