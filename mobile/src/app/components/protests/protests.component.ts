@@ -20,45 +20,26 @@ export class ProtestsComponent implements OnInit {
     description: [null, Validators.required],
   });
 
-  data$: Observable<{
-    protestsCreated: Protest[];
-    protestsJoined: Protest[];
-  }>;
+  data$: Observable<{}>;
+  addResult$: Observable<{ status: boolean }>;
 
   protestAdded$: Observable<any>;
 
   constructor(
     private formBuilder: FormBuilder,
     private jwtService: JwtService,
-    private http: HttpClient,
     public modalController: ModalController,
     private dataService: ProtestsDataService
-  ) {}
+  ) {
+    this.data$ = this.dataService.receiveGetProtestsForUser();
+    this.addResult$ = this.dataService.receiveCreateProtest();
+  }
 
   ngOnInit() {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestsView';
 
-    this.data$ = this.dataService.getProtests(); //listens
-
-    this.dataService.requestProtests(); //emits the websocket -> grabs data
-
-    /*const params: HttpParams = new HttpParams().append("userId", userId);
-
-    this.data$ = this.http
-      .get<{
-        protestsCreated: Protest[];
-        protestsJoined: Protest[];
-      }>(`${baseUrl}`, { params })
-      .pipe(
-        map(({ protestsCreated, protestsJoined }) => {
-          return {
-            protestsCreated,
-            protestsJoined,
-          };
-        })
-      );
-    */
+    this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
   }
 
   async presentModal() {
@@ -72,21 +53,11 @@ export class ProtestsComponent implements OnInit {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/add';
 
-    this.protestAdded$ = this.http
-      .post<{
-        newItem: Protest;
-      }>(`${baseUrl}`, {
-        title: this.title.value,
-        description: this.description.value,
-        userId,
-      })
-      .pipe(
-        map(({ newItem }) => {
-          return {
-            newItem,
-          };
-        })
-      );
+    this.dataService.requestCreateProtest({
+      title: this.title.value,
+      description: this.description.value,
+      creatorId: userId,
+    });
   }
 
   get title() {

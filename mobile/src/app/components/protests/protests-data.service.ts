@@ -1,18 +1,38 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { map, tap } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
 
 @Injectable()
 export class ProtestsDataService {
+  private rootKey = 'protests';
+  private addProtestKey = 'addProtest';
+  private getProtestsForUserKey = 'getProtestsForUser';
+
   constructor(private jwtService: JwtService, private socket: Socket) {}
 
-  getProtests() {
-    return this.socket.fromEvent('protests:getProtestsForUser');
+  requestCreateProtest(input) {
+    this.socket.emit(`${this.rootKey}:${this.addProtestKey}`, input);
   }
 
-  requestProtests() {
+  receiveCreateProtest() {
+    return this.socket.fromEvent(`${this.rootKey}:${this.addProtestKey}`).pipe(
+      map(({ status }) => (status ? { status: true } : { status: false })),
+      tap((_) => {
+        this.requestGetProtestsForUser();
+      })
+    );
+  }
+
+  receiveGetProtestsForUser() {
+    return this.socket
+      .fromEvent(`${this.rootKey}:${this.getProtestsForUserKey}`)
+      .pipe(map((res) => res));
+  }
+
+  requestGetProtestsForUser() {
     this.socket.emit(
-      'protests:getProtestsForUser',
+      `${this.rootKey}:${this.getProtestsForUserKey}`,
       this.jwtService.token.user.id
     );
   }

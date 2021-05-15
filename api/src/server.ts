@@ -74,7 +74,10 @@ io.on('connection', (socket: SocketIO.Socket) => {
       const user = await User.findById(creatorId);
 
       if (!user) {
-        socket.emit('protests:addProtest', 'Failure. User not found.');
+        socket.emit('protests:addProtest', {
+          status: false,
+          message: `User not found with provided 'creatorId'.`,
+        });
 
         return;
       }
@@ -112,17 +115,25 @@ io.on('connection', (socket: SocketIO.Socket) => {
         );
       }
 
-      socket.emit('protests:getProtestsForUser', 'Success');
+      socket.emit('protests:addProtest', {
+        status: true,
+        message: 'Successfully added protest.',
+      });
     } catch (e) {
       console.error(e);
 
-      socket.emit('protests:addProtest', 'Failure');
+      socket.emit('protests:addProtest', {
+        status: false,
+        message: 'Server error.',
+      });
     }
 
     return;
   });
 
   socket.on('protests:getProtestsForUser', async (input) => {
+    console.log('hello');
+
     socket.emit('protests:getProtestsForUser', JSON.stringify('protest'));
   });
 
