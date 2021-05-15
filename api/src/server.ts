@@ -125,13 +125,14 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 
   socket.on('protests:getProtestsForUser', async (input) => {
-    let protestsCreated = [];
+    if (!input) {
+      socket.emit('protests:getProtestsForUser', {
+        status: false,
+        message: `'input' is required.`,
+      });
+    }
 
     const userId = new ObjectId('60986b84b53a47745c5fb2a7');
-
-    const collectionId = new ObjectId();
-
-    console.log('here');
 
     const protestsJoined = await Protest.aggregate([
       {
@@ -149,7 +150,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       },
       {
         $group: {
-          _id: collectionId,
+          _id: new ObjectId(),
           protests: {
             $push: {
               _id: '$_id',

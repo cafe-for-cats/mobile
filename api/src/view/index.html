@@ -41,10 +41,17 @@
         </div>
         <p id="add-protest"></p>
       </div>
+      <div class="get-protest">
+        <input
+          type="text"
+          class="get-protests"
+          name="creator id"
+          placeholder="creator id"
+        />
+        <button onClick="getProtests()">Get Protests For User</button>
 
-      <button onClick="getProtests()">Get Protests</button>
-
-      <p id="get-protests"></p>
+        <p id="get-protests"></p>
+      </div>
     </div>
     <div>
       <button onClick="addPin()">Add Pin</button>
@@ -156,8 +163,13 @@
       }
 
       function getProtests() {
-        console.log('emitting');
-        socket.emit('protests:getProtestsForUser');
+        const elements = document.querySelectorAll('input.get-protests');
+
+        const input = {
+          creatorId: elements[0].value,
+        };
+
+        socket.emit('protests:getProtestsForUser', input);
       }
 
       function getPins() {
