@@ -81,8 +81,6 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
       const userObjectId = user?.get('_id');
 
-      const obj = new ObjectId(userObjectId);
-
       const newProtestResult = await Protest.findOneAndUpdate(
         { _id: new ObjectId() },
         {
@@ -90,7 +88,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             title,
             startDate,
             description,
-            associatedUserIds: [obj],
+            associatedUserIds: [new ObjectId(userObjectId)],
           },
         },
         { upsert: true, new: true }
