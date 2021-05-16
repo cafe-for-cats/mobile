@@ -24,16 +24,16 @@ export class ProtestsDataService {
     );
   }
 
-  receiveGetProtestsForUser() {
-    return this.socket
-      .fromEvent(`${this.rootKey}:${this.getProtestsForUserKey}`)
-      .pipe(map((res) => res));
-  }
-
   requestGetProtestsForUser() {
     this.socket.emit(
       `${this.rootKey}:${this.getProtestsForUserKey}`,
       this.jwtService.token.user.id
     );
+  }
+
+  receiveGetProtestsForUser() {
+    return this.socket
+      .fromEvent(`${this.rootKey}:${this.getProtestsForUserKey}`)
+      .pipe(map((res) => res));
   }
 }
