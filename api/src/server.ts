@@ -103,7 +103,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             $push: {
               associatedProtests: {
                 protestId,
-                accessLevel: 'Leader', // Creators of a protest automatically get 'Leader' status.
+                accessLevel: AccessLevels.Leader,
                 isCreator: true,
               },
             },
@@ -130,9 +130,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       });
     }
 
-    const { creatorId } = input;
-
-    const userId = new ObjectId(creatorId);
+    const userId = new ObjectId(input.creatorId);
 
     const aggregate: ProtestAggregate[] = await Protest.aggregate([
       {
@@ -196,6 +194,14 @@ const server = httpServer.listen(port, function () {
 });
 
 export default server;
+
+enum AccessLevels {
+  Admin = 0,
+  Leader = 1,
+  Organizer = 2,
+  Attendee = 3,
+  Unassigned = 4,
+}
 
 interface ProtestAggregate {
   _id: ObjectId;
