@@ -1,48 +1,44 @@
-<ion-header>
-  <ion-title class="ion-text-center">Welcome!</ion-title>
-</ion-header>
+<div class="ion-text-center app-heading-1 i-mt-50">Welcome!</div>
 
-<ion-content>
-  <ion-grid fixed="true">
-    <div class="app-subheading-1 i-ml-75 ion-text-left">Login</div>
+<ion-grid fixed="true">
+  <div class="app-subheading-1 i-ml-75 i-mt-75 ion-text-left">Login</div>
 
-    <ion-row>
-      <ion-col size-md class="ion-align-items-center">
-        <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
-          <ion-item>
-            <ion-label position="floating">Username</ion-label>
-            <ion-input formControlName="username" name="username"></ion-input>
-          </ion-item>
+  <ion-row>
+    <ion-col size-md class="ion-align-items-center">
+      <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+        <ion-item>
+          <ion-label position="floating">Username</ion-label>
+          <ion-input formControlName="username" name="username"></ion-input>
+        </ion-item>
 
-          <ion-item>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input formControlName="password" name="password"></ion-input>
-          </ion-item>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input formControlName="password" name="password"></ion-input>
+        </ion-item>
 
-          <div
-            *ngIf="username.invalid && (username.dirty || username.touched)"
-            class="alert alert-danger"
-          >
-            <div *ngIf="username.errors.required">Username is required.</div>
-          </div>
+        <div
+          *ngIf="username.invalid && (username.dirty || username.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="username.errors.required">Username is required.</div>
+        </div>
 
-          <div
-            *ngIf="password.invalid && (password.dirty || password.touched)"
-            class="alert alert-danger"
-          >
-            <div *ngIf="password.errors.required">Password is required.</div>
-          </div>
+        <div
+          *ngIf="password.invalid && (password.dirty || password.touched)"
+          class="alert alert-danger"
+        >
+          <div *ngIf="password.errors.required">Password is required.</div>
+        </div>
 
-          <ion-button
-            color="app-light-green"
-            class="wide-button i-m-200"
-            expand="block"
-            type="submit"
-          >
-            Login
-          </ion-button>
-        </form>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+        <ion-button
+          color="app-light-green"
+          class="wide-button i-m-200"
+          expand="block"
+          type="submit"
+        >
+          Login
+        </ion-button>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-grid>

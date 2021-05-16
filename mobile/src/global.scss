@@ -25,7 +25,8 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-/* Margin and Padding */
+// #region CSS Utilities
+/* Margin Selectors */
 .i-m-200 {
   margin: var(--ion-margin-200);
 }
@@ -54,13 +55,23 @@
   margin-left: var(--ion-margin-075);
 }
 
+.i-mt-75 {
+  margin-top: var(--ion-margin-075);
+}
+
 .i-m-50 {
   margin: var(--ion-margin-050);
+}
+
+.i-mt-50 {
+  margin-top: var(--ion-margin-050);
 }
 
 .i-m-25 {
   margin: var(--ion-margin-025);
 }
+
+// #endregion
 
 /* Buttons */
 .wide-button {
@@ -70,6 +81,7 @@
   margin-right: auto;
 }
 
+/* Colors */
 .ion-color-app-light-green {
   --ion-color-base: var(--ion-color-app-light-green);
   --ion-color-base-rgb: var(--ion-color-app-light-green-rgb);
@@ -80,7 +92,10 @@
 }
 
 /* Typography */
-// (`<ion-title>` is used for all top-level headings)
+.app-heading-1 {
+  font-size: 1.5rem;
+  font-weight: 350;
+}
 
 .app-subheading-1 {
   font-size: 1.25rem;
