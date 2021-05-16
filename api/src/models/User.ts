@@ -7,8 +7,8 @@ const schema = new Schema({
   createDate: Date,
   associatedProtests: [
     {
-      protestId: String,
-      accessLevel: String,
+      protestId: Schema.Types.ObjectId,
+      accessLevel: Number,
       isCreator: Boolean,
     },
   ],

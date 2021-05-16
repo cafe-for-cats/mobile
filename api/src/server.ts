@@ -88,7 +88,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             title,
             startDate,
             description,
-            associatedUserIds: [userObjectId],
+            associatedUserIds: [new ObjectId(userObjectId)],
           },
         },
         { upsert: true, new: true }
@@ -103,7 +103,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
             $push: {
               associatedProtests: {
                 protestId,
-                accessLevel: 'Leader', // Creators of a protest automatically get 'Leader' status.
+                accessLevel: AccessLevels.Leader,
                 isCreator: true,
               },
             },
@@ -112,7 +112,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
         );
       }
 
-      socket.emit('protests:getProtestsForUser', 'Success');
+      socket.emit('protests:addProtest', 'Success');
     } catch (e) {
       console.error(e);
 
@@ -123,109 +123,67 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 
   socket.on('protests:getProtestsForUser', async (input) => {
-    socket.emit('protests:getProtestsForUser', JSON.stringify('protest'));
-  });
-
-  socket.on('getProtestOverviewView', async (input) => {
-    const _id = new ObjectId(input);
-    const protest = await Protest.findOne({ _id: { $eq: _id } }, { title: 1 });
-
-    console.log('hello');
-
-    socket.emit('getProtestOverviewView', JSON.stringify(protest));
-  });
-
-  socket.on('getPins', async () => {
-    const pins = await Pin.find({});
-
-    const result = {
-      count: pins.length,
-      models: pins,
-    };
-
-    // TODO: only emit pins for sessions within the same location
-    sessions.forEach((session) => {
-      io.emit('getPins', JSON.stringify(result, null, '\t')); // is this emitting it for all sessions every loop?
-    });
-  });
-
-  socket.on('addPin', async (input: any) => {
-    const {
-      label,
-      userId,
-      showOnMap = false,
-      imageUrl = null,
-      lat = 0.0,
-      lng = 0.0,
-    } = input;
-
-    const fields = {
-      label,
-      showOnMap,
-      imageUrl,
-      trackable: {
-        createDate: new Date(),
-        userId,
-      },
-      position: {
-        lat,
-        lng,
-      },
-    };
-
-    try {
-      const newItem = new Pin(fields);
-      await newItem.save();
-      const pins = await Pin.find({});
-
-      socket.emit('addPin', JSON.stringify(newItem)); // TODO: does this NEED to be emited? also if so is itonly within the same zip protest?
-
-      socket.broadcast.emit('getPins', JSON.stringify(pins, null, '\t'));
-    } catch (e) {
-      console.error(e.message);
-
-      socket.emit('addPin', `Request Failed: ${e.message}`);
+    if (!input) {
+      socket.emit('protests:getProtestsForUser', {
+        status: false,
+        message: `'input' is required.`,
+      });
     }
-  });
 
-  socket.on('updatePin', async (input: any) => {
-    const {
-      label,
-      userId,
-      showOnMap = false,
-      imageUrl = null,
-      lat = 0.0,
-      lng = 0.0,
-    } = input;
+    const userId = new ObjectId(input.creatorId);
 
-    const fields = {
-      label,
-      showOnMap,
-      imageUrl,
-      trackable: {
-        createDate: new Date(),
-        userId,
-      },
-      position: {
-        lat,
-        lng,
-      },
-    };
-
-    const _id = new ObjectId(input.id);
-
-    await Pin.updateOne(
-      { _id },
+    const aggregate: ProtestAggregate[] = await Protest.aggregate([
       {
-        $set: {
-          fields,
+        $match: {
+          $expr: { $in: [userId, '$associatedUserIds'] },
         },
-      }
-    );
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'associatedUserIds',
+          foreignField: '_id',
+          as: 'user_info',
+        },
+      },
+      {
+        $group: {
+          _id: new ObjectId(),
+          protests: {
+            $push: {
+              _id: '$_id',
+              title: '$title',
+              description: '$description',
+              startDate: '$startDate',
+              usersAssociatedProtests: '$user_info.associatedProtests',
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          protests: '$protests',
+        },
+      },
+    ]);
 
-    const pin = await Pin.findById(input.id);
+    const mapped = aggregate[0].protests.map((protest: AssociatedProtest) => {
+      const { _id, title, description, startDate } = protest;
 
-    socket.emit('updatePin', JSON.stringify(pin));
+      const filtered = protest.usersAssociatedProtests[0].filter(
+        (userProtest: UserDetail) => userProtest.protestId.equals(_id)
+      );
+
+      return {
+        _id,
+        title,
+        description,
+        startDate,
+        usersAssociatedProtests: filtered,
+      };
+    });
+
+    socket.emit('protests:getProtestsForUser', JSON.stringify(mapped, null, 2));
   });
 });
 
@@ -236,3 +194,31 @@ const server = httpServer.listen(port, function () {
 });
 
 export default server;
+
+enum AccessLevels {
+  Admin = 0,
+  Leader = 1,
+  Organizer = 2,
+  Attendee = 3,
+  Unassigned = 4,
+}
+
+interface ProtestAggregate {
+  _id: ObjectId;
+  protests: AssociatedProtest[];
+}
+
+interface AssociatedProtest {
+  _id: ObjectId;
+  title: string;
+  description: string;
+  startDate: Date;
+  usersAssociatedProtests: UserDetail[][];
+}
+
+interface UserDetail {
+  _id: ObjectId;
+  protestId: ObjectId;
+  accessLevel: string;
+  isCreator: boolean;
+}
