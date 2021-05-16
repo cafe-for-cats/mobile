@@ -1,0 +1,34 @@
+<div class="ion-page">
+  <div class="add-protests">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div>
+        <input
+          type="text"
+          placeholder="title"
+          formControlName="title"
+          required
+        />
+      </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="description"
+          formControlName="description"
+          required
+        />
+      </div>
+
+      <button class="button">Add protest</button>
+      <button class="button" (click)="onClear()">Cancel</button>
+    </form>
+
+    <ng-container *ngIf="addResult$ | async as addResult">
+      <div *ngIf="addResult.status; else noAddResult">Success</div>
+      <ng-template #noAddResult> Something went wrong! </ng-template>
+    </ng-container>
+
+    <!-- <h3>Modal</h3>
+    <ion-button class="button" (click)="presentModal()">Modal</ion-button> -->
+  </div>
+</div>

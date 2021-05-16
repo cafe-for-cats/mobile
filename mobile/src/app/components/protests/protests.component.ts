@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
 import { ProtestsDataService } from './protests-data.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-protests',
@@ -29,6 +30,7 @@ export class ProtestsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private jwtService: JwtService,
     public modalController: ModalController,
+    public toastController: ToastController,
     private dataService: ProtestsDataService
   ) {
     this.data$ = this.dataService.receiveGetProtestsForUser();
@@ -39,6 +41,7 @@ export class ProtestsComponent implements OnInit {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/getProtestsView';
 
+    this.presentToast('ngOnInit.');
     this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
   }
 
@@ -47,6 +50,17 @@ export class ProtestsComponent implements OnInit {
       component: ModalPage,
     });
     return await modal.present();
+  }
+
+  async presentToast(msg) {
+    if (typeof msg !== 'string') {
+      msg = msg.toString();
+    }
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 2000,
+    });
+    toast.present();
   }
 
   onSubmit() {
