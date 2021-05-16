@@ -25,10 +25,13 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+.ion-margin-200 {
+  margin-top: var(--ion-margin-200);
+}
+
 /* Buttons */
 .wide-button {
   width: 80%;
-  margin-top: 1em;
   text-align: center;
   margin-left: auto;
   margin-right: auto;
