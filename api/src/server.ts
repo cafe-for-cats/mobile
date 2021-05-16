@@ -136,7 +136,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
 
     const userId = new ObjectId(creatorId);
 
-    const protestsJoined = await Protest.aggregate([
+    const aggregate = await Protest.aggregate([
       {
         $match: {
           $expr: { $in: [userId, '$associatedUserIds'] },
@@ -171,7 +171,22 @@ io.on('connection', (socket: SocketIO.Socket) => {
       },
     ]);
 
-    socket.emit('protests:getProtestsForUser', JSON.stringify(protestsJoined));
+    const mapped = aggregate[0].protests.map((protest: any) => {
+      const { _id: protestId, title, description, startDate } = protest;
+
+      const filtered = protest.usersAssociatedProtests[0].filter(
+        (userProtest: any) => userProtest.protestId.equals(protestId)
+      );
+
+      return {
+        title,
+        description,
+        startDate,
+        usersAssociatedProtests: filtered,
+      };
+    });
+
+    socket.emit('protests:getProtestsForUser', JSON.stringify(mapped, null, 2));
   });
 
   socket.on('getProtestOverviewView', async (input) => {
