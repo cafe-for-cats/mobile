@@ -1,37 +1,48 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
-  <div>
-    <input
-      type="text"
-      placeholder="username"
-      formControlName="username"
-      required
-    />
-  </div>
+<ion-header>
+  <ion-title>Welcome!</ion-title>
+</ion-header>
 
-  <div>
-    <input
-      type="text"
-      placeholder="password"
-      formControlName="password"
-      required
-    />
-  </div>
+<ion-content>
+  <ion-grid fixed="true">
+    <div class="app-subheading-1 ion-text-left">Login</div>
 
-  <div
-    *ngIf="username.invalid && (username.dirty || username.touched)"
-    class="alert alert-danger"
-  >
-    <div *ngIf="username.errors.required">Username is required.</div>
-  </div>
+    <ion-row>
+      <ion-col size-md class="ion-align-items-center">
+        <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input formControlName="username" name="username"></ion-input>
+          </ion-item>
 
-  <div
-    *ngIf="password.invalid && (password.dirty || password.touched)"
-    class="alert alert-danger"
-  >
-    <div *ngIf="password.errors.required">Password is required.</div>
-  </div>
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input formControlName="password" name="password"></ion-input>
+          </ion-item>
 
-  <button class="button" id="login">Login</button>
-  <!-- is the form validation not working because i'm using (click) instead of onsubmit? -->
-  <button class="button" id="register">Register</button>
-</form>
+          <div
+            *ngIf="username.invalid && (username.dirty || username.touched)"
+            class="alert alert-danger"
+          >
+            <div *ngIf="username.errors.required">Username is required.</div>
+          </div>
+
+          <div
+            *ngIf="password.invalid && (password.dirty || password.touched)"
+            class="alert alert-danger"
+          >
+            <div *ngIf="password.errors.required">Password is required.</div>
+          </div>
+
+          <ion-button
+            color="app-light-green --ion-margin-top"
+            expand="block"
+            type="submit"
+            class="wide-button"
+          >
+            Login
+          </ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
