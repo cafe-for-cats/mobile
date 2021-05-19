@@ -26,6 +26,16 @@
 @import '~@ionic/angular/css/flex-utils.css';
 
 // #region CSS Utilities
+
+/* Width selectors */
+.w-95 {
+  width: 95%;
+}
+
+.w-80 {
+  width: 80%;
+}
+
 /* Margin Selectors */
 .i-m-200 {
   margin: var(--ion-margin-200);
@@ -37,6 +47,10 @@
 
 .i-m-150 {
   margin: var(--ion-margin-150);
+}
+
+.i-mt-150 {
+  margin-top: var(--ion-margin-150);
 }
 
 .i-m-125 {
@@ -74,8 +88,7 @@
 // #endregion
 
 /* Buttons */
-.wide-button {
-  width: 80%;
+.center-button {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
