@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JwtService } from 'src/app/services/jwt.service';
 
@@ -26,27 +26,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onSubmit($event: SubmitEvent) {
-    const { id } = $event.submitter; // TODO: angular method of binding this instead of `id?
-
-    switch (id) {
-      case 'login': {
-        this.jwtService
-          .login(this.username.value, this.password.value)
-          .subscribe(() => this.router.navigate(['protests']));
-        break;
-      }
-      case 'register': {
-        this.jwtService
-          .register(this.username.value, this.password.value)
-          .subscribe();
-        break;
-      }
-      default: {
-        // error
-        break;
-      }
-    }
+  onSubmit(form: NgForm) {
+    this.jwtService
+      .login(form.value.username, form.value.password)
+      .subscribe(() => this.router.navigate(['protests']));
   }
 
   get username() {

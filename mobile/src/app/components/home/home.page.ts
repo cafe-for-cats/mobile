@@ -9,7 +9,7 @@ import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 @Component({
   selector: 'app-home-page',
   templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss']
+  styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
   setting;
@@ -104,7 +104,7 @@ export class HomePage implements OnInit {
             north: places[0].geometry.location.lat() + sizeFactor,
             south: places[0].geometry.location.lat() - sizeFactor,
             east: places[0].geometry.location.lng() + sizeFactor,
-            west: places[0].geometry.location.lng() - sizeFactor
+            west: places[0].geometry.location.lng() - sizeFactor,
           };
 
           // Without manually detecting changes, `rectangle` will not show after searching until the view is changed.
@@ -129,7 +129,7 @@ export class HomePage implements OnInit {
         ? new google.maps.LatLng(lastPos.latitude, lastPos.longitude)
         : new google.maps.LatLng(pins[0].position.lat, pins[0].position.lng);
 
-    this.markerPositions = pins.map(pin => {
+    this.markerPositions = pins.map((pin) => {
       const { lat, lng } = pin.position;
 
       if (lat && lng) {
@@ -158,14 +158,14 @@ export class HomePage implements OnInit {
           (position: Position) => {
             const pos = {
               lat: position.coords.latitude,
-              lng: position.coords.longitude
+              lng: position.coords.longitude,
             };
 
             this.map.googleMap.setCenter(pos);
 
             this.onAdd(true);
           },
-          e => {
+          (e) => {
             console.log('error', e);
           }
         );
@@ -178,7 +178,7 @@ export class HomePage implements OnInit {
         north: center.lat() + sizeFactor,
         south: center.lat() - sizeFactor,
         east: center.lng() + sizeFactor,
-        west: center.lng() - sizeFactor
+        west: center.lng() - sizeFactor,
       };
 
       this.showSelectionUI = true;
@@ -187,7 +187,7 @@ export class HomePage implements OnInit {
   }
 
   /**
-   * Handles canceling Pin selection.
+   * Handles the canceling of a Pin selection.
    * @docs-private
    */
   onCancel() {
@@ -218,10 +218,10 @@ export class HomePage implements OnInit {
       userId: '394749694', // TODO: implement unique identifers per device (doesn't need to be from device, just unique to the device? idk, lots of security stuff to think about)
       lat: center.lat(),
       lng: center.lng(),
-      label: this.currentMenuKey
+      label: this.currentMenuKey,
     };
 
-    this.http.post('http://localhost:3000/pins/', pin).subscribe(response => {
+    this.http.post('http://localhost:3000/pins/', pin).subscribe((response) => {
       if (response) {
         this.presentToast(
           usingGeolocation
@@ -235,7 +235,7 @@ export class HomePage implements OnInit {
         this.resetUiState();
         this.refresh$.next({
           latitude: pin.lat,
-          longitude: pin.lng
+          longitude: pin.lng,
         });
       }
     });
@@ -249,7 +249,7 @@ export class HomePage implements OnInit {
   private async presentToast(message: string) {
     const toast = await this.toastController.create({
       message,
-      duration: 2500
+      duration: 2500,
     });
 
     toast.present();
@@ -260,7 +260,7 @@ export class HomePage implements OnInit {
     return str
       .toLowerCase()
       .split(' ')
-      .map(word => {
+      .map((word) => {
         return word.replace(word[0], word[0].toUpperCase());
       })
       .join(' ');

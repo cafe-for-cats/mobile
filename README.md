@@ -1,7 +1,6 @@
 ### Setup
 
 - Download software:
-
   - [Git](https://git-scm.com/downloads)
   - [Node.js](https://nodejs.org/en/download/)
   - [Ionic](https://ionicframework.com/docs/intro/cli); `npm install -g @ionic/cli native-run cordova-res`

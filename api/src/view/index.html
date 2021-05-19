@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <title>☕ Cafe for Cats WS API</title>
   </head>
   <body>
     <div>
       <div>
-        <button onClick="addProtest()">Add Pin</button>
+        <button onClick="addProtest()">Add Protest</button>
         <button onClick="clearElement('add-protest')">Clear</button>
 
         <div style="display: grid; width: 20px">
@@ -39,12 +39,25 @@
             placeholder="startDate"
           />
         </div>
-        <p id="add-protest"></p>
+        <pre id="add-protest"></pre>
       </div>
+      <div
+        class="get-protest"
+        style="height: 500px; width: 500px; overflow-y: scroll"
+      >
+        <button onClick="getProtests()">Get Protests For User</button>
 
-      <button onClick="getProtests()">Get Protests</button>
+        <div style="display: grid; width: 20px">
+          <input
+            type="text"
+            class="get-protests"
+            name="creator id"
+            placeholder="creator id"
+          />
+        </div>
 
-      <p id="get-protests"></p>
+        <pre id="get-protests"></pre>
+      </div>
     </div>
     <div>
       <button onClick="addPin()">Add Pin</button>
@@ -134,7 +147,7 @@
         document.getElementById('update-pin').innerText = data;
       });
 
-      socket.on('getProtests', (data) => {
+      socket.on('protests:getProtestsForUser', (data) => {
         document.getElementById('get-protests').innerText = data;
       });
 
@@ -156,8 +169,13 @@
       }
 
       function getProtests() {
-        console.log('emitting');
-        socket.emit('getProtests');
+        const elements = document.querySelectorAll('input.get-protests');
+
+        const input = {
+          creatorId: elements[0].value,
+        };
+
+        socket.emit('protests:getProtestsForUser', input);
       }
 
       function getPins() {
