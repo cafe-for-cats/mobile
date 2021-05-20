@@ -7,6 +7,7 @@ import cors from 'cors';
 import { ObjectId } from 'mongodb';
 import auth from './routes/authRoutes';
 import protests from './routes/protestRoutes';
+import vision from './routes/visionRoutes';
 import bodyParser from 'body-parser';
 import rateLimit from 'express-rate-limit';
 import Protest from './models/Protest';
@@ -51,6 +52,7 @@ app.use(limiter);
 
 app.use('/auth', auth);
 app.use('/protests', protests);
+app.use('/vision', vision);
 
 app.get('/', (req: any, res: any) => {
   res.sendFile(path.resolve('./src/view/index.html'));
