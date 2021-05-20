@@ -16,7 +16,7 @@ export class UsersRoutes extends CommonRoutesConfig {
       });
 
     this.app
-      .route('/login')
+      .route('/users/login')
       .post(async (req: express.Request, res: express.Response) => {
         const { username, password } = req.body;
 
@@ -27,32 +27,6 @@ export class UsersRoutes extends CommonRoutesConfig {
 
         res.status(200).send(token);
       });
-
-    // this.app
-    //   .route(`/users/:userId`)
-    //   .all(
-    //     (
-    //       req: express.Request,
-    //       res: express.Response,
-    //       next: express.NextFunction
-    //     ) => {
-    //       // This middleware function runs before any request to /users/:userId
-    //       // It doesn't accomplish anything just yet---it simply passes control to the next applicable function below using next()
-    //       next();
-    //     }
-    //   )
-    //   .get((req: express.Request, res: express.Response) => {
-    //     res.status(200).send(`GET requested for id ${req.params.userId}`);
-    //   })
-    //   .put((req: express.Request, res: express.Response) => {
-    //     res.status(200).send(`Put requested for id ${req.params.userId}`);
-    //   })
-    //   .patch((req: express.Request, res: express.Response) => {
-    //     res.status(200).send(`Patch requested for id ${req.params.userId}`);
-    //   })
-    //   .delete((req: express.Request, res: express.Response) => {
-    //     res.status(200).send(`Delete requested for id ${req.params.userId}`);
-    //   });
 
     return this.app;
   }

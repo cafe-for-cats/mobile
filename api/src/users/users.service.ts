@@ -1,12 +1,13 @@
 import { getByUserId, getByUsername } from '../users/users.statics';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Schema } from 'mongoose';
 const mySecret = process.env.SECRET_KEY as string;
 
 export class UsersService {
   constructor() {}
 
-  async getUserById(userId: any) {
+  async getUserById(userId: string) {
     return await getByUserId(userId);
   }
 
@@ -34,8 +35,24 @@ export class UsersService {
         id: user._id,
       },
     };
-    let myToken;
 
+    const myToken = await generateJWT(payload);
+
+    return {
+      status: true,
+      message: 'Successfully authenticated user and signed token.',
+      payload: { token: myToken },
+    };
+  }
+}
+
+/**
+ * Signs the raw payload as a JWT.
+ * @param payload The users id.
+ * @returns The signed token.
+ */
+async function generateJWT(payload: {}) {
+  return new Promise((resolve, reject) => {
     jwt.sign(
       payload,
       mySecret,
@@ -43,15 +60,9 @@ export class UsersService {
         expiresIn: 3600,
       },
       (err, token) => {
-        if (err) throw err;
-        myToken = token;
+        if (err) reject(err);
+        else resolve(token);
       }
     );
-
-    return {
-      status: true,
-      message: 'Successfully authenticated user and signed token.',
-      payload: myToken,
-    };
-  }
+  });
 }
