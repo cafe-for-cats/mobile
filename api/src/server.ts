@@ -3,31 +3,48 @@ import * as http from 'http';
 import express from 'express';
 import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
-import connectDB from './config/database';
+import connectDB from './middleware/database';
 import { UsersService } from './users/users.service';
+import * as socketio from 'socket.io';
+import { UserSockets } from './users/users.sockets.config';
+import path from 'path';
+import { CommonSocketsConfig } from './common/common.sockets.config';
+import { CoreSockets } from './common/core.sockets.config';
 
 const port = 5000;
 const routes: Array<CommonRoutesConfig> = [];
+const sockets: Array<CommonSocketsConfig> = [];
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
+const io: socketio.Server = new socketio.Server(server);
 
 app.use(express.json());
 app.use(cors());
 
 connectDB();
 
-routes.push(new UsersRoutes(app, new UsersService()));
+const usersService = new UsersService();
+
+sockets.push(new CoreSockets(io));
+sockets.push(new UserSockets(io, usersService));
+routes.push(new UsersRoutes(app, usersService));
 
 const runningMessage = `⚡️ Server running at http://localhost:${port}`;
 
 app.get('/', (req: express.Request, res: express.Response) => {
-  res.status(200).send(runningMessage);
+  res.sendFile(path.resolve('./src/view/index.html'));
 });
 
 server.listen(port, () => {
   routes.forEach((route: CommonRoutesConfig) => {
     console.log(`✔  Routes configured for ${route.getName()}`);
   });
+
+  sockets.forEach((socket: CommonSocketsConfig) => {
+    console.log(`✔  Sockets configured for ${socket.getName()}`);
+  });
   console.log(runningMessage);
 });
+
+// pass IO instance to each sub-socket class

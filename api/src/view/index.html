@@ -129,7 +129,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
     <script>
-      const socket = io('http://localhost:3000');
+      const socket = io('http://localhost:5000');
+      const userSocket = io('/users');
+
+      socket.on('testusermessage', () => {
+        document.getElementById('add-protest').innerText = data;
+      });
 
       socket.on('addProtest', (data) => {
         document.getElementById('add-protest').innerText = data;
@@ -165,7 +170,7 @@
           startDate: elements[3].value,
         };
 
-        socket.emit('protests:addProtest', input);
+        userSocket.emit('testusermessage', input);
       }
 
       function getProtests() {

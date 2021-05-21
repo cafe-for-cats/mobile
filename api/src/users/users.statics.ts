@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import User from './user.models';
+import User from './users.models';
 
 export const getByUserId = async (userId: string) =>
   await User.findById(userId);
