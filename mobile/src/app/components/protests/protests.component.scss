@@ -20,27 +20,3 @@ hr {
   margin-top: 1.5em;
   width: 95%;
 }
-/* old buttons 
-input[type='text'] {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  padding: 0.4rem;
-  margin: 0.2rem;
-  width: 100%;
-  border: 1px solid rgba(128, 128, 128, 0.473);
-}
-input[type='text']:focus {
-  outline: none;
-  border: 1px solid #000000;
-  color: #000000;
-}
-*/
-
-.row-items-end {
-  justify-content: flex-end;
-}
-.submit-button {
-  width: 30%;
-  height: 1.8rem;
-}
