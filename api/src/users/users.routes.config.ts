@@ -1,6 +1,7 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import express from 'express';
 import { UsersService } from '../users/users.service';
+import { resolveSoa } from 'dns';
 
 export class UsersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application, private usersService: UsersService) {
@@ -9,25 +10,32 @@ export class UsersRoutes extends CommonRoutesConfig {
 
   configureRoutes() {
     this.app
-      .route(`/users/:userId`)
-      .get(async (req: express.Request, res: express.Response) => {
-        const users = await this.usersService.getUserById(req.params.userId);
-        res.status(200).send(users);
+      .route('/users/login')
+      .post(async (req: express.Request, res: express.Response) => {
+        try {
+          const { username, password } = req.body;
+
+          const token = await this.usersService.authenticateUser(
+            username,
+            password
+          );
+
+          res.status(200).send(token);
+        } catch (e) {
+          console.log(e);
+
+          res.status(500).send({ status: false, message: 'Server error.' });
+        }
       });
 
     this.app
-      .route('/users/login')
+      .route('/users/register')
       .post(async (req: express.Request, res: express.Response) => {
-        const { username, password } = req.body;
-
-        const token = await this.usersService.authenticateUser(
-          username,
-          password
-        );
-
-        res.status(200).send(token);
-      });
-
+        try {
+          const { username, password } = req.body;
+          
+          const user = await this.usersService.registerUser(username, password);
+        }
     return this.app;
   }
 }

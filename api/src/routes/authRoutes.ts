@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 import { check, validationResult } from 'express-validator/check';
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import User from '../users/user.models';
 import { ObjectId } from 'mongodb';
 
 const cors = require('cors'); // TODO: Fix type
