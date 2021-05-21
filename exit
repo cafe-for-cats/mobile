@@ -1,0 +1,196 @@
+[33mcommit be62f153557a1e07815b607aa08a6fde49890ecf[m[33m ([m[1;36mHEAD -> [m[1;32mdev[m[33m)[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Sat May 8 21:58:02 2021 -0700
+
+    removed desktop focused button
+
+ mobile/src/app/components/resources/resources.component.html | 5 [32m+[m[31m----[m
+ package-lock.json                                            | 3 [32m+++[m
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+[33mcommit 4bf55bf586c7b981843715974f7fb93500dd677a[m[33m ([m[1;31morigin/dev[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 2848a65 af70135
+Author: adrian <64164615+milkndcoffee@users.noreply.github.com>
+Date:   Thu May 6 17:33:03 2021 -0700
+
+    Merge pull request #83 from cafe-for-cats/ad-66
+    
+    Resource Section Page
+
+[33mcommit af70135808f294c3b6af7619200ad833dc7496e6[m[33m ([m[1;31morigin/ad-66[m[33m, [m[1;32mad-66[m[33m)[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Thu May 6 16:57:52 2021 -0700
+
+    used prettier format and added requested comments on types/interfaces
+
+ .../app/components/navbar/navbar.component.html    |  4 [32m+[m[31m-[m
+ .../app/components/navbar/navbar.component.scss    | 10 [32m++[m[31m--[m
+ .../components/resources/resources.component.html  | 44 [32m++++++++[m[31m------[m
+ .../components/resources/resources.component.scss  | 25 [32m++++[m[31m----[m
+ .../components/resources/resources.component.ts    | 67 [32m+++++++++++++++[m[31m-------[m
+ 5 files changed, 93 insertions(+), 57 deletions(-)
+
+[33mcommit 3499f0d543c1db2742d5fe20ecfad13b3e98d702[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Thu May 6 14:14:07 2021 -0700
+
+    quickfix
+
+ api/.env | 2 [31m--[m
+ 1 file changed, 2 deletions(-)
+
+[33mcommit bd23e811778f943ada5e771ab7630ee10743f4bd[m[33m ([m[1;32mlocal_branch[m[33m)[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Thu May 6 14:07:56 2021 -0700
+
+    Added resources to navbar component and fixed styling
+
+ api/.env                                               |  2 [32m++[m
+ mobile/src/app/components/navbar/navbar.component.html | 10 [32m+++++++[m[31m---[m
+ mobile/src/app/components/navbar/navbar.component.scss | 11 [32m+++++++++++[m
+ .../app/components/resources/resources.component.html  |  4 [32m+[m[31m---[m
+ .../app/components/resources/resources.component.scss  | 18 [32m++++++++++++++++++[m
+ .../app/components/resources/resources.component.ts    |  4 [32m+[m[31m---[m
+ mobile/src/global.scss                                 |  8 [32m++++++++[m
+ 7 files changed, 48 insertions(+), 9 deletions(-)
+
+[33mcommit 58cd8a74e168316793d4f135ba4a5b9d6dcbb373[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Tue May 4 18:40:28 2021 -0700
+
+    Set up resources component routing and added global styling for primary color
+
+ mobile/src/app/app-routing.module.ts               |  5 [32m++++[m
+ mobile/src/app/app.module.ts                       |  3 [32m+[m[31m-[m
+ .../components/resources/resources.component.html  | 33 [32m++++++++++++++++++++[m[31m--[m
+ .../components/resources/resources.component.ts    | 22 [32m++++++++++++++[m[31m-[m
+ mobile/src/global.scss                             | 21 [32m++++++++++++++[m
+ 5 files changed, 79 insertions(+), 5 deletions(-)
+
+[33mcommit 57a886e116355a4b3aad09795850a5ce3883f5fc[m
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Tue May 4 18:15:02 2021 -0700
+
+    Created resources component
+
+ .../components/resources/resources.component.html  |  3 [32m+++[m
+ .../components/resources/resources.component.scss  |  0
+ .../resources/resources.component.spec.ts          | 24 [32m++++++++++++++++++++++[m
+ .../components/resources/resources.component.ts    | 14 [32m+++++++++++++[m
+ 4 files changed, 41 insertions(+)
+
+[33mcommit 71c706ac5eb4cf52875c7a3a35f49a21c9b57204[m
+Merge: 28a682c 2848a65
+Author: milkndcoffee <milkndcoffee@gmail.com>
+Date:   Tue May 4 18:03:55 2021 -0700
+
+    Merge https://github.com/cafe-for-cats/app
+
+[33mcommit 2848a659c1a5dbb08fab91f7933b189157103756[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Mon May 3 19:29:42 2021 -0400
+
+    test
+
+ api/src/server.ts | 2 [31m--[m
+ 1 file changed, 2 deletions(-)
+
+[33mcommit 244cebbc948ff7886fd8659f8225e220b4bac08a[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Sat May 1 16:57:22 2021 -0400
+
+    Some styling and comments.
+
+ mobile/src/app/components/login/login.component.ts |  2 [32m+[m[31m-[m
+ .../components/protests/protests.component.html    | 66 [32m+++++++++++[m[31m-----------[m
+ .../components/protests/protests.component.scss    | 22 [32m+++[m[31m-----[m
+ .../app/components/protests/protests.component.ts  |  4 [32m+[m[31m-[m
+ 4 files changed, 44 insertions(+), 50 deletions(-)
+
+[33mcommit 755e3457f9e3ab5f8599fd9e4bb2315103bcd976[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Tue Apr 27 21:27:17 2021 -0400
+
+    Create protest and protest overview.
+
+ api/src/models/Protest.ts                          | 20 [32m+++[m[31m--------[m
+ api/src/models/User.ts                             |  2 [32m+[m[31m-[m
+ api/src/routes/protestRoutes.ts                    | 25 [32m+++++++[m[31m------[m
+ mobile/src/app/app.module.ts                       |  2 [31m--[m
+ mobile/src/app/components/login/login.component.ts |  6 [32m++[m[31m--[m
+ .../components/protests/protests.component.html    | 41 [32m++++++++++++++++++[m[31m----[m
+ .../components/protests/protests.component.scss    |  4 [32m+++[m
+ .../app/components/protests/protests.component.ts  | 36 [32m+++++++++++++++++[m[31m--[m
+ .../src/app/components/protests/protests.module.ts |  9 [32m++++[m[31m-[m
+ 9 files changed, 103 insertions(+), 42 deletions(-)
+
+[33mcommit 92cc513f569450a1f8983d5d287aa5bfbc68c8af[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Wed Apr 21 21:50:30 2021 -0400
+
+    Cleanup.
+
+ api/src/routes/protestRoutes.ts                    | 14 [32m+[m[31m---[m
+ api/src/server.ts                                  | 56 [32m+[m[31m--------------[m
+ mobile/src/app/app-routing.module.ts               |  3 [31m-[m
+ .../protest-overview-leader.component.ts           |  6 [32m+[m[31m-[m
+ .../protest-overview-data.service.ts               | 48 [31m-------------[m
+ .../protest-overview.component.html                | 32 [31m---------[m
+ .../protest-overview.component.scss                | 15 [31m----[m
+ .../protest-overview.component.spec.ts             | 24 [31m-------[m
+ .../protest-overview/protest-overview.component.ts | 82 [31m----------------------[m
+ .../protest-overview/protest-overview.module.ts    | 13 [31m----[m
+ .../components/protests/protests-data.service.ts   | 27 [31m-------[m
+ .../components/protests/protests.component.html    |  6 [32m+[m[31m-[m
+ .../components/protests/protests.component.scss    |  8 [32m+[m[31m--[m
+ .../app/components/protests/protests.component.ts  | 58 [32m+++[m[31m------------[m
+ 14 files changed, 25 insertions(+), 367 deletions(-)
+
+[33mcommit 6b36dea78f1c886b69fe062857b1bceafae26798[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Wed Apr 21 21:03:13 2021 -0400
+
+    Revised Protest Overview; Started Protest Sharing.
+
+ api/src/models/Protest.ts                          |  26 [32m++[m[31m--[m
+ api/src/routes/protestRoutes.ts                    | 161 [32m++++++++++++++[m[31m-------[m
+ .../protest-overview-leader.component.html         |  20 [32m++[m[31m-[m
+ .../protest-overview-leader.component.ts           |  34 [32m++++[m[31m-[m
+ .../protest-overview-data.service.ts               |  13 [32m+[m[31m-[m
+ .../protest-welcome/protest-welcome.component.ts   |   5 [32m+[m[31m-[m
+ .../components/protests/protests.component.html    |  23 [32m++[m[31m-[m
+ .../components/protests/protests.component.scss    |   6 [32m+[m[31m-[m
+ .../app/components/protests/protests.component.ts  |  24 [32m+[m[31m--[m
+ 9 files changed, 192 insertions(+), 120 deletions(-)
+
+[33mcommit 28a682c0ab6a55151cd9548eafd301902cfc18bc[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Donald Gatto <dgattoiii@gmail.com>
+Date:   Tue Apr 20 19:23:13 2021 -0400
+
+    Update node.js.yml
+
+ .github/workflows/node.js.yml | 2 [32m+[m[31m-[m
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+[33mcommit 115af7043506bf3426133a3d3d681f976a56137d[m
+Author: dgatto <dgattoiii@gmail.com>
+Date:   Sun Apr 18 18:42:24 2021 -0400
+
+    Some of protest share; Protest welcome; Protest overview.
+
+ api/src/models/Protest.ts                          |  3 [32m+[m
+ api/src/routes/protestRoutes.ts                    | 85 [32m++++++++++++++++++++[m[31m--[m
+ api/src/server.ts                                  |  9 [32m++[m[31m-[m
+ mobile/src/app/app-routing.module.ts               |  7 [32m+[m[31m-[m
+ mobile/src/app/app.module.ts                       |  2 [32m+[m
+ .../protest-overview-leader.component.html         |  4 [32m+[m[31m-[m
+ .../protest-overview-leader.component.ts           | 26 [32m+++++[m[31m--[m
+ .../protest-overview-data.service.ts               | 16 [32m+[m[31m---[m
+ .../protest-welcome/protest-welcome.component.html |  3 [32m+[m
+ .../protest-welcome/protest-welcome.component.scss |  0
+ .../protest-welcome.component.spec.ts              | 24 [32m++++++[m
+ .../protest-welcome/protest-welcome.component.ts   | 32 [32m++++++++[m
+ .../protest-welcome/protest-welcome.module.ts      |  9 [32m+++[m
+ .../components/protests/protests.component.html    |  4 [32m+[m[31m-[m
+ .../app/components/protests/protests.component.ts  | 50 [32m+++++++[m[31m------[m
+ 15 files changed, 216 insertions(+), 58 deletions(-)

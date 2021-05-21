@@ -5,50 +5,86 @@
         <ion-col size="12">
           <h2>Create Protest</h2>
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div>
-              <input
-                type="text"
-                placeholder="title"
-                formControlName="title"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="description"
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Title</ion-label>
+              <ion-input formControlName="title" name="title"></ion-input>
+            </ion-item>
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Description</ion-label>
+              <ion-input
                 formControlName="description"
-                required
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                placeholder="startDate"
+                name="description"
+              ></ion-input>
+            </ion-item>
+            <ion-item class="app-input-body1 ion-no-padding">
+              <ion-label position="floating">Start Date</ion-label>
+              <ion-datetime
+                displayFormat="D MMM YYYY H:mm"
                 formControlName="startDate"
-                required
-              />
-            </div>
+                name="startDate"
+                min="{{ minDate }}"
+                max="2030"
+              ></ion-datetime>
+            </ion-item>
             <ion-row class="row-items-end">
-              <ion-button class="submit-button">Create</ion-button>
-              <ion-button class="submit-button">Clear</ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="submit"
+              >
+                Submit
+              </ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="reset"
+              >
+                Clear
+              </ion-button>
             </ion-row>
           </form>
         </ion-col>
         <ion-col size="12">
           <h2>Join Protest</h2>
-          <form>
-            <div>
-              <input
-                type="text"
-                placeholder="protest-code"
-                formControlName="protest-code"
-                required
-              />
+          <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Protest Code</ion-label>
+              <ion-input
+                formControlName="protestCode"
+                name="protestCode"
+                required="true"
+              ></ion-input>
+            </ion-item>
+            <div
+              *ngIf="
+                protestCode.invalid &&
+                (protestCode.dirty || protestCode.touched)
+              "
+              class="alert alert-danger"
+            >
+              <div *ngIf="protestCode.errors.required">
+                Protest code is required.
+              </div>
             </div>
             <ion-row class="row-items-end">
-              <ion-button class="submit-button">Join</ion-button>
-              <ion-button class="submit-button">Clear</ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="submit"
+              >
+                Submit
+              </ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="reset"
+              >
+                Clear
+              </ion-button>
             </ion-row>
           </form>
         </ion-col>
@@ -56,7 +92,8 @@
     </div>
 
     <hr />
-    <div *ngIf="data$ | async as data">
+
+    <div *ngIf="data$ | async as data; else elseBlock">
       <h2>Created</h2>
       <table table class="protests__table">
         <tr>
@@ -89,6 +126,9 @@
         </tr>
       </table>
     </div>
+    <ng-template #elseBlock>
+      Content to render when condition is false.
+    </ng-template>
   </div>
 
   <!-- add httpinterceptor for checking authentication state -->

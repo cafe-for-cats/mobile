@@ -1,11 +1,9 @@
 .container {
   margin: 2rem 1rem;
 }
-
 .protests {
   overflow-y: scroll;
 }
-
 .protests__table {
   width: 100%;
   margin: 3rem 0 3rem 0;
@@ -15,7 +13,6 @@
     background: gray;
   }
 }
-
 hr {
   //currently local to resources but may change in the future for spacing changes.
   border: none;
@@ -23,7 +20,7 @@ hr {
   margin-top: 1.5em;
   width: 95%;
 }
-
+/* old buttons 
 input[type='text'] {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
@@ -38,6 +35,7 @@ input[type='text']:focus {
   border: 1px solid #000000;
   color: #000000;
 }
+*/
 
 .row-items-end {
   justify-content: flex-end;
@@ -45,9 +43,4 @@ input[type='text']:focus {
 .submit-button {
   width: 30%;
   height: 1.8rem;
-}
-
-* {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
