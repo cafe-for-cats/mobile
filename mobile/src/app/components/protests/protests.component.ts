@@ -43,6 +43,14 @@ export class ProtestsComponent implements OnInit {
     this.minDate = this.setMinDate();
 
     this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
+
+    this.addResult$.subscribe((result) => {
+      if (result.status) {
+        this.presentToast('Success! Form has been submitted.');
+      } else {
+        this.presentToast('Oh no! Something went wrong...');
+      }
+    });
   }
 
   async presentToast(msg) {
@@ -66,12 +74,6 @@ export class ProtestsComponent implements OnInit {
       startDate: this.startDate.value,
       creatorId: userId,
     });
-
-    if (this.addResult$) {
-      this.presentToast('Success! Form has been submitted.');
-    } else {
-      this.presentToast('Oh no! Something went wrong...');
-    }
   }
 
   get title() {
