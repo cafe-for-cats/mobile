@@ -15,12 +15,12 @@ export class UsersRoutes extends CommonRoutesConfig {
         try {
           const { username, password } = req.body;
 
-          const token = await this.usersService.authenticateUser(
+          const result = await this.usersService.authenticateUser(
             username,
             password
           );
 
-          res.status(200).send(token);
+          res.status(200).send(result);
         } catch (e) {
           console.log(e);
 
@@ -33,9 +33,22 @@ export class UsersRoutes extends CommonRoutesConfig {
       .post(async (req: express.Request, res: express.Response) => {
         try {
           const { username, password } = req.body;
-          
-          const user = await this.usersService.registerUser(username, password);
+
+          const result = await this.usersService.registerUser(
+            username,
+            password
+          );
+
+          res.status(200).send(result);
+        } catch (e) {
+          console.log(e);
+
+          res.status(500).send({ status: false, message: 'Server error.' });
         }
+      });
+
     return this.app;
   }
 }
+
+// Define what our MVP should be for october

@@ -1,4 +1,4 @@
-import { getByUserId, getByUsername } from '../users/users.statics';
+import { addUser, getByUserId, getByUsername } from '../users/users.statics';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
@@ -84,23 +84,17 @@ export class UsersService {
     };
   }
 
-  async registerUser(username: string, password :string) {
-
+  async registerUser(username: string, password: string) {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    const result = await User.findOneAndUpdate(
-      { _id: new ObjectId() },
-      {
-        $set: { username, password: hash },
-      },
-      { upsert: true, new: true }
-    );
+    const result = await addUser(username, hash);
 
     if (!result.id) {
-      return res.json({
-        message: 'Failure.',
-      });
+      return {
+        status: false,
+        message: 'Failed registering user.',
+      };
     }
 
     const payload = {
@@ -109,27 +103,13 @@ export class UsersService {
       },
     };
 
-    // [3]
-    jwt.sign(
-      payload,
-      mySecret,
-      {
-        expiresIn: 10000,
-      },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json({
-          token,
-        });
-      }
-    );
-        } catch (e) {
-          console.log(e);
+    const myToken = await generateJWT(payload);
 
-          res.status(500).send({ status: false, message: 'Server error.' });
-        }
-      });
-
+    return {
+      status: true,
+      message: 'Successfully registered user and signed token.',
+      payload: { token: myToken },
+    };
   }
 }
 
