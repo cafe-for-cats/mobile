@@ -17,7 +17,7 @@ export class ProtestSockets extends CommonSocketsConfig {
 
   configureRoutes() {
     this.io.of('/protests').on('connection', (socket: socketio.Socket) => {
-      console.log(`↑  Client '${socket.id}' connected to socket /protests`);
+      console.log(`↑  Connected client '${socket.id}' to socket /protests`);
 
       socket.on('addProtest', async (input) => {
         const { title, description, startDate, creatorId } = input;
@@ -39,61 +39,6 @@ export class ProtestSockets extends CommonSocketsConfig {
 
         return;
       });
-
-      //   socket.on('protests:addProtest', async (input) => {
-      //     const { title, description, startDate, creatorId } = input;
-
-      //     try {
-      //       const user = await User.findById(creatorId);
-
-      //       if (!user) {
-      //         socket.emit('protests:addProtest', 'Failure. User not found.');
-
-      //         return;
-      //       }
-
-      //       const userObjectId = user?.get('_id');
-
-      //       const newProtestResult = await Protest.findOneAndUpdate(
-      //         { _id: new ObjectId() },
-      //         {
-      //           $set: {
-      //             title,
-      //             startDate,
-      //             description,
-      //             associatedUserIds: [new ObjectId(userObjectId)],
-      //           },
-      //         },
-      //         { upsert: true, new: true }
-      //       );
-
-      //       const protestId = newProtestResult?.get('_id');
-
-      //       if (protestId) {
-      //         await User.findOneAndUpdate(
-      //           { _id: userObjectId },
-      //           {
-      //             $push: {
-      //               associatedProtests: {
-      //                 protestId,
-      //                 accessLevel: AccessLevels.Leader,
-      //                 isCreator: true,
-      //               },
-      //             },
-      //           },
-      //           { new: true }
-      //         );
-      //       }
-
-      //       socket.emit('protests:addProtest', 'Success');
-      //     } catch (e) {
-      //       console.error(e);
-
-      //       socket.emit('protests:addProtest', 'Failure');
-      //     }
-
-      //     return;
-      //   });
     });
 
     return this.io;

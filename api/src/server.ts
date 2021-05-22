@@ -6,7 +6,6 @@ import { UsersRoutes } from './users/users.routes.config';
 import connectDB from './middleware/database';
 import { UsersService } from './users/users.service';
 import * as socketio from 'socket.io';
-import { UserSockets } from './users/users.sockets.config';
 import path from 'path';
 import { CommonSocketsConfig } from './common/common.sockets.config';
 import { CoreSockets } from './common/core.sockets.config';
@@ -50,5 +49,3 @@ server.listen(port, () => {
   });
   console.log(runningMessage);
 });
-
-// pass IO instance to each sub-socket class

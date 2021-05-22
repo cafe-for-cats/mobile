@@ -8,10 +8,10 @@ export class CoreSockets extends CommonSocketsConfig {
 
   configureRoutes() {
     this.io.on('connection', (socket: socketio.Socket) => {
-      console.log(`↑  Client '${socket.id}' connected to io`);
+      console.log(`↑  Connected client '${socket.id}' to io.`);
 
       socket.on('disconnect', () => {
-        console.log('disconnected');
+        console.log(`↓  Disconnected client '${socket.id}' from io.`);
       });
     });
 
