@@ -10,6 +10,8 @@ import { UserSockets } from './users/users.sockets.config';
 import path from 'path';
 import { CommonSocketsConfig } from './common/common.sockets.config';
 import { CoreSockets } from './common/core.sockets.config';
+import { ProtestSockets } from './protests/protests.sockets.config';
+import { ProtestsService } from './protests/protests.service';
 
 const port = 5000;
 const routes: Array<CommonRoutesConfig> = [];
@@ -25,9 +27,11 @@ app.use(cors());
 connectDB();
 
 const usersService = new UsersService();
+const protestsService = new ProtestsService();
 
 sockets.push(new CoreSockets(io));
-sockets.push(new UserSockets(io, usersService));
+// sockets.push(new UserSockets(io, usersService));
+sockets.push(new ProtestSockets(io, protestsService));
 routes.push(new UsersRoutes(app, usersService));
 
 const runningMessage = `⚡️ Server running at http://localhost:${port}`;

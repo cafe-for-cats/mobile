@@ -2,7 +2,7 @@ import * as socketio from 'socket.io';
 
 export abstract class CommonSocketsConfig {
   io: socketio.Server;
-  name: string;
+  private name: string;
 
   constructor(io: socketio.Server, name: string) {
     this.io = io;

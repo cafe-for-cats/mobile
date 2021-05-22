@@ -1,4 +1,8 @@
-import { addUser, getByUserId, getByUsername } from '../users/users.statics';
+import {
+  addUser,
+  findUserById,
+  findUserByUsername,
+} from '../users/users.statics';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
@@ -8,7 +12,7 @@ export class UsersService {
   constructor() {}
 
   async getUserById(userId: string) {
-    const user = await getByUserId(userId);
+    const user = await findUserById(userId);
 
     if (!user) {
       return {
@@ -25,7 +29,7 @@ export class UsersService {
   }
 
   async getByUsername(username: string) {
-    const user = await getByUsername(username);
+    const user = await findUserByUsername(username);
 
     if (!user) {
       return {
@@ -36,7 +40,7 @@ export class UsersService {
 
     return {
       status: true,
-      message: 'Hey, good to see you again!.',
+      message: 'Hey, good to see you again!',
       payload: {
         user,
       },
@@ -44,12 +48,12 @@ export class UsersService {
   }
 
   async authenticateUser(username: string, password: string) {
-    const user = await getByUsername(username);
+    const user = await findUserByUsername(username);
 
     if (!mySecret) {
       return {
         status: false,
-        message: `Oh no, where'd your key go?`,
+        message: `Oh no, you dropped your keys!`,
       };
     }
 
@@ -114,9 +118,9 @@ export class UsersService {
 }
 
 /**
- * Signs the raw payload as a JWT.
- * @param payload The users id.
- * @returns The signed token.
+ * Signs a payload as a JWT.
+ * @param payload The payload.
+ * @returns Promise of the signed token.
  */
 async function generateJWT(payload: {}) {
   return new Promise((resolve, reject) => {

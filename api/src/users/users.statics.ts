@@ -1,10 +1,11 @@
 import { ObjectId } from 'mongodb';
+import { AccessLevels } from '../protests/protests.sockets.config';
 import User from './users.models';
 
-export const getByUserId = async (userId: string) =>
+export const findUserById = async (userId: string) =>
   await User.findById(userId);
 
-export const getByUsername = async (username: string) =>
+export const findUserByUsername = async (username: string) =>
   await User.findOne({ username: { $eq: username } });
 
 /**
@@ -20,4 +21,19 @@ export const addUser = async (username: string, password: string) =>
       $set: { username, password },
     },
     { upsert: true, new: true }
+  );
+
+export const updateUsersAssociatedProtests = async (userInput: any) =>
+  await User.findOneAndUpdate(
+    { _id: userInput.userId },
+    {
+      $push: {
+        associatedProtests: {
+          protestId: userInput.protestId,
+          accessLevel: AccessLevels.Leader,
+          isCreator: true,
+        },
+      },
+    },
+    { new: true }
   );

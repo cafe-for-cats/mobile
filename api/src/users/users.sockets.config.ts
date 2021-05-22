@@ -8,15 +8,7 @@ export class UserSockets extends CommonSocketsConfig {
   }
 
   configureRoutes() {
-    this.io.of('/users').on('connection', (socket: socketio.Socket) => {
-      console.log('connected here');
-
-      socket.on('testusermessage', () => {
-        console.log('here');
-
-        socket.emit('testusermessage');
-      });
-    });
+    console.log(`No sockets are registered for Users`);
 
     return this.io;
   }
