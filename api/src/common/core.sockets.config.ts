@@ -6,7 +6,7 @@ export class CoreSockets extends CommonSocketsConfig {
     super(io, 'CoreSockets');
   }
 
-  configureRoutes() {
+  configureSockets() {
     this.io.on('connection', (socket: socketio.Socket) => {
       console.log(`↑  Connected client '${socket.id}' to io.`);
 

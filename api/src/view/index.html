@@ -152,7 +152,7 @@
         document.getElementById('update-pin').innerText = data;
       });
 
-      socket.on('getProtestsForUser', (data) => {
+      protestSocket.on('getProtestsForUser', (data) => {
         document.getElementById('get-protests').innerText = data;
       });
 
@@ -180,7 +180,7 @@
           creatorId: elements[0].value,
         };
 
-        socket.emit('getProtestsForUser', input);
+        protestSocket.emit('getProtestsForUser', input);
       }
 
       function getPins() {

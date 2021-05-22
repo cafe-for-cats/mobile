@@ -7,12 +7,12 @@ export abstract class CommonSocketsConfig {
   constructor(io: socketio.Server, name: string) {
     this.io = io;
     this.name = name;
-    this.configureRoutes();
+    this.configureSockets();
   }
 
   getName() {
     return this.name;
   }
 
-  abstract configureRoutes(): socketio.Server;
+  abstract configureSockets(): socketio.Server;
 }

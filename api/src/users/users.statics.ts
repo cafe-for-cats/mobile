@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { AccessLevels } from '../protests/protests.sockets.config';
+import { AccessLevels } from '../protests/protests.service';
 import User from './users.models';
 
 export const findUserById = async (userId: string) =>

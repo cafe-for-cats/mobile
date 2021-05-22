@@ -1,6 +1,5 @@
 import * as socketio from 'socket.io';
 import { CommonSocketsConfig } from '../common/common.sockets.config';
-import { ObjectId } from 'mongodb';
 import User from '../users/users.models';
 import Protest from './protests.models';
 import {
@@ -15,7 +14,7 @@ export class ProtestSockets extends CommonSocketsConfig {
     super(io, 'UsersSockets');
   }
 
-  configureRoutes() {
+  configureSockets() {
     this.io.of('/protests').on('connection', (socket: socketio.Socket) => {
       console.log(`↑  Connected client '${socket.id}' to socket /protests`);
 
@@ -39,36 +38,21 @@ export class ProtestSockets extends CommonSocketsConfig {
 
         return;
       });
+
+      socket.on('getProtestsForUser', async (input) => {
+        if (!input) {
+          socket.emit('getProtestsForUser', {
+            status: false,
+            message: `'input' is required.`,
+          });
+        }
+
+        const result = this.protestsService.getProtestsForUser(input);
+
+        socket.emit('getProtestsForUser', JSON.stringify(result, null, 2));
+      });
     });
 
     return this.io;
   }
-}
-
-export enum AccessLevels {
-  Admin = 0,
-  Leader = 1,
-  Organizer = 2,
-  Attendee = 3,
-  Unassigned = 4,
-}
-
-interface ProtestAggregate {
-  _id: ObjectId;
-  protests: AssociatedProtest[];
-}
-
-interface AssociatedProtest {
-  _id: ObjectId;
-  title: string;
-  description: string;
-  startDate: Date;
-  usersAssociatedProtests: UserDetail[][];
-}
-
-interface UserDetail {
-  _id: ObjectId;
-  protestId: ObjectId;
-  accessLevel: string;
-  isCreator: boolean;
 }

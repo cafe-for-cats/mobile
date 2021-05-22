@@ -3,11 +3,11 @@ import { CommonSocketsConfig } from '../common/common.sockets.config';
 import { UsersService } from './users.service';
 
 export class UserSockets extends CommonSocketsConfig {
-  constructor(io: socketio.Server, private usersService: UsersService) {
+  constructor(io: socketio.Server) {
     super(io, 'UsersSockets');
   }
 
-  configureRoutes() {
+  configureSockets() {
     console.log(`No sockets are registered for Users`);
 
     return this.io;
