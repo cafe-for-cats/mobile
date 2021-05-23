@@ -1,224 +1,56 @@
-import express from 'express';
-import * as socketio from 'socket.io';
-import * as path from 'path';
-import Pin from './models/Pin';
-import connectDB from './config/database';
 import cors from 'cors';
-import { ObjectId } from 'mongodb';
-import auth from './routes/authRoutes';
-import protests from './routes/protestRoutes';
-import bodyParser from 'body-parser';
+import * as http from 'http';
+import express from 'express';
+import { CommonRoutesConfig } from './common/common.routes.config';
+import { UsersRoutes } from './users/users.routes.config';
+import connectDB from './middleware/database';
+import { UsersService } from './users/users.service';
+import path from 'path';
+import { CommonSocketsConfig } from './common/common.sockets.config';
+import { CoreSockets } from './common/core.sockets.config';
+import { ProtestSockets } from './protests/protests.sockets.config';
+import { ProtestsService } from './protests/protests.service';
 import rateLimit from 'express-rate-limit';
-import Protest from './models/Protest';
-import expressMongoSanitize from 'express-mongo-sanitize';
-import User from './models/User';
+import SocketIO from 'socket.io';
 
-const app = express();
+const port = process.env.PORT || 5000;
+const routes: Array<CommonRoutesConfig> = [];
+const sockets: Array<CommonSocketsConfig> = [];
 
-app.set('port', process.env.PORT || 3000);
-
-const httpServer = require('http').Server(app);
-
-const io = require('socket.io')(httpServer, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['my-custom-header'],
-    credentials: true,
-  },
-});
-
-app.use(cors());
-
-// Connect to MongoDB
-connectDB();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(
-  expressMongoSanitize({
-    replaceWith: '_',
-  })
-);
+const app: express.Application = express();
+const server: http.Server = http.createServer(app);
+const io: SocketIO.Server = new SocketIO.Server(server);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 100, // limit each IP to 100 requests per windowMs
 });
 
+app.use(express.json());
+app.use(cors());
 app.use(limiter);
 
-app.use('/auth', auth);
-app.use('/protests', protests);
+connectDB();
 
-app.get('/', (req: any, res: any) => {
+const usersService = new UsersService();
+const protestsService = new ProtestsService();
+
+sockets.push(new CoreSockets(io));
+sockets.push(new ProtestSockets(io, protestsService));
+routes.push(new UsersRoutes(app, usersService));
+
+app.get('/', (req: express.Request, res: express.Response) => {
   res.sendFile(path.resolve('./src/view/index.html'));
 });
 
-const sessions = new Set();
-
-io.on('connection', (socket: SocketIO.Socket) => {
-  sessions.add(socket.id);
-
-  console.log(`User connected with id ${socket.id}`);
-
-  socket.on('disconnect', () => {
-    console.log(`User disconnected with id ${socket.id}`);
+server.listen(port, () => {
+  routes.forEach((route: CommonRoutesConfig) => {
+    console.log(`✔  Routes configured for ${route.getName()}`);
   });
 
-  socket.on('protests:addProtest', async (input) => {
-    const { title, description, startDate, creatorId } = input;
-
-    try {
-      const user = await User.findById(creatorId);
-
-      if (!user) {
-        socket.emit('protests:addProtest', 'Failure. User not found.');
-
-        return;
-      }
-
-      const userObjectId = user?.get('_id');
-
-      const newProtestResult = await Protest.findOneAndUpdate(
-        { _id: new ObjectId() },
-        {
-          $set: {
-            title,
-            startDate,
-            description,
-            associatedUserIds: [new ObjectId(userObjectId)],
-          },
-        },
-        { upsert: true, new: true }
-      );
-
-      const protestId = newProtestResult?.get('_id');
-
-      if (protestId) {
-        await User.findOneAndUpdate(
-          { _id: userObjectId },
-          {
-            $push: {
-              associatedProtests: {
-                protestId,
-                accessLevel: AccessLevels.Leader,
-                isCreator: true,
-              },
-            },
-          },
-          { new: true }
-        );
-      }
-
-      socket.emit('protests:addProtest', 'Success');
-    } catch (e) {
-      console.error(e);
-
-      socket.emit('protests:addProtest', 'Failure');
-    }
-
-    return;
+  sockets.forEach((socket: CommonSocketsConfig) => {
+    console.log(`✔  Sockets configured for ${socket.getName()}`);
   });
 
-  socket.on('protests:getProtestsForUser', async (input) => {
-    if (!input) {
-      socket.emit('protests:getProtestsForUser', {
-        status: false,
-        message: `'input' is required.`,
-      });
-    }
-
-    const userId = new ObjectId(input.creatorId);
-
-    const aggregate: ProtestAggregate[] = await Protest.aggregate([
-      {
-        $match: {
-          $expr: { $in: [userId, '$associatedUserIds'] },
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'associatedUserIds',
-          foreignField: '_id',
-          as: 'user_info',
-        },
-      },
-      {
-        $group: {
-          _id: new ObjectId(),
-          protests: {
-            $push: {
-              _id: '$_id',
-              title: '$title',
-              description: '$description',
-              startDate: '$startDate',
-              usersAssociatedProtests: '$user_info.associatedProtests',
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          protests: '$protests',
-        },
-      },
-    ]);
-
-    const mapped = aggregate[0].protests.map((protest: AssociatedProtest) => {
-      const { _id, title, description, startDate } = protest;
-
-      const filtered = protest.usersAssociatedProtests[0].filter(
-        (userProtest: UserDetail) => userProtest.protestId.equals(_id)
-      );
-
-      return {
-        _id,
-        title,
-        description,
-        startDate,
-        usersAssociatedProtests: filtered,
-      };
-    });
-
-    socket.emit('protests:getProtestsForUser', JSON.stringify(mapped, null, 2));
-  });
+  console.log(`⚡️ Server running at http://localhost:${port}`);
 });
-
-const port = app.get('port');
-
-const server = httpServer.listen(port, function () {
-  console.log('listening on *:3000');
-});
-
-export default server;
-
-enum AccessLevels {
-  Admin = 0,
-  Leader = 1,
-  Organizer = 2,
-  Attendee = 3,
-  Unassigned = 4,
-}
-
-interface ProtestAggregate {
-  _id: ObjectId;
-  protests: AssociatedProtest[];
-}
-
-interface AssociatedProtest {
-  _id: ObjectId;
-  title: string;
-  description: string;
-  startDate: Date;
-  usersAssociatedProtests: UserDetail[][];
-}
-
-interface UserDetail {
-  _id: ObjectId;
-  protestId: ObjectId;
-  accessLevel: string;
-  isCreator: boolean;
-}
