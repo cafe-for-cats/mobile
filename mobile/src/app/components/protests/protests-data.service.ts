@@ -6,8 +6,6 @@ import { SocketNameSpace } from './socket-namespace';
 
 @Injectable()
 export class ProtestsDataService {
-  private rootKey = 'protests';
-  private addProtestKey = 'addProtest';
   private getProtestsForUserKey = 'getProtestsForUser';
   private protestsSocket = new SocketNameSpace({
     url: 'http://localhost:5000/protests',
