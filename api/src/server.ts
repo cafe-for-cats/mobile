@@ -68,15 +68,15 @@ io.on('connection', (socket: SocketIO.Socket) => {
   });
 
   socket.on('protests:addProtest', async (input) => {
-    const { title, description, startDate, creatorId } = input;
+    const { title, description, startDate, userId } = input;
 
     try {
-      const user = await User.findById(creatorId);
+      const user = await User.findById(userId);
 
       if (!user) {
         socket.emit('protests:addProtest', {
           status: false,
-          message: `User not found with provided 'creatorId'.`,
+          message: `User not found with provided 'userId'.`,
         });
 
         return;
@@ -139,7 +139,7 @@ io.on('connection', (socket: SocketIO.Socket) => {
       });
     }
 
-    const userId = new ObjectId(input.creatorId);
+    const userId = new ObjectId(input.userId);
 
     const aggregate: ProtestAggregate[] = await Protest.aggregate([
       {

@@ -23,7 +23,7 @@ import { CreateProtestComponent } from './components/create-protest/create-prote
 import { JoinProtestComponent } from './components/join-protest/join-protest.component';
 import { ProtestsDataService } from './components/protests/protests-data.service';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
   declarations: [
@@ -54,8 +54,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         tokenGetter: () => {
           return localStorage.getItem('token');
         },
-        allowedDomains: ['localhost:3000'],
-        disallowedRoutes: ['http://localhost:3000/auth/login'],
+        allowedDomains: ['localhost:5000'],
+        disallowedRoutes: ['http://localhost:5000/users/login'],
       },
     }),
   ],

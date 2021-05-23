@@ -21,7 +21,7 @@ export class ProtestWelcomeComponent implements OnInit {
         .set('shareId', shareId)
         .set('protestId', protestId);
 
-      const baseUrl = `http://localhost:3000/protests/getProtestIfShareLinkIsValid`;
+      const baseUrl = `http://localhost:5000/protests/getProtestIfShareLinkIsValid`;
 
       this.data$ = this.http.get(`${baseUrl}`, { params: httpParams });
     });
