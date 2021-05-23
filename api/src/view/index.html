@@ -129,7 +129,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"></script>
     <script>
-      const socket = io('http://localhost:3000');
+      const socket = io('http://localhost:5000');
+      const protestSocket = io('http://localhost:5000/protests');
+
+      socket.on('testusermessage', () => {
+        document.getElementById('add-protest').innerText = data;
+      });
 
       socket.on('addProtest', (data) => {
         document.getElementById('add-protest').innerText = data;
@@ -147,8 +152,12 @@
         document.getElementById('update-pin').innerText = data;
       });
 
-      socket.on('protests:getProtestsForUser', (data) => {
-        document.getElementById('get-protests').innerText = data;
+      protestSocket.on('getProtestsForUser', (data) => {
+        document.getElementById('get-protests').innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
       });
 
       function clearElement(key) {
@@ -165,7 +174,7 @@
           startDate: elements[3].value,
         };
 
-        socket.emit('protests:addProtest', input);
+        protestSocket.emit('addProtest', input);
       }
 
       function getProtests() {
@@ -175,7 +184,7 @@
           userId: elements[0].value,
         };
 
-        socket.emit('protests:getProtestsForUser', input);
+        protestSocket.emit('getProtestsForUser', input);
       }
 
       function getPins() {
