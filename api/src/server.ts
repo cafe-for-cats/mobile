@@ -5,13 +5,13 @@ import { CommonRoutesConfig } from './common/common.routes.config';
 import { UsersRoutes } from './users/users.routes.config';
 import connectDB from './middleware/database';
 import { UsersService } from './users/users.service';
-import * as socketio from 'socket.io';
 import path from 'path';
 import { CommonSocketsConfig } from './common/common.sockets.config';
 import { CoreSockets } from './common/core.sockets.config';
 import { ProtestSockets } from './protests/protests.sockets.config';
 import { ProtestsService } from './protests/protests.service';
 import rateLimit from 'express-rate-limit';
+import SocketIO from 'socket.io';
 
 const port = process.env.PORT || 5000;
 const routes: Array<CommonRoutesConfig> = [];
@@ -19,7 +19,7 @@ const sockets: Array<CommonSocketsConfig> = [];
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const io: socketio.Server = new socketio.Server(server);
+const io: SocketIO.Server = new SocketIO.Server(server);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
@@ -28,7 +28,6 @@ const limiter = rateLimit({
 
 app.use(express.json());
 app.use(cors());
-
 app.use(limiter);
 
 connectDB();
