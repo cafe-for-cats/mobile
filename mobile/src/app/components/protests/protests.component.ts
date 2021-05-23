@@ -35,8 +35,6 @@ export class ProtestsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userId = this.jwtService.token.user.id;
-    const baseUrl = 'http://localhost:5000/protests/getProtestsView';
     this.minDate = this.setMinDate();
 
     this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
