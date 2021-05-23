@@ -47,7 +47,7 @@ export class ProtestSockets extends CommonSocketsConfig {
           });
         }
 
-        const result = this.protestsService.getProtestsForUser(input);
+        const result = await this.protestsService.getProtestsForUser(input);
 
         socket.emit('getProtestsForUser', JSON.stringify(result, null, 2));
       });
