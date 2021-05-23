@@ -16,18 +16,24 @@ import SocketIO from 'socket.io';
 const port = process.env.PORT || 5000;
 const routes: Array<CommonRoutesConfig> = [];
 const sockets: Array<CommonSocketsConfig> = [];
+const corsOpts: cors.CorsOptions = {
+  origin: '*',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['my-custom-header'],
+  credentials: true,
+};
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
-const io: SocketIO.Server = new SocketIO.Server(server);
+const io: SocketIO.Server = new SocketIO.Server(server, { cors: corsOpts });
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 100, // limit each IP to 100 requests per windowMs
 });
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 app.use(limiter);
 
 connectDB();

@@ -1,64 +1,147 @@
-<div class="add-protests">
-  <h3>Add a Protest</h3>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+<ion-grid fixed="true">
+  <div class="container">
     <div>
-      <input type="text" placeholder="title" formControlName="title" required />
+      <ion-row>
+        <ion-col size="12">
+          <h2>Create Protest</h2>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Title</ion-label>
+              <ion-input
+                required
+                formControlName="title"
+                name="title"
+              ></ion-input>
+            </ion-item>
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Description</ion-label>
+              <ion-input
+                formControlName="description"
+                name="description"
+              ></ion-input>
+            </ion-item>
+            <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Start Date</ion-label>
+              <ion-datetime
+                displayFormat="D MMM YYYY H:mm"
+                formControlName="startDate"
+                name="startDate"
+                min="{{ minDate }}"
+                max="2030"
+              ></ion-datetime>
+            </ion-item>
+            <ion-row>
+              <div
+                *ngIf="title.invalid && (title.dirty || title.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="title.errors.required">Title is required.</div>
+              </div>
+            </ion-row>
+            <ion-row class="row-items-end">
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="submit"
+              >
+                Submit
+              </ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="reset"
+              >
+                Clear
+              </ion-button>
+            </ion-row>
+          </form>
+        </ion-col>
+        <ion-col size="12">
+          <h2>Join Protest</h2>
+          <form [formGroup]="form" (ngSubmit)="onSubmit(form)">
+            <!-- <ion-item class="app-input-body-1 ion-no-padding">
+              <ion-label position="floating">Protest Code</ion-label>
+              <ion-input
+                formControlName="protestCode"
+                name="protestCode"
+                required="true"
+              ></ion-input>
+            </ion-item>
+            <div
+              *ngIf="
+                protestCode.invalid &&
+                (protestCode.dirty || protestCode.touched)
+              "
+              class="alert alert-danger"
+            >
+              <div *ngIf="protestCode.errors.required">
+                Protest code is required.
+              </div>
+            </div> -->
+            <ion-row class="row-items-end">
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="submit"
+              >
+                Submit
+              </ion-button>
+              <ion-button
+                color="app-light-green"
+                class="submit-button"
+                expand="block"
+                type="reset"
+              >
+                Clear
+              </ion-button>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
     </div>
 
-    <div>
-      <input
-        type="text"
-        placeholder="description"
-        formControlName="description"
-        required
-      />
+    <hr />
+
+    <div *ngIf="data$ | async as data; else elseBlock">
+      <h2>Created</h2>
+      <table table class="protests__table">
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Date</th>
+        </tr>
+        <tr *ngFor="let protest of data.protestsCreated">
+          <td (click)="navigateToProtestOverview(protest)">
+            {{ protest.title }}
+          </td>
+          <td>{{ protest.description }}</td>
+          <td>{{ protest.startDate }}</td>
+        </tr>
+      </table>
+
+      <h2>Joined</h2>
+      <table class="protests__table">
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Date</th>
+        </tr>
+        <tr *ngFor="let protest of data.protestsJoined">
+          <td (click)="navigateToProtestOverview(protest)">
+            {{ protest.title }}
+          </td>
+          <td>{{ protest.description }}</td>
+          <td>{{ protest.startDate }}</td>
+        </tr>
+      </table>
     </div>
-
-    <button class="button" type="submit">Add protest</button>
-    <button class="button" (click)="onClear()">Cancel</button>
-  </form>
-
-  <div class="add-protests__new-protest" *ngIf="protestAdded$ | async as data">
-    <h5>Created protest</h5>
-    <p>Title: {{ data.newItem.title }}</p>
-    <p>Description: {{ data.newItem.description }}</p>
+    <ng-template #elseBlock>
+      Content to render when condition is false.
+    </ng-template>
   </div>
 
   <!-- add httpinterceptor for checking authentication state -->
-</div>
-
-<div class="protests" *ngIf="data$ | async as data">
-  <h3>Protests You've Joined</h3>
-  <table class="protests__table">
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Date</th>
-    </tr>
-    <tr *ngFor="let protest of data.protestsJoined">
-      <td (click)="navigateToProtestOverview(protest)">
-        {{ protest.title }}
-      </td>
-      <td>{{ protest.description }}</td>
-      <td>{{ protest.startDate }}</td>
-    </tr>
-  </table>
-
-  <hr color="gray" />
-
-  <h3>Protests You've Created</h3>
-  <table>
-    <tr>
-      <th>Tftle</th>
-      <th>Description</th>
-      <th>Date</th>
-    </tr>
-    <tr *ngFor="let protest of data.protestsCreated">
-      <td (click)="navigateToProtestOverview(protest)">
-        {{ protest.title }}
-      </td>
-      <td>{{ protest.description }}</td>
-      <td>{{ protest.startDate }}</td>
-    </tr>
-  </table>
-</div>
+</ion-grid>

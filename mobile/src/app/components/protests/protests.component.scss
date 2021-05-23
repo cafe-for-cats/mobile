@@ -1,12 +1,9 @@
-.add-protests {
-  margin: 3rem;
+.container {
+  margin: 2rem 1rem;
 }
-
 .protests {
   overflow-y: scroll;
-  margin: 3rem;
 }
-
 .protests__table {
   width: 100%;
   margin: 3rem 0 3rem 0;
@@ -15,4 +12,11 @@
   tr:nth-child(odd) {
     background: gray;
   }
+}
+hr {
+  //currently local to resources but may change in the future for spacing changes.
+  border: none;
+  background-color: rgba(44, 44, 44, 0.123);
+  margin-top: 1.5em;
+  width: 95%;
 }

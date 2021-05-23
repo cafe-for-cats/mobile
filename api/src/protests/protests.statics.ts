@@ -47,7 +47,7 @@ export const getProtestsForUser = async (userId: string) => {
             title: '$title',
             description: '$description',
             startDate: '$startDate',
-            usersAssociatedProtests: '$user_info.associatedProtests',
+            users: '$user_info.associatedProtests',
           },
         },
       },
@@ -62,8 +62,8 @@ export const getProtestsForUser = async (userId: string) => {
   const mapped = aggregate[0].protests.map((protest: AssociatedProtest) => {
     const { _id, title, description, startDate } = protest;
 
-    const filtered = protest.usersAssociatedProtests[0].filter(
-      (userProtest: UserDetail) => userProtest.protestId.equals(_id)
+    const filtered = protest.users[0].filter((userProtest: UserDetail) =>
+      userProtest.protestId.equals(_id)
     );
 
     return {
@@ -71,7 +71,7 @@ export const getProtestsForUser = async (userId: string) => {
       title,
       description,
       startDate,
-      usersAssociatedProtests: filtered,
+      users: filtered,
     };
   });
 
