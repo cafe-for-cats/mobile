@@ -5,7 +5,7 @@ import {
 } from '../users/users.statics';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { Schema } from 'mongoose';
+
 const mySecret = process.env.SECRET_KEY as string;
 
 export class UsersService {

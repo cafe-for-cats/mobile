@@ -12,9 +12,8 @@ import { CoreSockets } from './common/core.sockets.config';
 import { ProtestSockets } from './protests/protests.sockets.config';
 import { ProtestsService } from './protests/protests.service';
 import rateLimit from 'express-rate-limit';
-import { UserSockets } from './users/users.sockets.config';
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 const routes: Array<CommonRoutesConfig> = [];
 const sockets: Array<CommonSocketsConfig> = [];
 
@@ -39,10 +38,7 @@ const protestsService = new ProtestsService();
 
 sockets.push(new CoreSockets(io));
 sockets.push(new ProtestSockets(io, protestsService));
-// sockets.push(new UserSockets(io, usersService));
 routes.push(new UsersRoutes(app, usersService));
-
-const runningMessage = `⚡️ Server running at http://localhost:${port}`;
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.sendFile(path.resolve('./src/view/index.html'));
@@ -56,5 +52,6 @@ server.listen(port, () => {
   sockets.forEach((socket: CommonSocketsConfig) => {
     console.log(`✔  Sockets configured for ${socket.getName()}`);
   });
-  console.log(runningMessage);
+
+  console.log(`⚡️ Server running at http://localhost:${port}`);
 });

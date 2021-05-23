@@ -23,8 +23,8 @@
           <input
             type="text"
             class="add-protest"
-            name="creatorId"
-            placeholder="creatorId"
+            name="userId"
+            placeholder="userId"
           />
           <input
             type="text"
@@ -153,7 +153,11 @@
       });
 
       protestSocket.on('getProtestsForUser', (data) => {
-        document.getElementById('get-protests').innerText = data;
+        document.getElementById('get-protests').innerText = JSON.stringify(
+          data,
+          null,
+          2
+        );
       });
 
       function clearElement(key) {
@@ -165,7 +169,7 @@
 
         const input = {
           title: elements[0].value,
-          creatorId: elements[1].value,
+          userId: elements[1].value,
           description: elements[2].value,
           startDate: elements[3].value,
         };
@@ -177,7 +181,7 @@
         const elements = document.querySelectorAll('input.get-protests');
 
         const input = {
-          creatorId: elements[0].value,
+          userId: elements[0].value,
         };
 
         protestSocket.emit('getProtestsForUser', input);

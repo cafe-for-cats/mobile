@@ -1,12 +1,5 @@
-import * as socketio from 'socket.io';
+import socketio from 'socket.io';
 import { CommonSocketsConfig } from '../common/common.sockets.config';
-import User from '../users/users.models';
-import Protest from './protests.models';
-import {
-  findUserById,
-  updateUsersAssociatedProtests,
-} from '../users/users.statics';
-import { addProtest, AddProtestInput } from './protests.statics';
 import { ProtestsService } from './protests.service';
 
 export class ProtestSockets extends CommonSocketsConfig {
@@ -19,15 +12,8 @@ export class ProtestSockets extends CommonSocketsConfig {
       console.log(`↑  Connected client '${socket.id}' to socket /protests`);
 
       socket.on('addProtest', async (input) => {
-        const { title, description, startDate, creatorId } = input;
-
         try {
-          const result = await this.protestsService.addProtest(
-            title,
-            description,
-            startDate,
-            creatorId
-          );
+          const result = await this.protestsService.addProtest(input);
 
           socket.emit('addProtest', result);
         } catch (e) {
@@ -39,17 +25,17 @@ export class ProtestSockets extends CommonSocketsConfig {
         return;
       });
 
-      socket.on('getProtestsForUser', async (input) => {
-        if (!input) {
+      socket.on('getProtestsForUser', async ({ userId }) => {
+        if (!userId) {
           socket.emit('getProtestsForUser', {
             status: false,
             message: `'input' is required.`,
           });
         }
 
-        const result = await this.protestsService.getProtestsForUser(input);
+        const result = await this.protestsService.getProtestsForUser(userId);
 
-        socket.emit('getProtestsForUser', JSON.stringify(result, null, 2));
+        socket.emit('getProtestsForUser', result);
       });
     });
 

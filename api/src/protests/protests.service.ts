@@ -8,16 +8,10 @@ import {
   getProtestsForUser,
 } from './protests.statics';
 import { ObjectId } from 'mongodb';
-import Protest from './protests.models';
 
 export class ProtestsService {
-  async addProtest(
-    title: string,
-    description: string,
-    startDate: Date,
-    creatorId: string
-  ) {
-    const user = await findUserById(creatorId);
+  async addProtest({ userId, title, description, startDate }: AddProtestInput) {
+    const user = await findUserById(userId);
 
     if (!user) {
       return {
@@ -67,8 +61,8 @@ export class ProtestsService {
     };
   }
 
-  async getProtestsForUser(input: any) {
-    const mapped = await getProtestsForUser(input.creatorId);
+  async getProtestsForUser(userId: string) {
+    const mapped = await getProtestsForUser(userId);
 
     return {
       status: true,
