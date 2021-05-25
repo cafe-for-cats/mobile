@@ -35,20 +35,23 @@ export class JwtService {
 
   login(username: string, password: string) {
     return this.httpClient
-      .post<{ token: string }>('http://localhost:3000/auth/login', {
-        username,
-        password,
-      })
+      .post<{ payload: { token: string } }>(
+        'http://localhost:5000/users/login',
+        {
+          username,
+          password,
+        }
+      )
       .pipe(
         tap((res) => {
-          localStorage.setItem('token', res.token);
+          localStorage.setItem('token', res.payload.token);
         })
       );
   }
 
   register(username: string, password: string) {
     return this.httpClient
-      .post<{ token: string }>('http://localhost:3000/auth/register', {
+      .post<{ token: string }>('http://localhost:5000/users/register', {
         username,
         password,
       })
