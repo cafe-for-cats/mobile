@@ -1,5 +1,5 @@
-import { assert, expect, spy } from 'chai';
-import { stub } from 'sinon';
+import { assert, expect } from 'chai';
+import { spy, stub } from 'sinon';
 import { UsersService } from './users.service';
 import * as statics from './users.statics';
 
@@ -8,13 +8,16 @@ describe('UsersService', function () {
 
   beforeEach(() => {
     usersService = new UsersService();
-    stub(statics, 'findUserById');
-    stub(statics, 'findUserByUsername');
-    stub(statics, 'addUser');
-    stub(statics, 'updateUsersAssociatedProtests');
   });
 
   it('should create', () => {
+    const foo = { title: 'hello', description: 'hello' };
+    stub(statics, 'findUserById').returns(Promise.resolve(null));
     expect(usersService);
+  });
+
+  it('should find by user id', () => {
+    const userId = '123';
+    usersService.getUserById(userId);
   });
 });
