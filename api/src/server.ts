@@ -12,6 +12,7 @@ import { ProtestSockets } from './protests/protests.sockets.config';
 import { ProtestsService } from './protests/protests.service';
 import rateLimit from 'express-rate-limit';
 import SocketIO from 'socket.io';
+import expressMongoSanitize from 'express-mongo-sanitize';
 
 const port = process.env.PORT || 5000;
 const routes: Array<CommonRoutesConfig> = [];
@@ -29,6 +30,12 @@ const limiter = rateLimit({
 app.use(express.json());
 app.use(cors());
 app.use(limiter);
+
+app.use(
+  expressMongoSanitize({
+    replaceWith: '_',
+  })
+);
 
 connectDB();
 
