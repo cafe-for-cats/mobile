@@ -13,10 +13,11 @@
     background: gray;
   }
 }
+.alert-text {
+  font-size: 13px;
+  color: rgba(78, 78, 78, 0.644);
+}
 hr {
-  //currently local to resources but may change in the future for spacing changes.
-  border: none;
-  background-color: rgba(44, 44, 44, 0.123);
   margin-top: 1.5em;
-  width: 95%;
+  margin-bottom: 1.5em;
 }

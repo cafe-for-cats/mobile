@@ -67,13 +67,24 @@ export class ProtestsComponent implements OnInit {
   onSubmit() {
     const userId = this.jwtService.token.user.id;
     const baseUrl = 'http://localhost:3000/protests/add';
+    if (
+      this.title.value === null ||
+      this.description.value === null ||
+      this.startDate.value === null
+    ) {
+      this.presentToast('Required field is not set!');
+    } else {
+      this.dataService.requestCreateProtest({
+        title: this.title.value,
+        description: this.description.value,
+        startDate: this.startDate.value,
+        creatorId: userId,
+      });
+    }
+  }
 
-    this.dataService.requestCreateProtest({
-      title: this.title.value,
-      description: this.description.value,
-      startDate: this.startDate.value,
-      creatorId: userId,
-    });
+  logThis(x) {
+    console.log(x); //testing purposes
   }
 
   get title() {
@@ -94,13 +105,7 @@ export class ProtestsComponent implements OnInit {
     let DD = date.getDate();
     let currentDateTime = `${YYYY}-${MM}-${DD}`;
 
-    console.log('setMinDate has been called:', currentDateTime);
     return currentDateTime;
-
-    /* for YYYY-MM-DDDTHH:MMformat ex: 2021-01-16T19:20+01:00
-    let HH = date.getHours();
-    let Mn = date.getMinutes();
-    let currentDateTime = `${YYYY}-${MM}-${DD}T${HH}:${Mn}`; */
   }
 }
 
