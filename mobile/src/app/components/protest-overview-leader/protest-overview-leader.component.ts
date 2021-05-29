@@ -52,7 +52,7 @@ export class ProtestOverviewLeaderComponent implements OnInit {
     };
 
     const post = this.http.post(
-      'http://localhost:3000/protests/setProtestShareLinks',
+      'http://localhost:5000/protests/setProtestShareLinks',
       input
     );
 

@@ -1,10 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
 import { ProtestsDataService } from './protests-data.service';
 import { ToastController } from '@ionic/angular';
@@ -38,8 +35,6 @@ export class ProtestsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userId = this.jwtService.token.user.id;
-    const baseUrl = 'http://localhost:3000/protests/getProtestsView';
     this.minDate = this.setMinDate();
 
     this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
@@ -66,7 +61,7 @@ export class ProtestsComponent implements OnInit {
 
   onSubmit() {
     const userId = this.jwtService.token.user.id;
-    const baseUrl = 'http://localhost:3000/protests/add';
+    const baseUrl = 'http://localhost:5000/protests/add';
     if (
       this.title.value === null ||
       this.description.value === null ||

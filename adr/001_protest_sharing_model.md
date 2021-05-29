@@ -33,11 +33,11 @@ The tiers specifically will organized as such:
     - Share the protest.
     - Add announcements and important locations.
     - Admit unassigned users to the protest as Attendees.
+    - Manage individual access rights of users within a protest.
 - Leader:
   - Leaders create the protest and have overall administrative access over the users within.
   - Leaders can (including the rights of lower-tier access):
-    - Manage individual access rights of users within a protest.
-    - Delete the protest?
+    - Archive the protest.
 
 ## Consequences
 

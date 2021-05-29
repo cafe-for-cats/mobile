@@ -56,7 +56,7 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    const request = this.http.get('http://localhost:3000/pins/');
+    const request = this.http.get('http://localhost:5000/pins/');
 
     // no-no on the nested subscribes. maybe two observables?
     this.refresh$.subscribe(
@@ -221,7 +221,7 @@ export class HomePage implements OnInit {
       label: this.currentMenuKey,
     };
 
-    this.http.post('http://localhost:3000/pins/', pin).subscribe((response) => {
+    this.http.post('http://localhost:5000/pins/', pin).subscribe((response) => {
       if (response) {
         this.presentToast(
           usingGeolocation
