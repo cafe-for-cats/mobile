@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { JwtService } from 'src/app/services/jwt.service';
@@ -12,11 +12,7 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./protests.component.scss'],
 })
 export class ProtestsComponent implements OnInit {
-  form = this.formBuilder.group({
-    title: [null, Validators.required],
-    description: [null, Validators.required],
-    startDate: [null, Validators.required],
-  });
+  form: FormGroup;
 
   data$: Observable<{}>;
   addResult$: Observable<{ status: boolean }>;
@@ -35,6 +31,12 @@ export class ProtestsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+      title: [null, Validators.required],
+      description: [null, Validators.required],
+      startDate: [null, Validators.required],
+    });
+
     this.minDate = this.setMinDate();
 
     this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
@@ -61,7 +63,7 @@ export class ProtestsComponent implements OnInit {
 
   onSubmit() {
     const userId = this.jwtService.token.user.id;
-    const baseUrl = 'http://localhost:5000/protests/add';
+
     if (
       this.title.value === null ||
       this.description.value === null ||

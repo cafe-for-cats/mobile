@@ -4,7 +4,7 @@
       <ion-row>
         <ion-col size="12">
           <h2>Create Protest</h2>
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <form [formGroup]="form" (ngSubmit)="(onSubmit)">
             <ion-item class="app-input-body-1 ion-no-padding">
               <ion-label position="floating">Title</ion-label>
               <ion-input
@@ -34,33 +34,27 @@
             </ion-item>
             <ion-col>
               <div
-                *ngIf="title.invalid && (title.dirty || title.touched)"
+                *ngIf="form.hasError('required', 'title') && title.touched"
                 class="alert alert-danger"
               >
-                <div *ngIf="title.errors.required" class="alert-text">
-                  - Title is required.
-                </div>
+                <span class="alert-text">- A Title is required.</span>
               </div>
               <div
                 *ngIf="
-                  description.invalid &&
-                  (description.dirty || description.touched)
+                  form.hasError('required', 'description') &&
+                  description.touched
                 "
                 class="alert alert-danger"
               >
-                <div *ngIf="description.errors.required" class="alert-text">
-                  - A description is required.
-                </div>
+                <span class="alert-text">- A description is required.</span>
               </div>
               <div
                 *ngIf="
-                  startDate.invalid && (startDate.dirty || startDate.touched)
+                  form.hasError('required', 'startDate') && startDate.touched
                 "
                 class="alert alert-danger"
               >
-                <div *ngIf="startDate.errors.required" class="alert-text">
-                  - A start date is required.
-                </div>
+                <span class="alert-text">- A start date is required. </span>
               </div>
             </ion-col>
             <ion-row class="row-items-end">
@@ -69,6 +63,7 @@
                 class="submit-button"
                 expand="block"
                 type="submit"
+                [disabled]="!form.valid"
               >
                 Submit
               </ion-button>
