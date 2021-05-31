@@ -7,7 +7,7 @@ matrix:
       before_script:
         - cd api
       script:
-        - npm install
+        - npm install && npm t
       git:
         quiet: true
       env:
