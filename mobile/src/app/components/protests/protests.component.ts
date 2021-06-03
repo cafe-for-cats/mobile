@@ -62,6 +62,7 @@ export class ProtestsComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('submit has been touched');
     const userId = this.jwtService.token.user.id;
 
     if (
@@ -99,9 +100,10 @@ export class ProtestsComponent implements OnInit {
     let date = new Date();
     let YYYY = date.getFullYear();
     let MM = '0' + (date.getMonth() + 1).toString().slice(-2);
-    let DD = date.getDate();
+    let DD = '0' + (date.getDate() + 1).toString().slice(-2);
     let currentDateTime = `${YYYY}-${MM}-${DD}`;
 
+    console.log(currentDateTime);
     return currentDateTime;
   }
 }
