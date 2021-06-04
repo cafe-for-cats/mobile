@@ -65,9 +65,9 @@ export class ProtestsComponent implements OnInit {
     const userId = this.jwtService.token.user.id;
 
     this.dataService.requestCreateProtest({
-      title: this.title,
-      description: this.description,
-      startDate: this.startDate,
+      title: this.title.value,
+      description: this.description.value,
+      startDate: this.startDate.value,
       userId,
     });
   }
@@ -77,13 +77,13 @@ export class ProtestsComponent implements OnInit {
   }
 
   get title() {
-    return this.form.get('title').value;
+    return this.form.get('title');
   }
   get description() {
-    return this.form.get('description').value;
+    return this.form.get('description');
   }
   get startDate() {
-    return this.form.get('startDate').value;
+    return this.form.get('startDate');
   }
 
   setMinDate() {
