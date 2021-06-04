@@ -34,13 +34,13 @@ export class UsersService {
     if (!user) {
       return {
         status: false,
-        message: `Hm... I don't recognize you. Were you drunk last time, or was it me?`,
+        message: `User not found.`,
       };
     }
 
     return {
       status: true,
-      message: 'Hey, good to see you again!',
+      message: 'User successfully found.',
       payload: {
         user,
       },
@@ -53,14 +53,14 @@ export class UsersService {
     if (!mySecret) {
       return {
         status: false,
-        message: `Oh no, you dropped your keys!`,
+        message: `Secret key not set.`,
       };
     }
 
     if (!user) {
       return {
         status: false,
-        message: `Hm... I don't recognize you. Were you drunk last time, or was it me?`,
+        message: `User not found.`,
       };
     }
 
@@ -69,7 +69,7 @@ export class UsersService {
     if (!isMatch) {
       return {
         status: false,
-        message: "Are you sure that's the way it's spelled?",
+        message: 'Password does not match.',
       };
     }
 
@@ -83,7 +83,7 @@ export class UsersService {
 
     return {
       status: true,
-      message: 'Successfully authenticated user and signed token.',
+      message: 'Successfully authenticated user.',
       payload: { token: myToken },
     };
   }

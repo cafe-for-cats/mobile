@@ -35,13 +35,16 @@ export class JwtService {
 
   login(username: string, password: string) {
     return this.httpClient
-      .post<LoginResponse>('http://localhost:5000/users/login', {
-        username,
-        password,
-      })
+      .post<{ payload: { token: string } }>(
+        'http://localhost:5000/users/login',
+        {
+          username,
+          password,
+        }
+      )
       .pipe(
-        tap(({ payload }: LoginResponse) => {
-          localStorage.setItem('token', payload.token);
+        tap((res) => {
+          localStorage.setItem('token', res.payload.token);
         })
       );
   }
