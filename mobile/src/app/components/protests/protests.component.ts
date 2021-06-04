@@ -62,23 +62,14 @@ export class ProtestsComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('submit has been touched');
     const userId = this.jwtService.token.user.id;
 
-    if (
-      this.title.value === null ||
-      this.description.value === null ||
-      this.startDate.value === null
-    ) {
-      this.presentToast('Required field is not set!');
-    } else {
-      this.dataService.requestCreateProtest({
-        title: this.title.value,
-        description: this.description.value,
-        startDate: this.startDate.value,
-        creatorId: userId,
-      });
-    }
+    this.dataService.requestCreateProtest({
+      title: this.title.value,
+      description: this.description.value,
+      startDate: this.startDate.value,
+      creatorId: userId,
+    });
   }
 
   logThis(x) {
