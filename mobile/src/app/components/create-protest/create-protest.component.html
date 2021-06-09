@@ -1,3 +1,65 @@
-<p>
-  create-protest works!
-</p>
+<h2>Create Protest</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <ion-item class="app-input-body-1 ion-no-padding">
+    <ion-label position="floating">Title</ion-label>
+    <ion-input required formControlName="title" name="title"></ion-input>
+  </ion-item>
+  <ion-item class="app-input-body-1 ion-no-padding">
+    <ion-label position="floating">Description</ion-label>
+    <ion-input
+      required
+      formControlName="description"
+      name="description"
+    ></ion-input>
+  </ion-item>
+  <ion-item class="app-input-body-1 ion-no-padding">
+    <ion-label position="floating">Start Date</ion-label>
+    <ion-datetime
+      required
+      displayFormat="D MMM YYYY H:mm"
+      formControlName="startDate"
+      name="startDate"
+      min="{{ minDate }}"
+      max="2030"
+    ></ion-datetime>
+  </ion-item>
+  <ion-col>
+    <div
+      *ngIf="form.hasError('required', 'title') && title.touched"
+      class="alert alert-danger"
+    >
+      <span class="alert-text">- A Title is required.</span>
+    </div>
+    <div
+      *ngIf="form.hasError('required', 'description') && description.touched"
+      class="alert alert-danger"
+    >
+      <span class="alert-text">- A description is required.</span>
+    </div>
+    <div
+      *ngIf="form.hasError('required', 'startDate') && startDate.touched"
+      class="alert alert-danger"
+    >
+      <span class="alert-text">- A start date is required. </span>
+    </div>
+  </ion-col>
+  <ion-row class="row-items-end">
+    <ion-button
+      color="app-light-green"
+      class="submit-button"
+      expand="block"
+      type="submit"
+      [disabled]="!form.valid"
+    >
+      Submit
+    </ion-button>
+    <ion-button
+      color="app-light-green"
+      class="submit-button"
+      expand="block"
+      type="reset"
+    >
+      Clear
+    </ion-button>
+  </ion-row>
+</form>

@@ -19,19 +19,13 @@ import { ProtestOverviewLeaderModule } from './components/protest-overview-leade
 import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
 import { ProtestWelcomeModule } from './components/protest-welcome/protest-welcome.module';
 import { ResourcesComponent } from './components/resources/resources.component';
-import { CreateProtestComponent } from './components/create-protest/create-protest.component';
 import { JoinProtestComponent } from './components/join-protest/join-protest.component';
 import { ProtestsDataService } from './components/protests/protests-data.service';
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ResourcesComponent,
-    CreateProtestComponent,
-    JoinProtestComponent,
-  ],
+  declarations: [AppComponent, ResourcesComponent, JoinProtestComponent],
   entryComponents: [],
   imports: [
     BrowserModule,

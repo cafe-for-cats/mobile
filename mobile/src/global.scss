@@ -116,14 +116,16 @@ ion-content {
   font-size: 1.5rem;
   font-weight: 500;
 }
-
 .app-subheading-1 {
   font-size: 1.25rem;
   font-weight: 450;
 }
-
 .app-input-body-1 {
   font-weight: 400;
+}
+.alert-text {
+  font-size: 13px;
+  color: rgba(78, 78, 78, 0.644);
 }
 
 * {
@@ -143,4 +145,9 @@ hr {
   background-color: rgba(44, 44, 44, 0.123);
   margin-top: 1.5em;
   width: 95%;
+}
+
+/* containers */
+.container {
+  margin: 2rem 1rem;
 }

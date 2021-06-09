@@ -6,8 +6,10 @@ import { IonicModule } from '@ionic/angular';
 import { ProtestsComponent } from './protests.component';
 import { RouterModule } from '@angular/router';
 import { ProtestsDataService } from './protests-data.service';
+import { CreateProtestComponent } from '../create-protest/create-protest.component';
 
 @NgModule({
+  declarations: [ProtestsComponent, CreateProtestComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -16,7 +18,6 @@ import { ProtestsDataService } from './protests-data.service';
     RouterModule,
   ],
   providers: [ProtestsDataService],
-  declarations: [ProtestsComponent],
   exports: [ProtestsComponent],
 })
 export class ProtestsModule {}
