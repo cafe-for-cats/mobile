@@ -23,7 +23,7 @@ export class ProtestsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.requestGetProtestsForUser(); //emits the websocket -> grabs data
+    this.dataService.requestGetProtestsForUser();
   }
 }
 

@@ -27,6 +27,10 @@ export class ProtestsDataService {
     );
   }
 
+  /**
+   * Emits an event to the Websocket server
+   * to get all protests relevant for a given user
+   */
   requestGetProtestsForUser() {
     console.log(this.jwtService.token.user.id);
 
