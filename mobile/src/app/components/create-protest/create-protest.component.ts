@@ -46,10 +46,7 @@ export class CreateProtestComponent implements OnInit {
     });
   }
 
-  async presentToast(msg) {
-    if (typeof msg !== 'string') {
-      msg = msg.toString();
-    }
+  async presentToast(msg: string) {
     const toast = await this.toastController.create({
       message: msg,
       duration: 2000,
@@ -87,10 +84,10 @@ export class CreateProtestComponent implements OnInit {
     let date = new Date();
     let YYYY = date.getFullYear();
     let MM = '0' + (date.getMonth() + 1).toString().slice(-2);
-    let DD = '0' + (date.getDate() + 1).toString().slice(-2);
+    let DD = ('0' + date.getDate().toString()).slice(-2);
     let currentDateTime = `${YYYY}-${MM}-${DD}`;
 
-    //console.log(currentDateTime);
+    console.log(currentDateTime);
     return currentDateTime;
   }
 }
