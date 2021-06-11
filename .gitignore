@@ -2,5 +2,5 @@ mobile/src/index.html
 mobile/node_modules
 mobile/.env
 
-api/.env
+/app/api/.env
 api/node_modules
