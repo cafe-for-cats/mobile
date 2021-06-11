@@ -14,12 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { ProtestsModule } from './components/protests/protests.module';
 import { NavbarModule } from './components/navbar/navbar.module';
-import { ProtestOverviewAttendeeModule } from './components/protest-overview-attendee/protest-overview-attendee.module';
-import { ProtestOverviewLeaderModule } from './components/protest-overview-leader/protest-overview-leader.module';
-import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
-import { ProtestWelcomeModule } from './components/protest-welcome/protest-welcome.module';
 import { ResourcesComponent } from './components/resources/resources.component';
-import { JoinProtestComponent } from './components/join-protest/join-protest.component';
+import { JoinProtestComponent } from './components/protests/join-protest/join-protest.component';
 import { ProtestsDataService } from './components/protests/protests-data.service';
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
@@ -37,10 +33,6 @@ const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
     FormsModule,
     ReactiveFormsModule,
     ProtestsModule,
-    ProtestOverviewAttendeeModule,
-    ProtestOverviewLeaderModule,
-    ProtestOverviewOrganizerModule,
-    ProtestWelcomeModule,
     NavbarModule,
     SocketIoModule.forRoot(config),
     JwtModule.forRoot({
