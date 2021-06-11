@@ -1,12 +1,6 @@
-.add-protests {
-  margin: 3rem;
-}
-
 .protests {
   overflow-y: scroll;
-  margin: 3rem;
 }
-
 .protests__table {
   width: 100%;
   margin: 3rem 0 3rem 0;
@@ -15,4 +9,9 @@
   tr:nth-child(odd) {
     background: gray;
   }
+}
+
+hr {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
 }

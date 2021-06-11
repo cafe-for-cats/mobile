@@ -66,3 +66,7 @@ export class JwtService {
     localStorage.removeItem('token');
   }
 }
+
+interface LoginResponse {
+  payload: { token: string };
+}

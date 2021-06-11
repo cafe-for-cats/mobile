@@ -67,7 +67,7 @@ export class ProtestsService {
     return {
       status: true,
       message: 'Success',
-      payload: { usersAssociatedProtests: mapped },
+      payload: { protests: mapped },
     };
   }
 }
@@ -90,7 +90,7 @@ export interface AssociatedProtest {
   title: string;
   description: string;
   startDate: Date;
-  usersAssociatedProtests: UserDetail[][];
+  users: UserDetail[][];
 }
 
 export interface UserDetail {

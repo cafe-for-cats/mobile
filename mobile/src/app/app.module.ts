@@ -19,11 +19,13 @@ import { ProtestOverviewLeaderModule } from './components/protest-overview-leade
 import { ProtestOverviewOrganizerModule } from './components/protest-overview-organizer/protest-overview-organizer.module';
 import { ProtestWelcomeModule } from './components/protest-welcome/protest-welcome.module';
 import { ResourcesComponent } from './components/resources/resources.component';
+import { JoinProtestComponent } from './components/join-protest/join-protest.component';
+import { ProtestsDataService } from './components/protests/protests-data.service';
 
-const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
-  declarations: [AppComponent, ResourcesComponent],
+  declarations: [AppComponent, ResourcesComponent, JoinProtestComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
@@ -46,8 +48,8 @@ const config: SocketIoConfig = { url: 'http://localhost:3000', options: {} };
         tokenGetter: () => {
           return localStorage.getItem('token');
         },
-        allowedDomains: ['localhost:3000'],
-        disallowedRoutes: ['http://localhost:3000/auth/login'],
+        allowedDomains: ['localhost:5000'],
+        disallowedRoutes: ['http://localhost:5000/users/login'],
       },
     }),
   ],

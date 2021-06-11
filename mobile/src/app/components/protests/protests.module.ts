@@ -5,8 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ProtestsComponent } from './protests.component';
 import { RouterModule } from '@angular/router';
+import { ProtestsDataService } from './protests-data.service';
+import { CreateProtestComponent } from '../create-protest/create-protest.component';
 
 @NgModule({
+  declarations: [ProtestsComponent, CreateProtestComponent],
   imports: [
     CommonModule,
     IonicModule,
@@ -14,7 +17,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
   ],
-  declarations: [ProtestsComponent],
+  providers: [ProtestsDataService],
   exports: [ProtestsComponent],
 })
 export class ProtestsModule {}
