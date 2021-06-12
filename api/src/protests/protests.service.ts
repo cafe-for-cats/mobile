@@ -63,7 +63,7 @@ export class ProtestsService {
 }
 
 export enum AccessLevels {
-  Admin = 0,
+  Admin = -1,
   Leader = 1,
   Organizer = 2,
   Attendee = 3,
