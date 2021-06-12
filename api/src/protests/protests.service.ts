@@ -10,7 +10,13 @@ import {
 import { ObjectId } from 'mongodb';
 
 export class ProtestsService {
-  async addProtest({ userId, title, description, startDate }: AddProtestInput) {
+  async addProtest({
+    userId,
+    title,
+    description,
+    startDate,
+    duration,
+  }: AddProtestInput) {
     const user = await findUserById(userId);
 
     if (!user) {
@@ -27,6 +33,7 @@ export class ProtestsService {
       title,
       description,
       startDate,
+      duration,
     };
 
     const newProtestResult = await addProtest(newProtest);

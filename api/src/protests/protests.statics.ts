@@ -1,12 +1,12 @@
 import Protest from './protests.models';
 import { ObjectId } from 'mongodb';
-import { AssociatedProtest, UserDetail } from './protests.service';
 
 export const addProtest = async ({
   title,
   startDate,
   description,
   userId,
+  duration,
 }: AddProtestInput) =>
   await Protest.findOneAndUpdate(
     { _id: new ObjectId() },
@@ -15,7 +15,8 @@ export const addProtest = async ({
         title,
         startDate,
         description,
-        associatedUserIds: [new ObjectId(userId)],
+        duration: 120, // duration in minutes
+        associatedUsers: [{ _id: new ObjectId(userId), accessLevel: 1 }],
       },
     },
     { upsert: true, new: true }
@@ -93,4 +94,5 @@ export interface AddProtestInput {
   startDate: Date;
   description: string;
   userId: string;
+  duration: number;
 }
