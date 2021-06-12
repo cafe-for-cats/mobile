@@ -22,18 +22,3 @@ export const addUser = async (username: string, password: string) =>
     },
     { upsert: true, new: true }
   );
-
-export const updateUsersAssociatedProtests = async (userInput: any) =>
-  await User.findOneAndUpdate(
-    { _id: userInput.userId },
-    {
-      $push: {
-        associatedProtests: {
-          protestId: userInput.protestId,
-          accessLevel: AccessLevels.Leader,
-          isCreator: true,
-        },
-      },
-    },
-    { new: true }
-  );
