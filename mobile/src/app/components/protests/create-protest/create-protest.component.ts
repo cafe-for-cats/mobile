@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { JwtService } from 'src/app/services/jwt.service';
-import { ProtestsDataService } from '../protests/protests-data.service';
+import { ProtestsDataService } from '../protests-data.service';
 import { ToastController } from '@ionic/angular';
 
 @Component({
