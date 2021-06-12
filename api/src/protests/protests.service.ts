@@ -1,7 +1,4 @@
-import {
-  findUserById,
-  updateUsersAssociatedProtests,
-} from '../users/users.statics';
+import { findUserById } from '../users/users.statics';
 import {
   addProtest,
   AddProtestInput,
@@ -10,7 +7,13 @@ import {
 import { ObjectId } from 'mongodb';
 
 export class ProtestsService {
-  async addProtest({ userId, title, description, startDate }: AddProtestInput) {
+  async addProtest({
+    userId,
+    title,
+    description,
+    startDate,
+    duration,
+  }: AddProtestInput) {
     const user = await findUserById(userId);
 
     if (!user) {
@@ -27,6 +30,7 @@ export class ProtestsService {
       title,
       description,
       startDate,
+      duration,
     };
 
     const newProtestResult = await addProtest(newProtest);
@@ -37,20 +41,6 @@ export class ProtestsService {
       return {
         status: false,
         message: 'Failed to create the protest.',
-      };
-    }
-
-    const userInput = {
-      userId: userObjectId,
-      protestId,
-    };
-
-    const updatedUser = await updateUsersAssociatedProtests(userInput);
-
-    if (!updatedUser) {
-      return {
-        status: false,
-        message: 'Failed to associated user to the protest.',
       };
     }
 
@@ -73,7 +63,7 @@ export class ProtestsService {
 }
 
 export enum AccessLevels {
-  Admin = 0,
+  Admin = -1,
   Leader = 1,
   Organizer = 2,
   Attendee = 3,
