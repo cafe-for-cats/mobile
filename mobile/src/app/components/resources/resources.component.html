@@ -8,7 +8,7 @@
     <ion-row>
       <ion-col size-md class="ion-align-items-center">
         <div *ngFor="let item of resource | keyvalue">
-          <div class="f3 fw6 ion-text-left">{{ item.key }}</div>
+          <h2 class="f3 fw6 ion-text-left">{{ item.key }}</h2>
 
           <div *ngFor="let desc of item.value">
             <ion-button
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div *ngIf="resource != data[data.length - 1]">
-          <hr class="ba b--black-05 mt3" />
+          <!--<hr class="ba b--black-05 mt4" />-->
         </div>
       </ion-col>
     </ion-row>

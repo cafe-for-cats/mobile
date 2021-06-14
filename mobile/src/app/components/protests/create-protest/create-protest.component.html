@@ -1,10 +1,10 @@
 <h2 class="f3 fw6">Create Protest</h2>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <ion-item class="app-input-body-1 ion-no-padding">
+  <ion-item class="ion-no-padding">
     <ion-label position="floating">Title</ion-label>
     <ion-input required formControlName="title" name="title"></ion-input>
   </ion-item>
-  <ion-item class="app-input-body-1 ion-no-padding">
+  <ion-item class="ion-no-padding">
     <ion-label position="floating">Description</ion-label>
     <ion-input
       required
@@ -12,7 +12,7 @@
       name="description"
     ></ion-input>
   </ion-item>
-  <ion-item class="app-input-body-1 ion-no-padding">
+  <ion-item class="ion-no-padding">
     <ion-label position="floating">Start Date</ion-label>
     <ion-datetime
       required
@@ -43,10 +43,10 @@
       <span class="f7 black-60">- A start date is required. </span>
     </div>
   </ion-col>
-  <ion-row class="row-items-end">
+  <ion-row class="justify-end">
     <ion-button
       color="app-light-green"
-      class="submit-button"
+      class="w-30 h2"
       expand="block"
       type="submit"
       [disabled]="!form.valid"
@@ -55,7 +55,7 @@
     </ion-button>
     <ion-button
       color="app-light-green"
-      class="submit-button"
+      class="w-30 h2"
       expand="block"
       type="reset"
     >
