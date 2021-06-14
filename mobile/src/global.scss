@@ -25,15 +25,14 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+/* Import Tachyons */
+@import '~tachyons/css/tachyons.css';
+
 // #region CSS Utilities
 
 /* Width selectors */
 .w-95 {
   width: 95%;
-}
-
-.w-80 {
-  width: 80%;
 }
 
 /* Margin Selectors */
@@ -136,15 +135,6 @@ ion-content {
 /* flex positions */
 .row-items-end {
   justify-content: flex-end;
-}
-
-/* HTML element presets */
-hr {
-  //currently local to resources but may change in the future for spacing changes.
-  border: none;
-  background-color: rgba(44, 44, 44, 0.123);
-  margin-top: 1.5em;
-  width: 95%;
 }
 
 /* containers */

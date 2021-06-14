@@ -1,4 +1,4 @@
-<h2>Create Protest</h2>
+<h2 class="f3 fw6">Create Protest</h2>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <ion-item class="app-input-body-1 ion-no-padding">
     <ion-label position="floating">Title</ion-label>
@@ -28,19 +28,19 @@
       *ngIf="form.hasError('required', 'title') && title.touched"
       class="alert alert-danger"
     >
-      <span class="alert-text">- A Title is required.</span>
+      <span class="f7 black-60">- A Title is required.</span>
     </div>
     <div
       *ngIf="form.hasError('required', 'description') && description.touched"
       class="alert alert-danger"
     >
-      <span class="alert-text">- A description is required.</span>
+      <span class="f7 black-60">- A description is required.</span>
     </div>
     <div
       *ngIf="form.hasError('required', 'startDate') && startDate.touched"
       class="alert alert-danger"
     >
-      <span class="alert-text">- A start date is required. </span>
+      <span class="f7 black-60">- A start date is required. </span>
     </div>
   </ion-col>
   <ion-row class="row-items-end">
