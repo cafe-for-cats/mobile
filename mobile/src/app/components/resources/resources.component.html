@@ -1,17 +1,20 @@
-<div class="ion-text-center i-mt-50 app-heading-1">Resources</div>
-
 <ion-grid fixed="true">
+  <h1 class="b f2 mt1 pt1 mb0 pb0">Resources</h1>
+  <h3 class="f6 mt0 pt0 black-70">
+    View resources relating to protest information and legal recourse.
+  </h3>
+
   <div *ngFor="let resource of data">
     <ion-row>
       <ion-col size-md class="ion-align-items-center">
         <div *ngFor="let item of resource | keyvalue">
-          <div class="app-subheading-1 ion-text-left">{{ item.key }}</div>
+          <h2 class="f3 fw6 ion-text-left">{{ item.key }}</h2>
 
           <div *ngFor="let desc of item.value">
             <ion-button
               color="app-light-green"
               expand="block"
-              class="center-button w-80 i-mt-75 app-input-body-1"
+              class="tc w-90 mh3 mv2"
               href="{{ desc.url }}"
               target="_blank"
             >
@@ -19,9 +22,7 @@
             </ion-button>
           </div>
         </div>
-        <div *ngIf="resource != data[data.length - 1]">
-          <hr class="i-mt-150 w-95" />
-        </div>
+        <div *ngIf="resource != data[data.length - 1]"></div>
       </ion-col>
     </ion-row>
   </div>
