@@ -1,7 +1,10 @@
-<div *ngIf="jwtService.isLoggedIn" class="menu-items">
+<div
+  *ngIf="jwtService.isLoggedIn"
+  class="flex justify-between items-baseline ma2"
+>
   <div>
-    <a href="/protests">Protests</a>
-    <a href="/resources">Resources</a>
+    <a class="ma1 black-80" href="/protests">Protests</a>
+    <a class="ma1 black-80" href="/resources">Resources</a>
   </div>
   <div>
     <button class="button" (click)="onLogout()">Logout</button>

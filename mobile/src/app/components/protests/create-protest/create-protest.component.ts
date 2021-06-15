@@ -9,7 +9,6 @@ import { ToastController } from '@ionic/angular';
 @Component({
   selector: 'app-create-protest',
   templateUrl: './create-protest.component.html',
-  styleUrls: ['./create-protest.component.scss'],
 })
 export class CreateProtestComponent implements OnInit {
   form: FormGroup;

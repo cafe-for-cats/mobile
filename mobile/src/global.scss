@@ -37,8 +37,12 @@
   --ion-color-shade: var(--ion-color-app-light-green-shade);
   --ion-color-tint: var(--ion-color-app-light-green-tint);
 }
+
 ion-content {
   --ion-background-color: #f5f5f6;
+}
+ion-header {
+  background-color: var(--ion-color-app-light-green);
 }
 
 * {

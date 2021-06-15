@@ -1,38 +1,36 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: "app-resources",
-  templateUrl: "./resources.component.html",
-  styleUrls: ["./resources.component.scss"],
+  selector: 'app-resources',
+  templateUrl: './resources.component.html',
 })
 export class ResourcesComponent implements OnInit {
   data: ArrayResource = [
     {
-      "General Information": [
+      'General Information': [
         {
-          infoName: "What to expect at a protest",
-          url:
-            "https://www.law.nyu.edu/centers/race-inequality-law/protest-tips",
+          infoName: 'What to expect at a protest',
+          url: 'https://www.law.nyu.edu/centers/race-inequality-law/protest-tips',
         },
       ],
     },
     {
-      "Find Legal Resources": [
+      'Find Legal Resources': [
         {
-          infoName: "NGL Legal Support Hotline",
-          url: "https://www.communityjusticeexchange.org/nbfn-directory",
+          infoName: 'NGL Legal Support Hotline',
+          url: 'https://www.communityjusticeexchange.org/nbfn-directory',
         },
         {
-          infoName: "National Bail Fund Network",
-          url: "https://www.nlg.org/massdefenseprogram/",
+          infoName: 'National Bail Fund Network',
+          url: 'https://www.nlg.org/massdefenseprogram/',
         },
       ],
     },
     {
-      "Support us": [
+      'Support us': [
         {
-          infoName: "GoFundMe",
-          url: "https://www.gofundme.com/f/help-build-a-protest-app",
+          infoName: 'GoFundMe',
+          url: 'https://www.gofundme.com/f/help-build-a-protest-app',
         },
       ],
     },
