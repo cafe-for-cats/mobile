@@ -6,7 +6,6 @@ import { ToastController } from '@ionic/angular';
 @Component({
   selector: 'app-protests',
   templateUrl: './protests.component.html',
-  styleUrls: ['./protests.component.scss'],
 })
 export class ProtestsComponent implements OnInit {
   data$: Observable<{}>;

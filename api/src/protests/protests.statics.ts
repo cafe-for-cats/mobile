@@ -27,6 +27,24 @@ export const getProtestsForUser = async (userId: string) =>
     {
       $match: { 'associatedUsers._id': new ObjectId(userId) },
     },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        startDate: 1,
+        duration: 1,
+        associatedUsers: {
+          $filter: {
+            input: '$associatedUsers',
+            as: 'associatedUser',
+            cond: {
+              $eq: ['$$associatedUser._id', new ObjectId(userId)],
+            },
+          },
+        },
+      },
+    },
   ]);
 
 export interface AddProtestInput {
