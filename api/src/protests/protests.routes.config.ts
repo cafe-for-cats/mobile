@@ -14,10 +14,12 @@ export class ProtestsRoutes extends CommonRoutesConfig {
 
   configureRoutes() {
     this.app
-      .route('/protests/token')
+      .route('/protests/:token')
       .get(async (req: express.Request, res: express.Response) => {
         try {
-          const payload = await this.protestsService.getProtestByShareToken();
+          const payload = await this.protestsService.getProtestByShareToken(
+            req.params.token
+          );
 
           res.status(200).send({ status: true, message: 'Success.', payload });
         } catch (e) {

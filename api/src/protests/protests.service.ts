@@ -52,8 +52,8 @@ export class ProtestsService {
     };
   }
 
-  async getProtestByShareToken() {
-    return await getProtestByShareToken('YN-tqc8pOw');
+  async getProtestByShareToken(token: string) {
+    return await getProtestByShareToken(token);
   }
 
   async getProtestsForUser(userId: string) {
