@@ -49,25 +49,7 @@ export class ProtestsService {
       _id: protestId,
     };
 
-    return {
-      status: true,
-      message: 'Added protest.',
-      payload: { newItem },
-    };
-  }
-
-  async getProtestByShareToken(token: string) {
-    return await getProtestByShareToken(token);
-  }
-
-  async getProtestsForUser(userId: string) {
-    const mapped = await getProtestsForUser(userId);
-
-    return {
-      status: true,
-      message: 'Success',
-      payload: { protests: mapped },
-    };
+    return newItem;
   }
 }
 

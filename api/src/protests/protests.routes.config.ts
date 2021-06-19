@@ -1,8 +1,7 @@
 import { CommonRoutesConfig } from '../common/common.routes.config';
 import express from 'express';
-import { UsersService } from '../users/users.service';
-import { resolveSoa } from 'dns';
 import { ProtestsService } from './protests.service';
+import { getProtestByShareToken } from './protests.statics';
 
 export class ProtestsRoutes extends CommonRoutesConfig {
   constructor(
@@ -17,9 +16,7 @@ export class ProtestsRoutes extends CommonRoutesConfig {
       .route('/protests/:token')
       .get(async (req: express.Request, res: express.Response) => {
         try {
-          const payload = await this.protestsService.getProtestByShareToken(
-            req.params.token
-          );
+          const payload = await getProtestByShareToken(req.params.token);
 
           res.status(200).send({ status: true, message: 'Success.', payload });
         } catch (e) {
