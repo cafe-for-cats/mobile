@@ -45,10 +45,14 @@ export class ProtestsService {
       };
     }
 
+    const newItem = {
+      _id: protestId,
+    };
+
     return {
       status: true,
       message: 'Added protest.',
-      payload: { protest: newProtestResult },
+      payload: { newItem },
     };
   }
 
