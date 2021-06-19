@@ -2,6 +2,7 @@ import { findUserById } from '../users/users.statics';
 import {
   addProtest,
   AddProtestInput,
+  getProtestByShareToken,
   getProtestsForUser,
 } from './protests.statics';
 import { ObjectId } from 'mongodb';
@@ -44,21 +45,11 @@ export class ProtestsService {
       };
     }
 
-    return {
-      status: true,
-      message: 'Added protest.',
-      payload: { protest: newProtestResult },
+    const newItem = {
+      _id: protestId,
     };
-  }
 
-  async getProtestsForUser(userId: string) {
-    const mapped = await getProtestsForUser(userId);
-
-    return {
-      status: true,
-      message: 'Success',
-      payload: { protests: mapped },
-    };
+    return newItem;
   }
 }
 
