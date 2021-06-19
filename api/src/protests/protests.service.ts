@@ -2,6 +2,7 @@ import { findUserById } from '../users/users.statics';
 import {
   addProtest,
   AddProtestInput,
+  getProtestByShareToken,
   getProtestsForUser,
 } from './protests.statics';
 import { ObjectId } from 'mongodb';
@@ -49,6 +50,10 @@ export class ProtestsService {
       message: 'Added protest.',
       payload: { protest: newProtestResult },
     };
+  }
+
+  async getProtestByShareToken() {
+    return await getProtestByShareToken('YN-tqc8pOw');
   }
 
   async getProtestsForUser(userId: string) {

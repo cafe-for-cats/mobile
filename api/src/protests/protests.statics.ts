@@ -22,6 +22,22 @@ export const addProtest = async ({
     { upsert: true, new: true }
   );
 
+export const getProtestByShareToken = async (id: string) =>
+  await Protest.aggregate([
+    {
+      $match: { 'shareToken.token': 'YN-tqc8pOw' },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        startDate: 1,
+        duration: 1,
+      },
+    },
+  ]);
+
 export const getProtestsForUser = async (userId: string) =>
   await Protest.aggregate([
     {

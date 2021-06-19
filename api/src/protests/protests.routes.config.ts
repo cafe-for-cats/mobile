@@ -17,7 +17,9 @@ export class ProtestsRoutes extends CommonRoutesConfig {
       .route('/protests/token')
       .get(async (req: express.Request, res: express.Response) => {
         try {
-          this.protestsService.getProtestShareToken();
+          const payload = await this.protestsService.getProtestByShareToken();
+
+          res.status(200).send({ status: true, message: 'Success.', payload });
         } catch (e) {
           console.log(e);
 
