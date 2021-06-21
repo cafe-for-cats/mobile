@@ -6,13 +6,20 @@ import {
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const mySecret = process.env.ACCESS_TOKEN_SECRET as string;
+const mySecret = process.env.SECRET_KEY as string;
 
 export class UsersService {
   constructor() {}
 
   async getUserById(userId: string) {
     const user = await findUserById(userId);
+
+    if (!user) {
+      return {
+        status: false,
+        message: 'User not found.',
+      };
+    }
 
     return {
       status: true,
@@ -23,6 +30,13 @@ export class UsersService {
 
   async getByUsername(username: string) {
     const user = await findUserByUsername(username);
+
+    if (!user) {
+      return {
+        status: false,
+        message: `User not found.`,
+      };
+    }
 
     return {
       status: true,
