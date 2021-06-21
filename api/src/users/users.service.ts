@@ -43,6 +43,13 @@ export class UsersService {
       };
     }
 
+    if (!user) {
+      return {
+        status: false,
+        message: `User not found.`,
+      };
+    }
+
     const isMatch = await bcrypt.compare(password, user.get('password'));
 
     if (!isMatch) {
