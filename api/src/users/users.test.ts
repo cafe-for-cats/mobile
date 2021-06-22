@@ -4,7 +4,7 @@ import { HeapCodeStatistics } from 'v8';
 import User from './users.models';
 import { UsersService } from './users.service';
 import * as statics from './users.statics';
-import bcrypt from 'bcryptjs';
+import bcrypt, { compare } from 'bcryptjs';
 
 describe('UsersService', function () {
   let usersService: UsersService;
@@ -12,6 +12,9 @@ describe('UsersService', function () {
   let findUserByUsernameMock: SinonStubbedInstance<typeof statics.findUserByUsername>;
   let generateJWTMock: SinonStubbedInstance<typeof usersService.generateJWT>;
   let bcryptMock: SinonStubbedInstance<typeof bcrypt.compare>;
+  let authenticateUserMock: SinonStubbedInstance<typeof usersService.authenticateUser>;
+  //let passwordMock: SinonStubbedInstance<typeof usersService.isMatch>;
+  let registeredUserMock: SinonStubbedInstance<typeof usersService.registerUser >;
 
   beforeEach(() => {
     usersService = new UsersService();
@@ -53,6 +56,7 @@ describe('UsersService', function () {
       associatedProtests: [],
     });
 
+
     const response = await usersService.getUserById(_id);
 
     expect(response).to.deep.equal({
@@ -61,12 +65,12 @@ describe('UsersService', function () {
       payload: { user },
     });
   });
-       
-  it('should return error if user is not found', async() => {
+
+  it('should return error if user is not found', async () => {
 
     findUserByUsernameMock = sinon
-    .stub(statics, 'findUserByUsername')
-    .callsFake(async () => await null);
+      .stub(statics, 'findUserByUsername')
+      .callsFake(async () => await null);
 
     const username = 'test-automation';
     const response = await usersService.getByUsername(username);
@@ -74,40 +78,106 @@ describe('UsersService', function () {
     expect(response).to.deep.equal({
       status: false,
       message: 'User not found.',
-     
-   });
+
+    });
   });
 
-   it('should return user if user is found', async () => {
+  it('should return user if user is found', async () => {
 
-     findUserByUsernameMock = sinon
-     .stub(statics, "findUserByUsername")
-     .callsFake(async()=> await user);
+    findUserByUsernameMock = sinon
+      .stub(statics, "findUserByUsername")
+      .callsFake(async () => await user);
 
-     const username = 'test-automation'
-     const user = new User ({
-       _id:'6088b864a6c9b94094b43e42',
-       username:'test-automation',
-       associatedProtest:[],
-     })
-     const response = await usersService.getByUsername
-     expect(response).to.deep.equal({
-       status:true,
-       message: 'user successfully found',
-       payload:{ user },
+    const username = 'test-automation'
+    const user = new User({
+      _id: '6088b864a6c9b94094b43e42',
+      username: 'test-automation',
+      associatedProtest: [],
+    })
+    const response = await usersService.getByUsername
+    expect(response).to.deep.equal({
+      status: true,
+      message: 'user successfully found',
+      payload: { user },
 
-     })
-   });
+    })
+  });
+
+    it('should return error if secret key not set', async() => {
+      const mockUser = {
+        status: false,
+        message: `Secret key not set.`
+      }
+      
+      authenticateUserMock = sinon
+        .stub(usersService, "authenticateUser")
+        .callsFake(async () => await mockUser);
+
+      const response = await usersService.authenticateUser
+      expect(response).to.be.equal({
+        status: false,
+        message: `Secret key not set.`
+
+      });
+    });
+
+      it('should return error if user is not found', async () => {
+
+        findUserByUsernameMock = sinon
+          .stub(statics, "findUserByUsername")
+          .callsFake(async () => await user);
+
+        const username = 'test-automation'
+        const user = new User({
+          _id: '6088b864a6c9b94094b43e42',
+          username: 'test-automation',
+          associatedProtest: [],
+        });
+
+        const response = await usersService.getByUsername
+        expect(response).to.deep.equal({
+          status: false,
+          message: 'user successfully found',
+          payload: { user },
+        });
+
+      });
+
+      
+    
+        it('should return error if passwords do not match', async() => {
+          const mockUser = {
+            status: false,
+            message: `Password does not match `
+          }
+          
+          
+          authenticateUserMock = sinon
+            .stub(usersService, "authenticateUser")
+            .callsFake(async () => await mockUser);
+    
+          const response = await usersService.authenticateUser
+          expect(response).to.be.equal({
+            status: false,
+            message: `Password does not match`
+          });
 });
+    describe('registerUser',async() => {
+
+      const mockUser = {
+        status: false,
+      message: `Failed registering user.`
+      };
+    registeredUserMock = sinon
+            .stub(usersService, "registerUser")
+            .callsFake(async () => await mockUser);
+
+            const response = await usersService.registerUser
+          expect(response).to.be.equal({
+            status: false,
+            message: `Failed registering user`
 
 
-
-//describe('authenticateUser', () => {
-//it('should return error if secret key not set', () => { });
-
-  //   it('should return error if user is not found', () => {});
-
-  //   it('should return error if passwords do not match', () => {});
-  // });
-
-  // describe('registerUser', () => {});}
+      });
+});
+});
