@@ -22,10 +22,44 @@ export const addProtest = async ({
     { upsert: true, new: true }
   );
 
+export const getProtestByShareToken = async (token: string) =>
+  await Protest.aggregate([
+    {
+      $match: { 'shareToken.token': token },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        startDate: 1,
+        duration: 1,
+      },
+    },
+  ]);
+
 export const getProtestsForUser = async (userId: string) =>
   await Protest.aggregate([
     {
       $match: { 'associatedUsers._id': new ObjectId(userId) },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        startDate: 1,
+        duration: 1,
+        associatedUsers: {
+          $filter: {
+            input: '$associatedUsers',
+            as: 'associatedUser',
+            cond: {
+              $eq: ['$$associatedUser._id', new ObjectId(userId)],
+            },
+          },
+        },
+      },
     },
   ]);
 

@@ -13,6 +13,7 @@ import { ProtestsService } from './protests/protests.service';
 import rateLimit from 'express-rate-limit';
 import SocketIO from 'socket.io';
 import expressMongoSanitize from 'express-mongo-sanitize';
+import { ProtestsRoutes } from './protests/protests.routes.config';
 
 const port = process.env.PORT || 5000;
 const routes: Array<CommonRoutesConfig> = [];
@@ -51,6 +52,7 @@ const protestsService = new ProtestsService();
 sockets.push(new CoreSockets(io));
 sockets.push(new ProtestSockets(io, protestsService));
 routes.push(new UsersRoutes(app, usersService));
+routes.push(new ProtestsRoutes(app, protestsService));
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.sendFile(path.resolve('./src/view/index.html'));

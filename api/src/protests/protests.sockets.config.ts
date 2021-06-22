@@ -1,6 +1,7 @@
 import socketio from 'socket.io';
 import { CommonSocketsConfig } from '../common/common.sockets.config';
 import { ProtestsService } from './protests.service';
+import { getProtestsForUser } from './protests.statics';
 
 export class ProtestSockets extends CommonSocketsConfig {
   constructor(io: socketio.Server, private protestsService: ProtestsService) {
@@ -13,9 +14,13 @@ export class ProtestSockets extends CommonSocketsConfig {
 
       socket.on('addProtest', async (input) => {
         try {
-          const result = await this.protestsService.addProtest(input);
+          const payload = await this.protestsService.addProtest(input);
 
-          socket.emit('addProtest', result);
+          socket.emit('addProtest', {
+            status: true,
+            message: 'success',
+            payload,
+          });
         } catch (e) {
           console.error(e);
 
@@ -33,9 +38,13 @@ export class ProtestSockets extends CommonSocketsConfig {
           });
         }
 
-        const result = await this.protestsService.getProtestsForUser(userId);
+        const payload = await getProtestsForUser(userId);
 
-        socket.emit('getProtestsForUser', result);
+        socket.emit('getProtestsForUser', {
+          status: true,
+          message: 'Success',
+          payload,
+        });
       });
     });
 
