@@ -27,13 +27,13 @@ export class ProtestsRoutes extends CommonRoutesConfig {
           }
 
           switch (key.length) {
-            case KeyTypes.Token:
+            case KeyTypeLengths.Token:
               const payload = await getProtestByShareToken(key);
 
               return res
                 .status(200)
                 .send({ status: true, message: 'Success.', payload });
-            case KeyTypes.ObjectId:
+            case KeyTypeLengths.ObjectId:
               return res
                 .status(200)
                 .send({ status: false, message: 'Not implemented.' });
@@ -53,7 +53,9 @@ export class ProtestsRoutes extends CommonRoutesConfig {
 
 // Define what our MVP should be for october
 
-enum KeyTypes {
+enum KeyTypeLengths {
+  /** The length of a share token for a protest. For example: `8c9i-9epS` */
   Token = 9,
+  /** The length of an `ObjectId` for a protest. For example: `60b974f68a66171753b8bde9` */
   ObjectId = 24,
 }
