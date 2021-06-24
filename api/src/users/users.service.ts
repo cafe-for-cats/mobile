@@ -6,7 +6,7 @@ import {
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const mySecret = process.env.ACCESS_TOKEN_SECRET as string;
+const mySecret = process.env.SECRET_KEY as string;
 
 export class UsersService {
   constructor() {}

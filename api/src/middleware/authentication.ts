@@ -15,7 +15,7 @@ export const validateUser = async (
       .json({ msg: 'No token, authorization denied' });
   }
 
-  if (!process.env.ACCESS_TOKEN_SECRET) {
+  if (!process.env.SECRET_KEY) {
     return res
       .status(HttpStatusCodes.UNAUTHORIZED)
       .json({ msg: 'No secret set, authorization denied' });
@@ -26,7 +26,7 @@ export const validateUser = async (
   try {
     jwt.verify(
       payload,
-      process.env.ACCESS_TOKEN_SECRET as string,
+      process.env.SECRET_KEY as string,
       (err: any, user: any) => {
         if (err) {
           return res
