@@ -27,43 +27,5 @@ describe('ProtestsService', function () {
     expect(usersService).to.be.ok;
   });
 
-  it('should add a protest', async () => {
-    const _id = '6088b864a6c9b94094b43e42';
-
-    const user = new User({
-      _id,
-      username: 'test-automation',
-      associatedProtests: [],
-    });
-
-    const protest = new Protest({
-      _id: '60b974f68a66171753b8bde9',
-    });
-
-    findByUserIdMock = sinon
-      .stub(userStatics, 'findUserById')
-      .callsFake(async () => await user);
-
-    addProtestMock = sinon
-      .stub(protestStatics, 'addProtest')
-      .callsFake(async () => await protest);
-
-    const obj = {
-      userId: _id,
-      title: 'title',
-      description: 'description',
-      startDate: new Date(),
-      duration: 200,
-    };
-
-    const response = await protestsService.addProtest(obj);
-
-    const result = {
-      status: true,
-      message: 'Added protest.',
-      payload: { newItem: { _id: new ObjectId('60b974f68a66171753b8bde9') } },
-    };
-
-    expect(response).to.deep.equal(result);
-  });
+  it('should add a protest', async () => {});
 });
