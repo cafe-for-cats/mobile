@@ -77,7 +77,10 @@
 
         <!-- Attending -->
         <ion-col size-md class="pa0">
-          <div class="mt3" *ngIf="chipViewCondition != 1">
+          <div
+            [ngClass]="chipViewCondition == 2 ? 'mt0' : 'mt3'"
+            *ngIf="chipViewCondition != 1"
+          >
             <h4 class="ml2 mv1 f4 fw6">Attending</h4>
             <div *ngFor="let protest of protestsData.payload">
               <div

@@ -28,7 +28,6 @@ export class MyProtestsComponent implements OnInit {
 
     this.data$.subscribe((result) => {
       this.protestsData = result;
-      console.log('subscribed data: ', this.protestsData);
     });
 
     this.chipViewCondition = 0;
@@ -36,6 +35,5 @@ export class MyProtestsComponent implements OnInit {
 
   onClickChip(chip) {
     this.chipViewCondition = chip;
-    console.log(this.chipViewCondition);
   }
 }
