@@ -5,6 +5,7 @@ const schema = new Schema({
   title: String,
   description: String,
   startDate: Date,
+  /** Duration in minutes. */
   duration: Number,
   associatedUsers: [Object],
   shareToken: Object,

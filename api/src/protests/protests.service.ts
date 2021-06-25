@@ -17,13 +17,6 @@ export class ProtestsService {
   }: AddProtestInput) {
     const user = await findUserById(userId);
 
-    if (!user) {
-      return {
-        status: false,
-        message: 'No user',
-      };
-    }
-
     const userObjectId = user?.get('_id');
 
     const newProtest: AddProtestInput = {
