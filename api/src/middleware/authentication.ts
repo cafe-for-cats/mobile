@@ -3,12 +3,15 @@ import HttpStatusCodes from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { findUserById } from '../users/users.statics';
 
+// TODO: this could potentially be split in to `validateToken` and `validateUser` with
+// shared helper functions.
 export const validateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const token: string = req.headers['authorization'] || '';
+
   if (!token) {
     return res
       .status(HttpStatusCodes.UNAUTHORIZED)
@@ -23,41 +26,39 @@ export const validateUser = async (
 
   const payload = token.split(' ')[1];
 
-  const verify = await verifyToken(payload);
+  try {
+    await verifyToken(payload);
 
-  // TODO: if the token is expired, there will be an error about headers being set after request sent.
-  // TODO: no `as DecodedToken`
-  const decoded: DecodedToken = jwt.decode(payload) as DecodedToken;
+    const decoded: DecodedToken = jwt.decode(payload) as { [key: string]: any };
 
-  const user = await findUserById(decoded.user.id);
+    const user = await findUserById(decoded?.user?.id);
 
-  if (!user) {
+    if (!user) {
+      return res
+        .status(HttpStatusCodes.UNAUTHORIZED)
+        .json({ msg: 'User does not exist.' });
+    }
+  } catch (error) {
     return res
       .status(HttpStatusCodes.UNAUTHORIZED)
-      .json({ msg: 'User does not exist.' });
+      .json({ msg: 'Token invalid.' });
   }
 
   next();
 };
 
-async function verifyToken(payload: string) {
-  console.log('in function');
-
+async function verifyToken(payload: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    jwt.verify(
-      payload,
-      process.env.SECRET_KEY as string,
-      (err: any, user: any) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(user);
-        }
+    jwt.verify(payload, process.env.SECRET_KEY as string, (err: any) => {
+      if (err) {
+        reject();
+      } else {
+        resolve();
       }
-    );
+    });
   });
 }
 
 interface DecodedToken {
-  [key: string]: any;
+  [key: string]: { id: string };
 }
