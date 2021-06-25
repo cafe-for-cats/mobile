@@ -1,0 +1,3 @@
+class vs file w/ function
+
+all these functions don't really have a shared state so the separate functions seemed appropiate (they're all static)

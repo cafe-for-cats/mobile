@@ -1,5 +1,6 @@
 import Protest from './protests.models';
 import { ObjectId } from 'mongodb';
+import { AccessLevels } from './protests.service';
 
 export const addProtest = async ({
   title,
@@ -15,8 +16,14 @@ export const addProtest = async ({
         title,
         startDate,
         description,
-        duration: 120, // duration in minutes
-        associatedUsers: [{ _id: new ObjectId(userId), accessLevel: 1 }],
+        duration,
+        associatedUsers: [
+          {
+            _id: new ObjectId(userId),
+            accessLevel: AccessLevels.Leader,
+            isCreator: true,
+          },
+        ],
       },
     },
     { upsert: true, new: true }
@@ -42,6 +49,9 @@ export const getProtestsForUser = async (userId: string) =>
   await Protest.aggregate([
     {
       $match: { 'associatedUsers._id': new ObjectId(userId) },
+    },
+    {
+      $sort: { startDate: -1 },
     },
     {
       $project: {
