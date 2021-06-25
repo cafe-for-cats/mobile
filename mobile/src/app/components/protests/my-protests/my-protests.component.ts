@@ -11,8 +11,13 @@ export class MyProtestsComponent implements OnInit {
   data$: Observable<{}>;
   protestsData: any = [];
   attendingProtests: any = [];
-  leaderLevel = accessLevels.Leader;
   chipViewCondition: number;
+
+  adminLevel = accessLevels.Admin;
+  leaderLevel = accessLevels.Leader;
+  organizerLevel = accessLevels.Organizer;
+  attendeeLevel = accessLevels.Attendee;
+  unassignedLevel = accessLevels.Unassigned;
 
   constructor(private dataService: ProtestsDataService) {
     this.data$ = this.dataService.receiveGetProtestsForUser();
@@ -27,10 +32,6 @@ export class MyProtestsComponent implements OnInit {
     });
 
     this.chipViewCondition = 0;
-  }
-
-  onClickLog() {
-    console.log('button clicked');
   }
 
   onClickChip(chip) {

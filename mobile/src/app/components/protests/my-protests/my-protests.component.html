@@ -39,10 +39,13 @@
         <!-- Organizing -->
         <ion-col size-md class="pa0">
           <div *ngIf="chipViewCondition != 2">
-            <h4 class="ml2 mv1 f4 fw6 ion-text-left">Organizing</h4>
+            <h4 class="ml2 mv1 f4 fw6">Organizing</h4>
             <div *ngFor="let protest of protestsData.payload">
               <div
-                *ngIf="protest.associatedUsers[0].accessLevel == leaderLevel"
+                *ngIf="
+                  protest.associatedUsers[0].accessLevel == leaderLevel ||
+                  protest.associatedUsers[0].accessLevel == organizerLevel
+                "
               >
                 <ion-card class="ma2 w-100">
                   <div class="flex justify-start items-center ph2 pv1">
@@ -68,38 +71,46 @@
                   </div>
                 </ion-card>
               </div>
-              <!-- <div *ngIf="protest.accessL"> -->
             </div>
           </div>
         </ion-col>
 
         <!-- Attending -->
-        <ion-col size-md class="ion-align-items-center">
-          <div *ngIf="chipViewCondition != 1">
-            <h4 class="ml2 mv1 f4 fw6 ion-text-left">Attending</h4>
-            <ion-card class="ma2">
-              <div class="flex justify-start items-center ph2 pv1">
-                <div class="pr2">
-                  <img
-                    class="br-100 h3 w3 dib bg-black-10"
-                    alt="protest-icon"
-                  />
-                </div>
-                <div>
-                  <ion-card-header class="pa0">
-                    <ion-card-title class="pa0 f5 fw6 mw-100 w5">
-                      placement title
-                    </ion-card-title>
-                    <ion-card-subtitle class="fw4">
-                      Nov 12, 2020
-                    </ion-card-subtitle>
-                  </ion-card-header>
-                  <ion-card-content class="pa0">
-                    placement desc
-                  </ion-card-content>
-                </div>
+        <ion-col size-md class="pa0">
+          <div class="mt3" *ngIf="chipViewCondition != 1">
+            <h4 class="ml2 mv1 f4 fw6">Attending</h4>
+            <div *ngFor="let protest of protestsData.payload">
+              <div
+                *ngIf="
+                  protest.associatedUsers[0].accessLevel == attendeeLevel ||
+                  protest.associatedUsers[0].accessLevel == unassignedLevel
+                "
+              >
+                <ion-card class="ma2 w-100">
+                  <div class="flex justify-start items-center ph2 pv1">
+                    <div class="pr2">
+                      <img
+                        class="br-100 h3 w3 dib bg-black-10"
+                        alt="protest-icon"
+                      />
+                    </div>
+                    <div>
+                      <ion-card-header class="pa0">
+                        <ion-card-title class="pa0 f5 fw6 mw-100 w5">
+                          {{ protest.title }}
+                        </ion-card-title>
+                        <ion-card-subtitle class="fw4">
+                          {{ protest.startDate }}
+                        </ion-card-subtitle>
+                      </ion-card-header>
+                      <ion-card-content class="pa0">
+                        {{ protest.description }}
+                      </ion-card-content>
+                    </div>
+                  </div>
+                </ion-card>
               </div>
-            </ion-card>
+            </div>
           </div>
         </ion-col>
       </ion-col>
