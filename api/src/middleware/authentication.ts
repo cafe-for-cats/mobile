@@ -23,21 +23,7 @@ export const validateUser = async (
 
   const payload = token.split(' ')[1];
 
-  try {
-    jwt.verify(
-      payload,
-      process.env.SECRET_KEY as string,
-      (err: any, user: any) => {
-        if (err) {
-          return res
-            .status(HttpStatusCodes.FORBIDDEN)
-            .json({ msg: 'Token expired.' });
-        }
-      }
-    );
-  } catch (err) {
-    return res.status(HttpStatusCodes.UNAUTHORIZED).json({ msg: err.message });
-  }
+  const verify = await verifyToken(payload);
 
   // TODO: if the token is expired, there will be an error about headers being set after request sent.
   // TODO: no `as DecodedToken`
@@ -53,6 +39,24 @@ export const validateUser = async (
 
   next();
 };
+
+async function verifyToken(payload: string) {
+  console.log('in function');
+
+  return new Promise((resolve, reject) => {
+    jwt.verify(
+      payload,
+      process.env.SECRET_KEY as string,
+      (err: any, user: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(user);
+        }
+      }
+    );
+  });
+}
 
 interface DecodedToken {
   [key: string]: any;
