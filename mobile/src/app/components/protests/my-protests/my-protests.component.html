@@ -1,0 +1,116 @@
+<ion-grid fixed="true">
+  <h1 class="b f2 mt1 pt1 mb0 pb0">My Protests</h1>
+  <h3 class="f6 mt0 pt0 black-70">
+    View protests you are organizing and or attending.
+  </h3>
+
+  <ion-row>
+    <section class="">
+      <ion-col size-md class="pa0">
+        <h2 class="f3 mb0 fw6 ion-text-left pt0">Active Protests</h2>
+        <button
+          (click)="onClickChip(0)"
+          class="br-pill ph2 mr1"
+          [ngClass]="
+            chipViewCondition == 0 ? 'bg-app-light-green' : 'bg-black-10'
+          "
+        >
+          All
+        </button>
+        <button
+          (click)="onClickChip(1)"
+          class="br-pill ph2 mh1"
+          [ngClass]="
+            chipViewCondition == 1 ? 'bg-app-light-green' : 'bg-black-10'
+          "
+        >
+          Organizing
+        </button>
+        <button
+          (click)="onClickChip(2)"
+          class="br-pill ph2 mh1"
+          [ngClass]="
+            chipViewCondition == 2 ? 'bg-app-light-green' : 'bg-black-10'
+          "
+        >
+          Attending
+        </button>
+
+        <!-- Organizing -->
+        <ion-col size-md class="pa0">
+          <div *ngIf="chipViewCondition != 2">
+            <h4 class="ml2 mv1 f4 fw6 ion-text-left">Organizing</h4>
+            <div *ngFor="let protest of protestsData.payload">
+              <div
+                *ngIf="protest.associatedUsers[0].accessLevel == leaderLevel"
+              >
+                <ion-card class="ma2 w-100">
+                  <div class="flex justify-start items-center ph2 pv1">
+                    <div class="pr2">
+                      <img
+                        class="br-100 h3 w3 dib bg-black-10"
+                        alt="protest-icon"
+                      />
+                    </div>
+                    <div>
+                      <ion-card-header class="pa0">
+                        <ion-card-title class="pa0 f5 fw6 mw-100 w5">
+                          {{ protest.title }}
+                        </ion-card-title>
+                        <ion-card-subtitle class="fw4">
+                          {{ protest.startDate }}
+                        </ion-card-subtitle>
+                      </ion-card-header>
+                      <ion-card-content class="pa0">
+                        {{ protest.description }}
+                      </ion-card-content>
+                    </div>
+                  </div>
+                </ion-card>
+              </div>
+              <!-- <div *ngIf="protest.accessL"> -->
+            </div>
+          </div>
+        </ion-col>
+
+        <!-- Attending -->
+        <ion-col size-md class="ion-align-items-center">
+          <div *ngIf="chipViewCondition != 1">
+            <h4 class="ml2 mv1 f4 fw6 ion-text-left">Attending</h4>
+            <ion-card class="ma2">
+              <div class="flex justify-start items-center ph2 pv1">
+                <div class="pr2">
+                  <img
+                    class="br-100 h3 w3 dib bg-black-10"
+                    alt="protest-icon"
+                  />
+                </div>
+                <div>
+                  <ion-card-header class="pa0">
+                    <ion-card-title class="pa0 f5 fw6 mw-100 w5">
+                      placement title
+                    </ion-card-title>
+                    <ion-card-subtitle class="fw4">
+                      Nov 12, 2020
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content class="pa0">
+                    placement desc
+                  </ion-card-content>
+                </div>
+              </div>
+            </ion-card>
+          </div>
+        </ion-col>
+      </ion-col>
+    </section>
+
+    <!--
+    <section>
+      <ion-col size-md class="ion-align-items-center">
+        <h2 class="f3 fw6 ion-text-left">Archived Protests</h2>
+      </ion-col>
+    </section>
+     -->
+  </ion-row>
+</ion-grid>
