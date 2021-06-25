@@ -1,6 +1,6 @@
 import { Response, NextFunction, Request } from 'express';
 import HttpStatusCodes from 'http-status-codes';
-import jwt from 'jsonwebtoken';
+import jwt, { TokenExpiredError } from 'jsonwebtoken';
 import { findUserById } from '../users/users.statics';
 
 // TODO: this could potentially be split in to `validateToken` and `validateUser` with
@@ -39,9 +39,15 @@ export const validateUser = async (
         .json({ msg: 'User does not exist.' });
     }
   } catch (error) {
-    return res
-      .status(HttpStatusCodes.UNAUTHORIZED)
-      .json({ msg: 'Token invalid.' });
+    let msg;
+
+    if (error instanceof TokenExpiredError) {
+      msg = 'Expired token.';
+    } else {
+      msg = 'Invalid token.';
+    }
+
+    return res.status(HttpStatusCodes.UNAUTHORIZED).json({ msg });
   }
 
   next();
@@ -51,7 +57,7 @@ async function verifyToken(payload: string): Promise<void> {
   return new Promise((resolve, reject) => {
     jwt.verify(payload, process.env.SECRET_KEY as string, (err: any) => {
       if (err) {
-        reject();
+        reject(err);
       } else {
         resolve();
       }
