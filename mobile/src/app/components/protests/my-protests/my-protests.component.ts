@@ -8,6 +8,7 @@ import { accessLevels, ProtestsDataService } from '../protests-data.service';
   styleUrls: ['./my-protests.component.scss'],
 })
 export class MyProtestsComponent implements OnInit {
+  format = 'dd/MM/yyyy hh:mm:ss';
   data$: Observable<{}>;
   protestsData: any = [];
   attendingProtests: any = [];
