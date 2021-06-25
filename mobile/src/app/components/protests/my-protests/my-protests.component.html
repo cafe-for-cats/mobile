@@ -8,35 +8,35 @@
     <section class="">
       <ion-col size-md class="pa0">
         <h2 class="f3 mb0 fw6 ion-text-left pt0">Active Protests</h2>
-        <button
-          (click)="onClickChip(0)"
-          class="br-pill ph2 mr1"
-          [ngClass]="
-            chipViewCondition == 0 ? 'bg-app-light-green' : 'bg-black-10'
-          "
-        >
-          All
-        </button>
-        <button
-          (click)="onClickChip(1)"
-          class="br-pill ph2 mh1"
-          [ngClass]="
-            chipViewCondition == 1 ? 'bg-app-light-green' : 'bg-black-10'
-          "
-        >
-          Organizing
-        </button>
-        <button
-          (click)="onClickChip(2)"
-          class="br-pill ph2 mh1"
-          [ngClass]="
-            chipViewCondition == 2 ? 'bg-app-light-green' : 'bg-black-10'
-          "
-        >
-          Attending
-        </button>
 
-        <!-- Organizing -->
+        <!-- chips -->
+        <div class="pb1">
+          <ion-chip
+            (click)="onClickChip(0)"
+            [ngClass]="
+              chipViewCondition == 0 ? 'bg-app-light-green' : 'bg-black-10'
+            "
+          >
+            <ion-label>All</ion-label>
+          </ion-chip>
+          <ion-chip
+            (click)="onClickChip(1)"
+            [ngClass]="
+              chipViewCondition == 1 ? 'bg-app-light-green' : 'default'
+            "
+          >
+            <ion-label>Organizing</ion-label>
+          </ion-chip>
+          <ion-chip
+            (click)="onClickChip(2)"
+            [ngClass]="
+              chipViewCondition == 2 ? 'bg-app-light-green' : 'bg-black-10'
+            "
+          >
+            <ion-label>Attending</ion-label>
+          </ion-chip>
+        </div>
+        <!-- Organizing Section -->
         <ion-col size-md class="pa0">
           <div *ngIf="chipViewCondition != 2">
             <h4 class="ml2 mv1 f4 fw6">Organizing</h4>
@@ -75,7 +75,7 @@
           </div>
         </ion-col>
 
-        <!-- Attending -->
+        <!-- Attending Section -->
         <ion-col size-md class="pa0">
           <div
             [ngClass]="chipViewCondition == 2 ? 'mt0' : 'mt3'"
