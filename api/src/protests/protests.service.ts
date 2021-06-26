@@ -11,6 +11,8 @@ export class ProtestsService {
   async getProtestByToken(key: string) {
     const protest = await getProtestByShareToken(key);
 
+    // TODO: is this a more UTC-safe approach for this?
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC
     const currentDate = new Date();
 
     const expirationDate = new Date(protest[0].shareToken.expirationDate);
