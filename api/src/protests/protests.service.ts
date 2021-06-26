@@ -8,6 +8,24 @@ import {
 import { ObjectId } from 'mongodb';
 
 export class ProtestsService {
+  async getProtestByToken(key: string) {
+    const protest = await getProtestByShareToken(key);
+
+    if (new Date().getUTCDate() > protest[0].shareToken.expirationDate) {
+      return {
+        status: false,
+        message: 'Protest token is expired.',
+        payload: null,
+      };
+    }
+
+    return {
+      status: true,
+      message: 'Success.',
+      payload: protest,
+    };
+  }
+
   async addProtest({
     userId,
     title,

@@ -32,7 +32,9 @@ export const addProtest = async ({
 export const getProtestByShareToken = async (token: string) =>
   await Protest.aggregate([
     {
-      $match: { 'shareToken.token': token },
+      $match: {
+        'shareToken.token': token,
+      },
     },
     {
       $project: {
@@ -41,6 +43,7 @@ export const getProtestByShareToken = async (token: string) =>
         description: 1,
         startDate: 1,
         duration: 1,
+        shareToken: 1,
       },
     },
   ]);
