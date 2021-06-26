@@ -23,20 +23,20 @@ export class ProtestsRoutes extends CommonRoutesConfig {
           if (!key) {
             return res
               .status(400)
-              .send({ status: true, message: 'Must provide a token id.' });
+              .send({ status: true, message: 'Must provide a key.' });
           }
 
           switch (key.length) {
             case KeyTypeLengths.Token:
-              const payload = await getProtestByShareToken(key);
+              const { status, payload, message } =
+                await this.protestsService.getProtestByToken(key);
 
-              return res
-                .status(200)
-                .send({ status: true, message: 'Success.', payload });
+              return res.status(200).send({ status, message, payload });
             case KeyTypeLengths.ObjectId:
-              return res
-                .status(200)
-                .send({ status: false, message: 'Not implemented.' });
+              return res.status(200).send({
+                status: false,
+                message: 'GET not implemented for Protest by ObjectId.',
+              });
           }
         } catch (e) {
           console.log(e);
@@ -50,8 +50,6 @@ export class ProtestsRoutes extends CommonRoutesConfig {
     return this.app;
   }
 }
-
-// Define what our MVP should be for october
 
 enum KeyTypeLengths {
   /** The length of a share token for a protest. For example: `8c9i-9epS` */

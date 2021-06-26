@@ -8,6 +8,30 @@ import {
 import { ObjectId } from 'mongodb';
 
 export class ProtestsService {
+  async getProtestByToken(key: string) {
+    const protest = await getProtestByShareToken(key);
+
+    // TODO: is this a more UTC-safe approach for this?
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC
+    const currentDate = new Date();
+
+    const expirationDate = new Date(protest[0].shareToken.expirationDate);
+
+    if (currentDate > expirationDate) {
+      return {
+        status: false,
+        message: 'Protest token is expired.',
+        payload: null,
+      };
+    }
+
+    return {
+      status: true,
+      message: 'Success.',
+      payload: protest,
+    };
+  }
+
   async addProtest({
     userId,
     title,
@@ -16,13 +40,6 @@ export class ProtestsService {
     duration,
   }: AddProtestInput) {
     const user = await findUserById(userId);
-
-    if (!user) {
-      return {
-        status: false,
-        message: 'No user',
-      };
-    }
 
     const userObjectId = user?.get('_id');
 
