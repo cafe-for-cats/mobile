@@ -51,7 +51,7 @@ export const getProtestsForUser = async (userId: string) =>
       $match: { 'associatedUsers._id': new ObjectId(userId) },
     },
     {
-      $sort: { startDate: -1 }, // sorting by time, not by date
+      $sort: { startDate: 1 },
     },
     {
       $project: {
