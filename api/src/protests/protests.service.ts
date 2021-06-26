@@ -11,7 +11,11 @@ export class ProtestsService {
   async getProtestByToken(key: string) {
     const protest = await getProtestByShareToken(key);
 
-    if (new Date().getUTCDate() > protest[0].shareToken.expirationDate) {
+    const currentDate = new Date();
+
+    const expirationDate = new Date(protest[0].shareToken.expirationDate);
+
+    if (currentDate > expirationDate) {
       return {
         status: false,
         message: 'Protest token is expired.',
