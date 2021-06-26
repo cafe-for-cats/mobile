@@ -1,4 +1,4 @@
-<ion-grid fixed="true">
+<ion-grid fixed="true" style="overflow-y: scroll">
   <h1 class="b f2 mt1 pt1 mb0 pb0">My Protests</h1>
   <h3 class="f6 mt0 pt0 black-70">
     View protests you are organizing and or attending.
@@ -103,7 +103,7 @@
                           {{ protest.title }}
                         </ion-card-title>
                         <ion-card-subtitle class="fw4">
-                          {{ protest.startDate }}
+                          {{ protest.startDate | date: format }}
                         </ion-card-subtitle>
                       </ion-card-header>
                       <ion-card-content class="pa0">
