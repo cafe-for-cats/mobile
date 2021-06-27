@@ -2,20 +2,46 @@ import { findUserById } from '../users/users.statics';
 import {
   addProtest,
   AddProtestInput,
+  addUserToProtest,
+  AddUserToProtestInput,
   getProtestByShareToken,
-  getProtestsForUser,
+  getProtestsByUserAndProtest,
+  getProtestsByUser,
 } from './protests.statics';
 import { ObjectId } from 'mongodb';
 
 export class ProtestsService {
+  async addUserToProtest(input: AddUserToProtestInput) {
+    const protests = await getProtestsByUserAndProtest(
+      input.protestId,
+      input.userId
+    );
+
+    if (protests[0].associatedUsers.length > 0) {
+      return {
+        status: true,
+        message: 'User already exists on protest.',
+        payload: null,
+      };
+    }
+
+    const result = await addUserToProtest(input);
+
+    return {
+      status: true,
+      message: 'Success.',
+      payload: result,
+    };
+  }
+
   async getProtestByToken(key: string) {
-    const protest = await getProtestByShareToken(key);
+    const result = await getProtestByShareToken(key);
 
     // TODO: is this a more UTC-safe approach for this?
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/UTC
     const currentDate = new Date();
 
-    const expirationDate = new Date(protest[0].shareToken.expirationDate);
+    const expirationDate = new Date(result[0].shareToken.expirationDate);
 
     if (currentDate > expirationDate) {
       return {
@@ -28,7 +54,7 @@ export class ProtestsService {
     return {
       status: true,
       message: 'Success.',
-      payload: protest,
+      payload: result,
     };
   }
 
