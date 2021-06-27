@@ -14,6 +14,23 @@ export class ProtestsRoutes extends CommonRoutesConfig {
 
   configureRoutes() {
     this.app
+      .route('/protests/addUser')
+      .post(async (req: express.Request, res: express.Response) => {
+        const { protestId, userId, accessLevel } = req.body;
+
+        try {
+          const { status, payload, message } =
+            await this.protestsService.addUserToProtest({
+              protestId,
+              userId,
+              accessLevel,
+            });
+
+          return res.status(200).send({ status, message, payload });
+        } catch (error) {}
+      });
+
+    this.app
       .route('/protests/:key')
       .all(validateUser)
       .get(async (req: express.Request, res: express.Response) => {

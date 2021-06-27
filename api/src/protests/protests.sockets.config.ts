@@ -1,7 +1,7 @@
 import socketio from 'socket.io';
 import { CommonSocketsConfig } from '../common/common.sockets.config';
 import { ProtestsService } from './protests.service';
-import { getProtestsForUser } from './protests.statics';
+import { getProtestsByUser } from './protests.statics';
 
 export class ProtestSockets extends CommonSocketsConfig {
   constructor(io: socketio.Server, private protestsService: ProtestsService) {
@@ -38,7 +38,7 @@ export class ProtestSockets extends CommonSocketsConfig {
           });
         }
 
-        const payload = await getProtestsForUser(userId);
+        const payload = await getProtestsByUser(userId);
 
         socket.emit('getProtestsForUser', {
           status: true,
