@@ -1,6 +1,4 @@
-mobile/src/index.html
-mobile/node_modules
-mobile/.env
+src/index.html
+node_modules
+.env
 
-/app/api/.env
-api/node_modules
