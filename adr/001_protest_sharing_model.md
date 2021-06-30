@@ -22,6 +22,7 @@ The tiers specifically will organized as such:
   - Unassigned can:
     - View protest overview details.
     - View an area map of the protest, not including locations at the protests placed by organizers and leaders of the protest.
+    - Request higher-level access (?)
 - Attendee (3):
   - Attendees are participating in the protest and don't hold any higher organizational level role. They can only view places and announcements.
   - Attendees can (including the rights of lower-tier access):
@@ -34,10 +35,8 @@ The tiers specifically will organized as such:
     - Add announcements and important locations.
     - Admit unassigned users to the protest as Attendees.
     - Manage individual access rights of users within a protest.
-- Leader (1):
-  - Leaders create the protest and have overall administrative access over the users within.
-  - Leaders can (including the rights of lower-tier access):
-    - Archive the protest.
+    - Assign others to be organizers.
+    - Organziers can vote on ending an event early (?)
 
 ## Consequences
 
