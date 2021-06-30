@@ -1,11 +1,11 @@
-<ion-grid fixed="true" style="overflow-y: scroll">
+<ion-grid fixed="true" class="overflow-x-hidden overflow-y-auto">
   <h1 class="b f2 mt1 pt1 mb0 pb0">My Protests</h1>
   <h3 class="f6 mt0 pt0 black-70">
     View protests you are organizing and or attending.
   </h3>
 
   <ion-row>
-    <section class="">
+    <section class="w-100">
       <ion-col size-md class="pa0">
         <h2 class="f3 mb0 fw6 ion-text-left pt0">Active Protests</h2>
 
@@ -14,7 +14,7 @@
           <ion-chip
             (click)="onClickChip(0)"
             [ngClass]="
-              chipViewCondition == 0 ? 'bg-app-light-green' : 'bg-black-10'
+              chipViewCondition == 0 ? 'bg-app-light-green' : 'default'
             "
           >
             <ion-label>All</ion-label>
@@ -30,12 +30,13 @@
           <ion-chip
             (click)="onClickChip(2)"
             [ngClass]="
-              chipViewCondition == 2 ? 'bg-app-light-green' : 'bg-black-10'
+              chipViewCondition == 2 ? 'bg-app-light-green' : 'default'
             "
           >
             <ion-label>Attending</ion-label>
           </ion-chip>
         </div>
+
         <!-- Organizing Section -->
         <ion-col size-md class="pa0">
           <div *ngIf="chipViewCondition != 2">
@@ -47,7 +48,7 @@
                   protest.associatedUsers[0].accessLevel == organizerLevel
                 "
               >
-                <ion-card class="ma2 w-100">
+                <ion-card class="ma2 mw-100">
                   <div class="flex justify-start items-center ph2 pv1">
                     <div class="pr2">
                       <img
@@ -56,7 +57,7 @@
                       />
                     </div>
                     <div>
-                      <ion-card-header class="pa0">
+                      <ion-card-header class="pa0 w-100">
                         <ion-card-title class="pa0 f5 fw6 mw-100 w5">
                           {{ protest.title }}
                         </ion-card-title>
