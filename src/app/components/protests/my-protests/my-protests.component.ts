@@ -12,7 +12,7 @@ export class MyProtestsComponent implements OnInit {
   data$: Observable<{}>;
   protestsData: any = [];
   attendingProtests: any = [];
-  chipViewCondition: number;
+  chipViewCondition: ChipViewType;
 
   adminLevel = accessLevels.Admin;
   leaderLevel = accessLevels.Leader;
@@ -31,10 +31,12 @@ export class MyProtestsComponent implements OnInit {
       this.protestsData = result;
     });
 
-    this.chipViewCondition = 0;
+    this.chipViewCondition = 'organizing';
   }
 
-  onClickChip(chip) {
+  onClickChip(chip: ChipViewType) {
     this.chipViewCondition = chip;
   }
 }
+
+type ChipViewType = 'organizing' | 'attending' | 'all';

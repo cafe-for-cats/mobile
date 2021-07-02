@@ -12,25 +12,29 @@
         <!-- chips -->
         <div class="pb1">
           <ion-chip
-            (click)="onClickChip(0)"
+            (click)="onClickChip('all')"
             [ngClass]="
-              chipViewCondition == 0 ? 'bg-app-light-green' : 'default'
+              chipViewCondition == 'all' ? 'bg-app-light-green' : 'default'
             "
           >
             <ion-label>All</ion-label>
           </ion-chip>
           <ion-chip
-            (click)="onClickChip(1)"
+            (click)="onClickChip('organizing')"
             [ngClass]="
-              chipViewCondition == 1 ? 'bg-app-light-green' : 'default'
+              chipViewCondition == 'organizing'
+                ? 'bg-app-light-green'
+                : 'default'
             "
           >
             <ion-label>Organizing</ion-label>
           </ion-chip>
           <ion-chip
-            (click)="onClickChip(2)"
+            (click)="onClickChip('attending')"
             [ngClass]="
-              chipViewCondition == 2 ? 'bg-app-light-green' : 'default'
+              chipViewCondition == 'attending'
+                ? 'bg-app-light-green'
+                : 'default'
             "
           >
             <ion-label>Attending</ion-label>
@@ -39,7 +43,7 @@
 
         <!-- Organizing Section -->
         <ion-col size-md class="pa0">
-          <div *ngIf="chipViewCondition != 2">
+          <div *ngIf="chipViewCondition != 'attending'">
             <h4 class="ml2 mv1 f4 fw6">Organizing</h4>
             <div *ngFor="let protest of protestsData.payload">
               <div
@@ -79,8 +83,8 @@
         <!-- Attending Section -->
         <ion-col size-md class="pa0">
           <div
-            [ngClass]="chipViewCondition == 2 ? 'mt0' : 'mt3'"
-            *ngIf="chipViewCondition != 1"
+            [ngClass]="chipViewCondition == 'attending' ? 'mt0' : 'mt3'"
+            *ngIf="chipViewCondition != 'organizing'"
           >
             <h4 class="ml2 mv1 f4 fw6">Attending</h4>
             <div *ngFor="let protest of protestsData.payload">
