@@ -1,7 +1,3 @@
-mobile/src/index.html
-mobile/node_modules
-mobile/.env
-
-/app/api/.env
-api/node_modules
+src/index.html
 node_modules
+.env

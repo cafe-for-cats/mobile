@@ -45,3 +45,11 @@ export class ProtestsDataService {
       .pipe(map((res) => res));
   }
 }
+
+export enum accessLevels {
+  Admin = -1,
+  Leader = 1,
+  Organizer = 2,
+  Attendee = 3,
+  Unassigned = 4,
+}
