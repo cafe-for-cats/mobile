@@ -13,6 +13,7 @@ export class MyProtestsComponent implements OnInit {
   protestsData: any = [];
   attendingProtests: any = [];
   chipViewCondition: ChipViewType;
+  segmentViewCondition: SegmentViewType;
 
   adminLevel = accessLevels.Admin;
   leaderLevel = accessLevels.Leader;
@@ -31,7 +32,14 @@ export class MyProtestsComponent implements OnInit {
       this.protestsData = result;
     });
 
-    this.chipViewCondition = 'organizing';
+    this.chipViewCondition = 'all';
+    this.segmentViewCondition = 'pending';
+  }
+
+  segmentChanged(ev: any) {
+    console.log('Segment changed', ev);
+    this.segmentViewCondition = ev.target.value;
+    console.log(this.segmentViewCondition);
   }
 
   onClickChip(chip: ChipViewType) {
@@ -40,3 +48,4 @@ export class MyProtestsComponent implements OnInit {
 }
 
 type ChipViewType = 'organizing' | 'attending' | 'all';
+type SegmentViewType = 'pending' | 'active' | 'archived';
