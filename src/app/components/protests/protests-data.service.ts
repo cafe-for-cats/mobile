@@ -27,6 +27,19 @@ export class ProtestsDataService {
     );
   }
 
+  // join Protest in progress
+  requestJoinProtest(input) {
+    this.protestsSocket.emit(`joinProtest`, input);
+  }
+  receiveJoinProtest() {
+    return this.protestsSocket.fromEvent(`joinProtest`).pipe(
+      map(({ status }) => (status ? { status: true } : { status: false })),
+      tap((_) => {
+        this.requestGetProtestsForUser();
+      })
+    );
+  }
+
   /**
    * Emits an event to the Websocket server
    * to get all protests relevant for a given user

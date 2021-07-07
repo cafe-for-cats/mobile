@@ -24,22 +24,15 @@
     ></ion-datetime>
   </ion-item>
   <ion-col>
-    <div
-      *ngIf="form.hasError('required', 'title') && title.touched"
-      class="alert alert-danger"
-    >
+    <div *ngIf="form.hasError('required', 'title') && title.touched">
       <span class="f7 black-60">- A Title is required.</span>
     </div>
     <div
       *ngIf="form.hasError('required', 'description') && description.touched"
-      class="alert alert-danger"
     >
       <span class="f7 black-60">- A description is required.</span>
     </div>
-    <div
-      *ngIf="form.hasError('required', 'startDate') && startDate.touched"
-      class="alert alert-danger"
-    >
+    <div *ngIf="form.hasError('required', 'startDate') && startDate.touched">
       <span class="f7 black-60">- A start date is required. </span>
     </div>
   </ion-col>

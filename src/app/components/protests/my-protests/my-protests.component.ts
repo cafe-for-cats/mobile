@@ -11,7 +11,6 @@ export class MyProtestsComponent implements OnInit {
   format = 'dd/MM/yyyy hh:mm:ss';
   data$: Observable<{}>;
   protestsData: any = [];
-  attendingProtests: any = [];
   chipViewCondition: ChipViewType;
   segmentViewCondition: SegmentViewType;
 
@@ -37,9 +36,7 @@ export class MyProtestsComponent implements OnInit {
   }
 
   segmentChanged(ev: any) {
-    console.log('Segment changed', ev);
     this.segmentViewCondition = ev.target.value;
-    console.log(this.segmentViewCondition);
   }
 
   onClickChip(chip: ChipViewType) {

@@ -4,98 +4,16 @@
   <div>
     <ion-row>
       <ion-col size="12">
-        <app-create-protest></app-create-protest>
+        <div class="ph2">
+          <app-create-protest></app-create-protest>
+        </div>
       </ion-col>
       <ion-col size="12">
-        <h2 class="f3 fw6">Join Protest</h2>
-        <form (ngSubmit)="onSubmit(form)">
-          <p>//Commented out due to errors 🙀☕</p>
-          <!-- <ion-item class="app-input-body-1 ion-no-padding">
-              <ion-label position="floating">Protest Code</ion-label>
-              <ion-input
-                formControlName="protestCode"
-                name="protestCode"
-                required="true"
-              ></ion-input>
-            </ion-item>
-            <div
-              *ngIf="
-                protestCode.invalid &&
-                (protestCode.dirty || protestCode.touched)
-              "
-              class="alert alert-danger"
-            >
-              <div *ngIf="protestCode.errors.required">
-                Protest code is required.
-              </div>
-            </div> -->
-          <ion-row class="justify-end">
-            <ion-button
-              color="app-light-green"
-              class="w-30 h2"
-              expand="block"
-              type="submit"
-            >
-              Submit
-            </ion-button>
-            <ion-button
-              color="app-light-green"
-              class="w-30 h2"
-              expand="block"
-              type="reset"
-            >
-              Clear
-            </ion-button>
-          </ion-row>
-        </form>
+        <div class="ph2">
+          <app-join-protest></app-join-protest>
+        </div>
       </ion-col>
     </ion-row>
-  </div>
-
-  <hr />
-
-  <div>
-    <h2 class="f3 fw6">Protests Joined:</h2>
-    <div *ngIf="data$ | async as data; else elseBlock">
-      <h2 class="f3 fw6">Created</h2>
-      <table table class="w-100 mv3">
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Date</th>
-        </tr>
-        <tr *ngFor="let protest of data.protestsCreated">
-          <!-- <td (click)="navigateToProtestOverview(protest)">
-              {{ protest.title }}
-            </td>-->
-          <td>{{ protest.description }}</td>
-          <td>{{ protest.startDate }}</td>
-        </tr>
-      </table>
-
-      <h2 class="f3 fw6">Joined</h2>
-      <table class="w-100 mv3">
-        <tr>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Date</th>
-        </tr>
-        <tr *ngFor="let protest of data.protestsJoined">
-          <td (click)="navigateToProtestOverview(protest)">
-            {{ protest.title }}
-          </td>
-          <td>{{ protest.description }}</td>
-          <td>{{ protest.startDate }}</td>
-        </tr>
-      </table>
-    </div>
-    <ng-template #elseBlock
-      ><p class="alert-text">
-        - You currently have not created or joined a protest. <br />
-        - Or data is not being rendered 😿😿😿
-      </p>
-      <!--<ion-button (click)="logThis(data$)"></ion-button>-->
-    </ng-template>
   </div>
 
   <!-- add httpinterceptor for checking authentication state -->

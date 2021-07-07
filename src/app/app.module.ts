@@ -15,19 +15,13 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { ProtestsModule } from './components/protests/protests.module';
 import { NavbarModule } from './components/navbar/navbar.module';
 import { ResourcesComponent } from './components/resources/resources.component';
-import { JoinProtestComponent } from './components/protests/join-protest/join-protest.component';
 import { ProtestsDataService } from './components/protests/protests-data.service';
 import { MyProtestsComponent } from './components/protests/my-protests/my-protests.component';
 
 const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ResourcesComponent,
-    JoinProtestComponent,
-    MyProtestsComponent,
-  ],
+  declarations: [AppComponent, ResourcesComponent, MyProtestsComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
