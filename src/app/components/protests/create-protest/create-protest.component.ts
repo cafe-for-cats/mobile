@@ -16,6 +16,7 @@ export class CreateProtestComponent implements OnInit {
   addResult$: Observable<{ status: boolean }>;
   protestAdded$: Observable<any>;
   minDate: String;
+  geocoder: google.maps.Geocoder;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,6 +25,8 @@ export class CreateProtestComponent implements OnInit {
     public toastController: ToastController,
     private dataService: ProtestsDataService
   ) {
+    this.geocoder = new google.maps.Geocoder();
+
     this.data$ = this.dataService.receiveGetProtestsForUser();
     this.addResult$ = this.dataService.receiveCreateProtest();
   }
@@ -33,7 +36,9 @@ export class CreateProtestComponent implements OnInit {
       title: [null, Validators.required],
       description: [null, Validators.required],
       startDate: [null, Validators.required],
+      location: null,
     });
+
     this.minDate = this.setMinDate();
 
     this.addResult$.subscribe((result) => {
@@ -50,32 +55,53 @@ export class CreateProtestComponent implements OnInit {
       message: msg,
       duration: 2000,
     });
+
     toast.present();
   }
 
-  onSubmit() {
-    const userId = this.jwtService.token.user.id;
-
+  async onSubmit() {
     this.dataService.requestCreateProtest({
-      title: this.title.value,
-      description: this.description.value,
-      startDate: this.startDate.value,
-      userId,
+      title: this.title,
+      description: this.description,
+      startDate: this.startDate,
+      userId: this.jwtService.token.user.id,
+      location: await this.location,
     });
   }
 
-  logThis(x) {
-    console.log(x); //testing purposes
+  /** Get the `location` input from the form and geocode it before passing to the server. */
+  get location() {
+    return (async () => {
+      try {
+        const result: google.maps.GeocoderResult[] = await findPlaceFromQuery(
+          this.geocoder,
+          this.form.get('location').value
+        );
+
+        return {
+          lat: result[0].geometry.location.lat(),
+          lng: result[0].geometry.location.lng(),
+          simpleName: result[0].formatted_address,
+          fullName: result[0].address_components,
+        };
+      } catch (e) {
+        console.log(e);
+
+        return null;
+      }
+    })();
   }
 
   get title() {
-    return this.form.get('title');
+    return this.form.get('title').value;
   }
+
   get description() {
-    return this.form.get('description');
+    return this.form.get('description').value;
   }
+
   get startDate() {
-    return this.form.get('startDate');
+    return this.form.get('startDate').value;
   }
 
   setMinDate() {
@@ -86,9 +112,25 @@ export class CreateProtestComponent implements OnInit {
     let DD = ('0' + date.getDate().toString()).slice(-2);
     let currentDateTime = `${YYYY}-${MM}-${DD}`;
 
-    console.log(currentDateTime);
     return currentDateTime;
   }
+}
+
+/** Wraps the google maps `findPlaceFromQuery` in a Promise-based result. */
+async function findPlaceFromQuery(
+  geocoder: google.maps.Geocoder,
+  address
+): Promise<google.maps.GeocoderResult[]> {
+  return new Promise((resolve, reject) => {
+    geocoder.geocode({ address }, (response, status) => {
+      if (status === google.maps.GeocoderStatus.ZERO_RESULTS) resolve([]);
+
+      if (status === google.maps.GeocoderStatus.OK) resolve(response);
+
+      if (status !== google.maps.GeocoderStatus.OK)
+        reject('Something went wrong!');
+    });
+  });
 }
 
 export interface Protest {

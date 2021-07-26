@@ -23,21 +23,22 @@
       max="2030"
     ></ion-datetime>
   </ion-item>
+  <ion-item class="ion-no-padding">
+    <ion-label position="floating">Location</ion-label>
+    <ion-input required formControlName="location" name="location"></ion-input>
+  </ion-item>
   <ion-col>
-    <div
-      *ngIf="form.hasError('required', 'title') && title.touched"
-      class="alert alert-danger"
-    >
+    <div *ngIf="form.hasError('required', 'title')" class="alert alert-danger">
       <span class="f7 black-60">- A Title is required.</span>
     </div>
     <div
-      *ngIf="form.hasError('required', 'description') && description.touched"
+      *ngIf="form.hasError('required', 'description')"
       class="alert alert-danger"
     >
       <span class="f7 black-60">- A description is required.</span>
     </div>
     <div
-      *ngIf="form.hasError('required', 'startDate') && startDate.touched"
+      *ngIf="form.hasError('required', 'startDate')"
       class="alert alert-danger"
     >
       <span class="f7 black-60">- A start date is required. </span>
