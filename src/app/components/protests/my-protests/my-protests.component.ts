@@ -15,7 +15,6 @@ export class MyProtestsComponent implements OnInit {
   segmentViewCondition: SegmentViewType;
 
   adminLevel = accessLevels.Admin;
-  leaderLevel = accessLevels.Leader;
   organizerLevel = accessLevels.Organizer;
   attendeeLevel = accessLevels.Attendee;
   unassignedLevel = accessLevels.Unassigned;
@@ -32,7 +31,7 @@ export class MyProtestsComponent implements OnInit {
     });
 
     this.chipViewCondition = 'all';
-    this.segmentViewCondition = 'pending';
+    this.segmentViewCondition = 'active';
   }
 
   segmentChanged(ev: any) {
@@ -45,4 +44,4 @@ export class MyProtestsComponent implements OnInit {
 }
 
 type ChipViewType = 'organizing' | 'attending' | 'all';
-type SegmentViewType = 'pending' | 'active' | 'archived';
+type SegmentViewType = 'active' | 'pending' | 'archived';

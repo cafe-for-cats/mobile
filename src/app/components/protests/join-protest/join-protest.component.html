@@ -3,18 +3,18 @@
   <ion-item class="app-input-body-1 ion-no-padding">
     <ion-label position="floating">Protest Code</ion-label>
     <ion-input
-      formControlName="protestCode"
-      name="protestCode"
+      formControlName="protestToken"
+      name="protestToken"
       required="true"
     ></ion-input>
   </ion-item>
   <ion-col>
     <div
-      *ngIf="form.hasError('required', 'protestCode') && protestCode.touched"
+      *ngIf="form.hasError('required', 'protestToken') && protestToken.touched"
     >
-      <span class="f7 black-60">Protest code is required.</span>
+      <span class="f7 black-60">Protest token is required.</span>
     </div>
-    </ion-col>
+  </ion-col>
   <ion-row class="justify-end">
     <ion-button
       color="app-light-green"

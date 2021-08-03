@@ -7,17 +7,17 @@
   <ion-row>
     <section class="w-100">
       <ion-col size-md class="pa0">
-        <!-- segments [pending | active | archived] -->
+        <!-- segments [active | pending | archived] -->
         <ion-segment
           (ionChange)="segmentChanged($event)"
           mode="ios"
-          value="pending"
+          value="active"
         >
-          <ion-segment-button value="pending">
-            <ion-label>Pending</ion-label>
-          </ion-segment-button>
           <ion-segment-button value="active">
             <ion-label>Active</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="pending">
+            <ion-label>Pending</ion-label>
           </ion-segment-button>
           <ion-segment-button value="archived">
             <ion-label>Archived</ion-label>

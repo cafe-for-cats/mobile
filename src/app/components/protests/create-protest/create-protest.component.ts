@@ -1,3 +1,9 @@
+/*
+  TODO
+        //create another function in dataservice that takes an input.
+        //POST protest/addUser ex. homepage.ts line 224
+*/
+
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -62,10 +68,6 @@ export class CreateProtestComponent implements OnInit {
       startDate: this.startDate.value,
       userId,
     });
-  }
-
-  logThis(x) {
-    console.log(x); //testing purposes
   }
 
   get title() {

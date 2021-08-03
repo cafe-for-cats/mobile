@@ -28,7 +28,7 @@ export class JoinProtestComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      protestCode: [null, Validators.required],
+      protestToken: [null, Validators.required],
     });
 
     this.addResult$.subscribe((result) => {
@@ -41,16 +41,23 @@ export class JoinProtestComponent implements OnInit {
   }
 
   onSubmit() {
-    const userId = this.jwtService.token.user.id;
+    //const userId = this.jwtService.token.user.id;
 
-    this.dataService.requestCreateProtest({
-      protestCode: this.protestCode.value,
-      userId,
-    });
+    this.dataService
+      .getProtestByShareToken(this.protestToken.value)
+      .subscribe((result: ProtestResponse) => {
+        console.log(result.status);
+        if (result.status) {
+          this.presentToast('Protest exist', 2000);
+          this.dataService.postJoinProtest(result.payload[0]._id);
+        } else {
+          this.presentToast(result.message, 2000);
+        }
+      });
   }
 
-  get protestCode() {
-    return this.form.get('protestCode');
+  get protestToken() {
+    return this.form.get('protestToken');
   }
 
   async presentToast(msg: string, durationSec: number) {
@@ -60,4 +67,12 @@ export class JoinProtestComponent implements OnInit {
     });
     toast.present();
   }
+}
+
+interface ProtestResponse {
+  status: boolean;
+  message: string;
+  payload: {
+    _id: string;
+  };
 }

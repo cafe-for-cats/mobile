@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { map, tap } from 'rxjs/operators';
@@ -12,7 +13,11 @@ export class ProtestsDataService {
     options: {},
   });
 
-  constructor(private jwtService: JwtService, private socket: Socket) {}
+  constructor(
+    private jwtService: JwtService,
+    private socket: Socket,
+    private httpClient: HttpClient
+  ) {}
 
   requestCreateProtest(input) {
     this.protestsSocket.emit(`addProtest`, input);
@@ -28,22 +33,30 @@ export class ProtestsDataService {
   }
 
   // join Protest in progress
-  requestJoinProtest(input) {
-    this.protestsSocket.emit(`joinProtest`, input);
-  }
-  receiveJoinProtest() {
-    return this.protestsSocket.fromEvent(`joinProtest`).pipe(
-      map(({ status }) => (status ? { status: true } : { status: false })),
-      tap((_) => {
-        this.requestGetProtestsForUser();
-      })
-    );
+  /* https://github.com/cafe-for-cats/api/blob/main/src/protests/protests.routes.config.ts 
+    POST: /protests/addUser
+    home.page.ts line 224
+  */
+
+  getProtestByShareToken(token) {
+    return this.httpClient.get(`http://localhost:5000/protests/${token}`);
   }
 
-  /**
-   * Emits an event to the Websocket server
-   * to get all protests relevant for a given user
-   */
+  postJoinProtest(protestId) {
+    const associatedUser = {
+      protestId: protestId,
+      userId: this.jwtService.token.user.id,
+      accessLevel: 1, //assigns the user as unassigned
+    };
+    this.httpClient
+      .post('http://localhost:5000/protests/addUser/', associatedUser)
+      .subscribe((res) => {
+        if (res) {
+          console.log(res); // para testing
+        }
+      });
+  }
+
   requestGetProtestsForUser() {
     console.log(this.jwtService.token.user.id);
 
@@ -60,9 +73,8 @@ export class ProtestsDataService {
 }
 
 export enum accessLevels {
+  Organizer = 3,
+  Attendee = 2,
+  Unassigned = 1,
   Admin = -1,
-  Leader = 1,
-  Organizer = 2,
-  Attendee = 3,
-  Unassigned = 4,
 }
