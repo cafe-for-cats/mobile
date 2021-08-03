@@ -32,12 +32,6 @@ export class ProtestsDataService {
     );
   }
 
-  // join Protest in progress
-  /* https://github.com/cafe-for-cats/api/blob/main/src/protests/protests.routes.config.ts 
-    POST: /protests/addUser
-    home.page.ts line 224
-  */
-
   getProtestByShareToken(token) {
     return this.httpClient.get(`http://localhost:5000/protests/${token}`);
   }
@@ -48,11 +42,13 @@ export class ProtestsDataService {
       userId: this.jwtService.token.user.id,
       accessLevel: 1, //assigns the user as unassigned
     };
+    console.log(protestId);
     this.httpClient
       .post('http://localhost:5000/protests/addUser/', associatedUser)
       .subscribe((res) => {
         if (res) {
-          console.log(res); // para testing
+          console.log(res);
+          return res;
         }
       });
   }

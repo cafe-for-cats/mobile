@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { JwtService } from 'src/app/services/jwt.service';
 import { ProtestsDataService } from '../protests-data.service';
 import { ToastController } from '@ionic/angular';
 
@@ -18,7 +17,6 @@ export class JoinProtestComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private jwtService: JwtService,
     public modalController: ModalController,
     public toastController: ToastController,
     private dataService: ProtestsDataService
@@ -41,14 +39,14 @@ export class JoinProtestComponent implements OnInit {
   }
 
   onSubmit() {
-    //const userId = this.jwtService.token.user.id;
-
     this.dataService
       .getProtestByShareToken(this.protestToken.value)
       .subscribe((result: ProtestResponse) => {
-        console.log(result.status);
         if (result.status) {
-          this.presentToast('Protest exist', 2000);
+          this.presentToast(
+            'Joining waitlist. Check "My Protests" to view your status.',
+            3000
+          );
           this.dataService.postJoinProtest(result.payload[0]._id);
         } else {
           this.presentToast(result.message, 2000);

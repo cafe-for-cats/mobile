@@ -28,6 +28,7 @@ export class MyProtestsComponent implements OnInit {
 
     this.data$.subscribe((result) => {
       this.protestsData = result;
+      console.log(result);
     });
 
     this.chipViewCondition = 'all';
