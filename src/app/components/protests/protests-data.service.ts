@@ -4,6 +4,7 @@ import { Socket } from 'ngx-socket-io';
 import { map, tap } from 'rxjs/operators';
 import { JwtService } from 'src/app/services/jwt.service';
 import { SocketNameSpace } from './socket-namespace';
+import { ToastController } from '@ionic/angular';
 
 @Injectable()
 export class ProtestsDataService {
@@ -16,6 +17,7 @@ export class ProtestsDataService {
   constructor(
     private jwtService: JwtService,
     private socket: Socket,
+    public toastController: ToastController,
     private httpClient: HttpClient
   ) {}
 
@@ -43,14 +45,11 @@ export class ProtestsDataService {
       accessLevel: 1, //assigns the user as unassigned
     };
     console.log(protestId);
-    this.httpClient
-      .post('http://localhost:5000/protests/addUser/', associatedUser)
-      .subscribe((res) => {
-        if (res) {
-          console.log(res);
-          return res;
-        }
-      });
+
+    return this.httpClient.post(
+      'http://localhost:5000/protests/addUser/',
+      associatedUser
+    );
   }
 
   requestGetProtestsForUser() {

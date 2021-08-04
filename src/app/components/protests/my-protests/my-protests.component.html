@@ -138,7 +138,6 @@
               <div *ngFor="let protest of protestsData.payload">
                 <div
                   *ngIf="
-                    protest.associatedUsers[0].accessLevel == leaderLevel ||
                     protest.associatedUsers[0].accessLevel == organizerLevel
                   "
                 >
